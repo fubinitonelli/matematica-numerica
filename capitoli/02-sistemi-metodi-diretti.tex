@@ -1,0 +1,1087 @@
+%!TEX root = ../main.tex
+\quad \chapter{Risoluzione di sistemi lineari con metodi diretti}
+% \textit{[Lezione 3 (11-03-2020)]}
+
+Ci soffermeremo dapprima su metodi numerici per la risoluzione di sistemi lineari. Supponiamo siano assegnate la matrice $\displaystyle A\in \mathbb{R}^{n\times n}$ e il vettore $ \mathbf{b} \in \mathbb{R}^{n}$. Si vuole determinare il vettore $\displaystyle \x \in \mathbb{R}^{n}$ tale che
+\begin{equation*}
+A\mathbf{x=b}.
+\end{equation*}
+Possiamo scrivere il sistema in forma estesa come
+\begin{equation*}
+\sum ^{n}_{j=1} a_{ij} x_{j} =b_{i} ,\quad \forall i=1,\dotsc ,n,\quad a_{ij} =(A)_{ij} .
+\end{equation*}
+Siamo interessati a problemi \textit{ben posti}, ossia in cui la soluzione esiste ed è unica. Le condizioni affinché ciò sia verificato possono essere diverse, tutte equivalenti tra loro.
+\begin{theorem}
+    La soluzione $\displaystyle \x \in \mathbb{R}^{n}$ del sistema lineare $\displaystyle A\x=\mathbf{b}$ esiste ed è unica se e solo se una delle seguenti equivalenti condizioni è soddisfatta:
+    \begin{itemize}
+        \item $\det(A) \neq 0$, ovvero la matrice è invertibile;
+        \item $\operatorname{rank}(A) =n$, ovvero il suo rango è massimo;
+        \item $A\x =\mathbf{0} \Leftrightarrow \x =\mathbf{0}$, ovvero l'unica soluzione del cosiddetto sistema omogeneo è $\mathbf{0}$.
+    \end{itemize}
+    \label{thm:esistenza-unicita-sl}
+\end{theorem}
+
+Nel corso dei vari capitoli, molti risultati coinvolgeranno le matrici simmetriche e definite positive (SDP).
+Ricordiamo il concetto di definita positività, di cui il lettore può trovare un approfondimento nell'appendice \ref{thm:matrice-definita-positiva-negativa}.
+\begin{definition}
+  [Matrice definita positiva/negativa]
+  \index{matrice!definita positiva}
+  \index{matrice!definita negativa}
+  Una matrice quadrata $A\in \mathbb{R} ^{n\times n} $ si dice definita positiva (risp. negativa) se $\x^{T} A\x > 0$ (risp. $< 0$) per ogni $\x \neq \mathbf{0}$, $\x \in \mathbb{R}^{n}$.
+\end{definition}
+Per questo tipo di matrici, riportiamo un primo importante risultato.
+\begin{theorem}
+    Se $A\in \mathbb{R} ^{n\times n} $ è una matrice quadrata definita positiva, allora è invertibile.
+    \label{thm:A-DP-invertibile}
+\end{theorem}
+Ciò si può giustificare pensando che il prodotto degli autovalori della matrice coincide col suo determinante, e se essa è definita positiva, tutti gli autovalori sono strettamente positivi, quindi il determinante è non nullo.
+
+Per il resto della trattazione considereremo solo matrici per cui $\displaystyle A\mathbf{x=b}$ ammette una e una sola soluzione, per avere a che fare solo con problemi ben posti.
+
+\begin{definition}
+  [Matrice triangolare]
+  \index{matrice!triangolare}
+  Una matrice quadrata $A\in \mathbb{R}^{n\times n}$ si dice triangolare superiore (risp. inferiore) se $a_{ij} =0$ per ogni $i >j$ (risp. $i< j$), cioè se gli elementi sotto (risp. sopra) la diagonale si annullano.
+\end{definition}
+
+\section{Regola di Cramer}
+
+È una regola che permette di calcolare ogni componente della soluzione di un certo sistema lineare $A\x=\mathbf{b}$
+\begin{equation*}
+x_{i} =\frac{\det( A_{i})}{\det(A)} \ \ \forall i=1,\dotsc ,n
+\end{equation*}
+dove
+\begin{equation*}
+A_{i} =[ a_{1} ,a_{2} ,\dotsc ,a_{i-1}, b,a_{i+1}  ,\dotsc ,a_{n}],
+\end{equation*}
+ovvero la matrice ottenuta sostituendo la $i$-esima colonna della matrice $A$ con il termine noto.
+
+Questo algoritmo è inutilizzabile nella pratica per il suo eccessivo carico computazionale:
+il costo di calcolare il determinante di una matrice $n\times n$ è $\approx n!$ operazioni, e questa regola richiede il calcolo di $n+1$ determinanti, ossia $n+1$ operazioni di complessità fattoriale.
+
+Cogliamo l'occasione per far notare un aspetto particolarmente importante nella risoluzione di sistemi lineari. Il lettore forse si sarà chiesto perché, nel voler risolvere il sistema $A\x=\mathbf{b}$, non è stato menzionato il banale passaggio di inversione della matrice che permette di scrivere la soluzione come $\x=A^{-1}\mathbf{b}$. Il calcolo della matrice inversa è un'operazione che richiede la computazione di numerosi determinanti.
+Tale operazione operazione è estremamente costosa, come appena mostrato.
+Pertanto, diventa chiara la ragione per cui, salvo specifiche esigenze, si dovrebbe evitare il calcolo di una matrice inversa.
+Per compiti come la risoluzione dei sistemi lineari, sono preferibili i metodi presentati in seguito, i quali consentono di determinare la soluzione, o una sua ragionevole approssimazione, senza passare per la matrice inversa.
+
+\section{Metodi diretti: Fattorizzazione LU}
+\label{sec:fattorizzazione-lu}
+
+Supponiamo di saper decomporre la matrice $\displaystyle A$ in questo modo:
+\begin{equation}
+A=LU \quad L, U \in \mathbb{R}^{n\times n}.
+\label{eq:fattorizzazione-LU}
+\end{equation}
+dove $\displaystyle L$ e $\displaystyle U$ sono matrici triangolari, rispettivamente triangolare inferiore (Lower) e superiore (Upper).
+Risolvere $\displaystyle A\x =\mathbf{b}$ è equivalente a risolvere
+\begin{equation*}
+L\underbrace{U\x}_{\y} =\mathbf{b} \ \ \Leftrightarrow \ \ \begin{cases}
+L\y =\mathbf{b}\\
+U\x =\y.
+\end{cases}
+\end{equation*}
+Se avessimo accesso a un algoritmo poco costoso per risolvere questi due sistemi triangolari, abbatteremmo il costo computazionale totale rispetto alla regola di Cramer.
+
+\subsection{Algoritmo di sostituzione in avanti}
+\index{algoritmo!sostituzione in avanti}
+Supponiamo che $\displaystyle L$ sia triangolare inferiore:
+\begin{equation}
+\underbrace{\begin{bmatrix}
+l_{11} & 0 & \dotsc  & 0\\
+l_{21} & l_{22} & \ddots  & \vdots \\
+\vdots  & \vdots  & \ddots  & 0\\
+l_{n1} & l_{n2} & \dotsc  & l_{nn}
+\end{bmatrix}}_{L}\underbrace{\begin{bmatrix}
+y_{1}\\
+y_{2}\\
+\vdots \\
+y_{n}
+\end{bmatrix}}_{\y} =\underbrace{\begin{bmatrix}
+b_{1}\\
+b_{2}\\
+\vdots \\
+b_{n}
+\end{bmatrix}}_{\mathbf{b}}.
+\label{eq:Ly-b}
+\end{equation}
+\textbf{Osservazione. }$\displaystyle l_{11} \neq 0,l_{22} \neq 0,\dotsc ,l_{nn} \neq 0$ altrimenti $\displaystyle L$ sarebbe singolare, quindi anche $\displaystyle A$ sarebbe singolare\footnote{In una matrice triangolare, $L$ in questo caso, gli autovalori sono gli elementi sulla diagonale, e in generale il determinante è il prodotto degli autovalori. Se un elemento della diagonale di $L$ fosse nullo, allora anche il determinante lo sarebbe. Essendo $A=LU$, per il teorema di Binet $\operatorname{det}A=\operatorname{det}L\cdot\operatorname{det}U$, quindi sarebbe singolare anche $A$.}
+e non rispetterebbe la condizione per l'esistenza e unicità della soluzione. Vediamo ora cosa succede alle varie equazioni risolutive del sistema \eqref{eq:Ly-b}
+\begin{itemize}
+\item alla $1^{a}$ equazione:
+\begin{equation*}
+l_{11} y_{1} =b_{1} \ \Rightarrow \ y_{1} =\frac{b_{1}}{l_{11}};
+\end{equation*}
+\item alla $2^{a}$ equazione, sfruttando il calcolo appena svolto per $y_{1}$:
+\begin{equation*}
+l_{21} y_{1} +l_{22} y_{2} =b_{2} \ \Rightarrow \ y_{2} =\frac{1}{l_{22}}( b_{2} -l_{21} y_{1});
+\end{equation*}
+\item alla $n$-esima equazione, iterando il procedimento:
+\begin{equation*}
+l_{n1} y_{1} +l_{n2} y_{2} +\cdots +l_{nn} y_{n} =b_{n} \ \Rightarrow \ y_{n} =\frac{1}{l_{nn}}\left[ b_{n} -\sum ^{n-1}_{j=1} l_{nj} y_{j}\right].
+\end{equation*}
+\end{itemize}
+
+Riscriviamo ora questo algoritmo sotto forma di pseudocodice:
+
+\begin{algo}
+    $y_{1} = \frac{b_{1} }{l_{11} }  $\;
+    \For{$i=2$ \KwTo $n$}{
+        $y_{i}=\frac{1}{l_{ii}}\left( b_{i} -\sum\limits ^{i-1}_{j=1} l_{ij} y_{j}\right)$\;
+        \If{criterio di arresto}{
+            termina algoritmo\;
+        }
+    }
+    \caption{Algoritmo di sostituzione in avanti}
+\end{algo}
+
+\textit{Osservazione.} Determiniamo il costo computazionale dell'algoritmo:
+\begin{itemize}
+\item $1$ divisione fuori dal ciclo;
+\item per ogni passo del ciclo $( i-1)$ prodotti, $( i-1)$ somme e $1$ divisione per il calcolo di $y_{i}$.
+\end{itemize}
+
+Quindi il costo totale è:
+\begin{align*}
+  1+\sum ^{n}_{i=2}[( i-1) +( i-1) +1] &= 1+\sum ^{n}_{i=2}[ 2i-1]\\
+ &= 1+\sum ^{n}_{i=1}[ 2i-1] -1 \\
+ &= \sum ^{n}_{i=1}[ 2i-1]\\
+ &= 2\sum ^{n}_{i=1} i-n\\
+ &= 2\frac{n( n+1)}{2} -n \approx n^{2} \ \text{operazioni},
+\end{align*}
+che risulta molto inferiore al $n!$ della regola di Cramer.
+In generale, $n^2$ è la soglia minima possibile per il numero di operazioni di un algoritmo di algebra matriciale, visto che è lo stesso ordine di grandezza del numero di elementi della matrice, ed è pertanto ottimale per un metodo numerico.
+
+\subsection{Algoritmo di sostituzione all'indietro}
+\index{algoritmo!sostituzione all'indietro}
+Supponiamo invece che la matrice $\displaystyle U$ sia triangolare superiore:
+\begin{equation}
+\underbrace{\begin{bmatrix}
+u_{11} & u_{12} & \dotsc  & u_{1n}\\
+0 & u_{22} & \dotsc  & u_{2n}\\
+\vdots  & \ddots  & \ddots  & \vdots \\
+0 & \dotsc  & 0 & u_{nn}
+\end{bmatrix}}_{U}\underbrace{\begin{bmatrix}
+x_{1}\\
+x_{2}\\
+\vdots \\
+x_{n}
+\end{bmatrix}}_{\x} =\underbrace{\begin{bmatrix}
+y_{1}\\
+y_{2}\\
+\vdots \\
+y_{n}
+\end{bmatrix}}_{\y}.
+\label{eq:Ux-y}
+\end{equation}
+\textit{Osservazione.} $\displaystyle u_{11} \neq 0,u_{22} \neq 0,\dotsc ,u_{nn} \neq 0$, per le stesse ragioni enunciate per $L$.
+
+L'idea è fare la stessa sostituzione della sezione precedente, ma andando a ritroso partendo dall'ultima riga:
+
+\begin{algo}
+    $x_{n} =\frac{y_{n}}{u_{nn}}$\;
+    \For{$i=n-1$ \KwTo $1$}{
+        $x_{i} =\frac{1}{u_{ii}}\left( y_{i} -\sum\limits ^{n}_{j=i+1} u_{ij} x_{j}\right)$\;
+        \If{criterio di arresto}{
+            termina algoritmo\;
+        }
+    }
+    \caption{Algoritmo di sostituzione all'indietro}
+\end{algo}
+\textit{Osservazione.} Determiniamo il costo computazionale dell'algoritmo.
+Ci aspettiamo che sia lo stesso della sostituzione in avanti:
+\begin{itemize}
+\item $1$ divisione fuori dal ciclo;
+\item per ogni passo del ciclo $( n-i)$ prodotti, $( n-i)$ somme e $1$ divisione per il calcolo di $x_{i}$.
+\end{itemize}
+
+Il costo è dunque:
+\begin{align*}
+  1+\sum ^{1}_{i=n-1}[( n-i) +( n-i) +1] &= 1+\sum ^{n-1}_{i=1}[ 2n-2i+1]\\
+  &=1+2n( n-1) -2\sum ^{n-1}_{i=1} i+( n-1)\\
+  &=1+2n( n-1) -2\frac{( n-1) n}{2} +( n-1)\\
+  &=1+2n^{2} -2n-n^{2} +n+n-1=n^{2} \ \text{operazioni}
+\end{align*}
+
+Ricapitolando:
+\begin{equation*}
+A\x =\mathbf{b} \ \Leftrightarrow \left\{\begin{array}{ c }
+L\y =\mathbf{b}\\
+U\x =\y.
+\end{array}\right.
+\end{equation*}
+Se riuscissimo a trovare la scomposizione $\displaystyle A=LU$ dove $\displaystyle L$ è una matrice triangolare inferiore (che si risolve con sostituzione in avanti) e $\displaystyle U$ triangolare superiore (che si risolve con sostituzione all'indietro), riusciremmo a risolvere il sistema con solo approssimativamente $\displaystyle \approx 2n^{2}$ operazioni, aggirando l'enorme costo della regola di Cramer.
+
+\subsection{Come trovare la fattorizzazione LU}
+
+%Siamo capaci di fattorizzare $\displaystyle A$ in questo modo?
+
+\textit{Esempio.}
+\begin{equation*}
+\begin{bmatrix}
+a_{11} & a_{12}\\
+a_{21} & a_{22}
+\end{bmatrix} =\begin{bmatrix}
+l_{11} & 0\\
+l_{21} & l_{22}
+\end{bmatrix}\begin{bmatrix}
+u_{11} & u_{12}\\
+0 & u_{22}
+\end{bmatrix}
+\end{equation*}
+in questo sistema abbiamo $\displaystyle 3+3$ incognite nel menbro destro e i $\displaystyle 4$ vincoli del membro sinistro. Questo problema è irrisolvibile in quanto sottodimensionato: abbiamo troppe incognite rispetto ai vincoli, il che produrrebbe infinite fattorizzazioni possibili.
+Dobbiamo dunque eliminare almeno $2$ incognite.
+Per esempio, possiamo fissare gli elementi $\displaystyle l_{11} =1,l_{22} =1$.
+Avendo ora incognite e vincoli in egual numero, siamo nelle condizioni di poter trovare una soluzione, e non ci resta che svolgere i calcoli per trovarla.
+\begin{definition}
+[Fattorizzazione $\displaystyle LU$]
+\index{fattorizzazione!LU}
+Una matrice quadrata $\displaystyle A\in \mathbb{R}^{n\times n}$ ammette una fattorizzazione $\displaystyle LU$ se esistono $\displaystyle L\in \mathbb{R}^{n\times n}$ matrice triangolare inferiore tale che $\displaystyle l_{ii} =1\ \forall i=1,\dotsc ,n$ e $\displaystyle U\in \mathbb{R}^{n\times n}$ matrice triangolare superiore tali che $\displaystyle A=LU$.
+\end{definition}
+I valori degli elementi sulla diagonale principale di $\displaystyle L$ sono irrilevanti a patto che non siano nulli.
+Per ragioni di stabilità numerica degli algoritmi, li scegliamo uguali a $\displaystyle 1$.
+Ricordiamo infatti che gli autovalori di una matrice triangolare sono i valori sulla diagonale principale.
+\begin{definition}
+[Minori principali]
+\index{minori principali}
+Data una matrice quadrata $A \in \mathbb{R}^{n\times n}$, si definiscono \textbf{minori principali} di ordine $k$, con $k=0,\dots,n$, le sottomatrici quadrate di dimensione $k$ ottenute eliminando righe e colonne \emph{dello stesso indice}. Più in particolare, si definisce \textbf{minore principale di testa}\index{minori principale di testa} (o \textbf{minore Nord-Ovest})\index{minore di nord-ovest} di ordine $k$ quel minore principale ottenuto eliminando le ultime $(n-k)$ righe e colonne, con $0\le k\le n-1$.
+\end{definition}
+Naturalmente quindi una matrice quadrata di dimensione $n$ ha esattamente $n$ minori principali di testa.
+\begin{theorem}
+[Esistenza e unicità della fattorizzazione $\displaystyle LU$]
+\index{fattorizzazione!LU!esistenza e unicità}
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ una matrice non singolare. La matrice $\displaystyle A$ ammette una e una sola fattorizzazione $\displaystyle LU$ se e solo se tutti i minori principali di testa $\displaystyle A_{i}$ di ordine $\displaystyle i=1,\dotsc ,n$ sono non singolari.
+\label{thm:esist-unicita-LU}
+\end{theorem}
+\textit{Esempio.}
+\begin{equation*}
+A=\begin{bmatrix}
+1 & 2 & 3\\
+4 & 5 & 6\\
+0 & 7 & 1
+\end{bmatrix} =\begin{bmatrix}
+1 & 0 & 0\\
+l_{21} & 1 & 0\\
+l_{31} & l_{32} & 1
+\end{bmatrix}\begin{bmatrix}
+u_{11} & u_{12} & u_{13}\\
+0 & u_{22} & u_{23}\\
+0 & 0 & u_{33}
+\end{bmatrix}
+\end{equation*}
+I suoi minori di testa principali sono:
+\begin{equation*}
+A_{1} =[ 1] \qquad A_{2} =\begin{bmatrix}
+1 & 2\\
+4 & 5
+\end{bmatrix} \qquad A=\begin{bmatrix}
+1 & 2 & 3\\
+4 & 5 & 6\\
+0 & 7 & 1
+\end{bmatrix}.
+\end{equation*}
+Essendo tutti non singolari, la matrice soddisfa le ipotesi del teorema \ref{thm:esist-unicita-LU}.
+Per determinare i coefficienti delle matrici $L$ e $U$ si scrivono tutti i prodotti riga per colonna e si risolvono i sistemi:
+\begin{align*}
+u_{11} & =1\\
+u_{12} & =2\\
+u_{13} & =3\\
+l_{21} u_{11} & =4\ \ \Rightarrow \ \ l_{21} =4\\
+l_{21} u_{12} +u_{22} & =5\ \ \Rightarrow \ \ u_{22} =5-4\cdot 2=-3\\
+l_{21} u_{13} +u_{23} & =6\ \ \Rightarrow \ \ u_{23} =6-4\cdot 3=-6\\
+l_{31} u_{11} & =0\ \ \Rightarrow \ \ l_{31} =0\\
+l_{31} u_{12} +l_{32} u_{22} & =7\ \ \Rightarrow \ \ l_{32} =-7/3\\
+l_{31} u_{13} +l_{32} u_{23} +u_{33} & =1\ \ \Rightarrow \ \ u_{33} =1-( -7/3)( -6) =-13.
+\end{align*}
+Pertanto:
+\begin{equation*}
+A=\begin{bmatrix}
+1 & 2 & 3\\
+4 & 5 & 6\\
+0 & 7 & 1
+\end{bmatrix} =\begin{bmatrix}
+1 & 0 & 0\\
+4 & 1 & 0\\
+0 & -\frac{7}{3} & 1
+\end{bmatrix}\begin{bmatrix}
+1 & 2 & 3\\
+0 & -3 & -6\\
+0 & 0 & -13
+\end{bmatrix}.
+\end{equation*}
+Richiamiamo ora una definizione dall'algebra lineare che ci sarà utile nelle prossime pagine.
+\begin{definition}
+  [Predominanza diagonale stretta]
+  \index{matrice!predominanza diagonale stretta}
+  Una matrice $A\in \mathbb{R} ^{n\times n} $ si dice:
+  \begin{itemize}
+      \item a \textbf{predominanza diagonale stretta per righe} se
+      \begin{equation*}
+          |a_{ii} | >\sum ^{n}_{\substack{j=1\\j\neq i}} |a_{ij} |,\quad \forall i=1,\dotsc ,n
+      \end{equation*}
+      cioè se ogni elemento della diagonale è in modulo maggiore strettamente della somma degli altri elementi sulla sua stessa riga.
+      \item a \textbf{predominanza diagonale stretta per colonne} se
+      \begin{equation*}
+          |a_{jj} | >\sum ^{n}_{\substack{i=1\\i\neq j}} |a_{ij} |,\quad \forall j=1,\dotsc ,n.
+      \end{equation*}
+  \end{itemize}
+\end{definition}
+
+\textit{Esempio.}
+La matrice
+\begin{equation*}
+    \begin{bmatrix}
+    -3 & 1 & 1\\
+    0 & 2 & 1\\
+    1 & 0 & -4
+    \end{bmatrix}
+\end{equation*}
+è a predominanza diagonale stretta per righe. Infatti:
+\begin{equation*}
+    \begin{aligned}
+    |-3| &  >|1|+|1|\\
+    |+2| &  >|0|+|1|\\
+    |-4| &  >|1|+|0|,
+    \end{aligned}
+\end{equation*}
+mentre la matrice
+\begin{equation*}
+    \begin{bmatrix}
+    5 & -1 & -2\\
+    -1 & 2 & -1\\
+    2 & -1 & 4
+    \end{bmatrix}
+\end{equation*}
+non lo è. Infatti:
+\begin{equation*}
+    \begin{aligned}
+    | 5|  &  >| -1| +|-2| \\
+    | 2|  & \ngtr | -1| +| -1| \\
+    | 4|  &  >| +2| +| -1|.
+    \end{aligned}
+\end{equation*}
+\textit{Esempio.}
+La matrice
+\begin{equation*}
+    \begin{bmatrix}
+    3 & 1 & 1\\
+    1 & 2 & 1\\
+    0 & 0 & 3
+    \end{bmatrix}
+\end{equation*}
+è a predominanza diagonale stretta per colonne. Infatti:
+\begin{equation*}
+    \begin{aligned}
+    |3| &  >|1|+|0|\\
+    |2| &  >|1|+|0|\\
+    |3| &  >|1|+|1|.
+    \end{aligned}
+\end{equation*}
+
+%\textit{Esempio.}
+%\begin{equation*}
+%\begin{array}{ l l l }
+%\begin{bmatrix}
+%    -3 & 1 & 1\\
+%    0 & 2 & 1\\
+%    1 & 0 & -4
+%    \end{bmatrix} & \begin{aligned}
+%|-3| &  >|1|+|1|\\
+%|+2| &  >|0|+|1|\\
+%|-4| &  >|1|+|0|
+%\end{aligned} & \text{è a p.d.s.r}\\
+%\begin{bmatrix}
+%2 & -1 & 0\\
+%-1 & 2 & -1\\
+%0 & -1 & 2
+%\end{bmatrix} & \begin{aligned}
+%| 2|  &  >| -1| +| 0| \\
+%| 2|  & \ngtr | -1| +| -1| \\
+%| 2|  &  >| 0| +| -1|
+%\end{aligned} & \text{non è a p.d.s.r}
+%\end{array}
+%\end{equation*}
+%
+%\textit{Esempio.}
+%\begin{equation*}
+%\begin{array}{ l l l }
+%\begin{bmatrix}
+%3 & 1 & 1\\
+%1 & 2 & 1\\
+%0 & 0 & 3
+%\end{bmatrix} & \begin{aligned}
+%|3| &  >|1|+|0|\\
+%|2| &  >|1|+|0|\\
+%|3| &  >|1|+|1|
+%\end{aligned} & \text{è a p.d.s.c}
+%\end{array}
+%\end{equation*}
+
+
+Esistono delle particolari classi di matrici in cui la fattorizzazione $\displaystyle LU$ esiste ed è unica:
+\begin{theorem}
+[Condizioni sufficienti per fattorizzazione $\displaystyle LU$]
+\index{fattorizzazione!LU!condizioni sufficienti}
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ non singolare:
+\begin{itemize}
+\item Se $\displaystyle A$ è a predominanza diagonale stretta per righe o per colonne allora $\displaystyle \exists !$ fattorizzazione $\displaystyle LU$.
+\item Se $\displaystyle A$ è SDP (simmetrica e definita positiva) allora $\displaystyle \exists !$ fattorizzazione $\displaystyle LU$.
+\end{itemize}
+\label{thm:CS-LU}
+\end{theorem}
+
+% \textit{[Lezione 4 (16-03-2020)]}
+\section{Metodo di eliminazione gaussiana (MEG)}
+Presentiamo ora il metodo ideato da Gauss per la risoluzione di sistemi lineari.
+L'idea generale è manipolare in maniera incrementale la matrice di partenza in modo da renderla, dopo $\displaystyle n$ passaggi, una matrice triangolare superiore, da risolvere successivamente con il metodo di sostituzione all'indietro. In un sistema lineare possiamo sommare e sottrarre tra loro due righe e moltiplicare due righe per uno scalare non nullo, lasciando inalterato il sistema. Vogliamo rendere nulli tutti gli elementi sulla prima colonna, dalla seconda riga in poi; poi sulla seconda colonna, dalla terza riga in poi e così via.
+\begin{gather*}
+A=A^{(1)}\rightarrow A^{(2)}\rightarrow A^{(3)}\rightarrow \cdots \rightarrow A^{(k)}\rightarrow \cdots \rightarrow A^{(n)}\\
+\\
+\underbrace{\begin{bmatrix}
+a^{(1)}_{11} & \dotsc  & \dotsc  & \dotsc  & \dotsc  & a^{(1)}_{1n}\\
+\vdots  &  &  &  &  & \vdots \\
+\vdots  &  &  &  &  & \vdots \\
+\vdots  &  &  &  &  & \vdots \\
+\vdots  &  &  &  &  & \vdots \\
+a^{(1)}_{n1} & \dotsc  & \dotsc  & \dotsc  & \dotsc  & a^{(1)}_{nn}
+\end{bmatrix}}_{A=A^{(1)}}\rightarrow \underbrace{\begin{bmatrix}
+a^{(1)}_{11} & \dotsc  & \dotsc  & \dotsc  & \dotsc  & a^{(1)}_{1n}\\
+0 & a^{(2)}_{22} & \dotsc  & \dotsc  & \dotsc  & a^{(2)}_{2n}\\
+\vdots  & \vdots  &  &  &  & \vdots \\
+\vdots  & \vdots  &  &  &  & \vdots \\
+\vdots  & \vdots  &  &  &  & \vdots \\
+0 & a^{(2)}_{n2} & \dotsc  & \dotsc  & \dotsc  & a^{(2)}_{nn}
+\end{bmatrix}}_{A^{(2)}}\rightarrow \\
+\rightarrow \dotsc \rightarrow A^{(k)} =\begin{bmatrix}
+a^{(1)}_{11} & \dotsc  & \dotsc  & \dotsc  & \dotsc  & a^{(1)}_{1n}\\
+0 & a^{(2)}_{22} &  &  &  & \vdots \\
+\vdots  & \ddots  & \ddots  &  &  & \vdots \\
+\vdots  &  & 0 & a^{(k)}_{kk} & \dotsc  & a^{(k)}_{kn}\\
+\vdots  &  & \vdots  & \vdots  &  & \vdots \\
+0 & \dotsc  & 0 & a^{(k)}_{nk} & \dotsc  & a^{(k)}_{nn}
+\end{bmatrix}.
+\end{gather*}
+Al passo $\displaystyle n$-esimo (l'ultimo) la matrice avrà la forma richiesta al fattore $U$:
+\begin{equation}
+  A^{(n)} =
+  \begin{bmatrix}
+      a^{(1)}_{11} & a^{(1)}_{12} & a^{(1)}_{13} & \dotsc & a^{(1)}_{1n} \\
+      0             & a^{(2)}_{22} & a^{(2)}_{23} & \dotsc & a^{(2)}_{2n} \\
+      \vdots        & \ddots        & a^{(3)}_{33} & \dotsc & a^{(3)}_{3n} \\
+      \vdots        &               & \ddots        & \ddots & \vdots        \\
+      0             & \dotsc        & \dotsc        & 0      & a^{(n)}_{nn}
+  \end{bmatrix}.
+  \label{eq:costruzione-U-con-MEG}
+\end{equation}
+Per fare ciò, ricaveremo una serie di \textit{moltiplicatori} $m_{ik}$ dividendo ogni elemento della riga per l'elemento pivotale, cioè quello sulla diagonale.
+In particolare, vediamo lo pseudo-codice dell'algoritmo, che processerà la $k$-esima riga al $k$-esimo passo:
+
+\begin{algo}
+    \For{$k=1$ \KwTo $n-1$}{
+    	\For{$i=k+1$ \KwTo $n$}{
+    		\eIf{$a_{kk}=0$}{
+    			termina algoritmo senza successo\;
+    		}{
+    			$m_{ik}=\frac{a_{ik} }{a_{kk} } $\;
+    			\For{$j=k$ \KwTo $n$}{
+    				$a_{ij} = a_{ij}-m_{ik}\cdot a_{kj} $\;
+    			}
+    		}
+    	}
+    }
+    \caption{Metodo di Eliminazione Gaussiana}
+\end{algo}
+Ovviamente, l'algoritmo prosegue solo fintanto che non troviamo un \textbf{elemento pivotale}\index{elemento pivotale} nullo, ovvero $a_{kk} = 0$, visto che è il numero per cui dividiamo per trovare i moltiplicatori $m_{ik}$.
+
+
+\textit{Esempio.}
+Indichiamo con $(I), (II)$, etc la prima, seconda, etc riga della matrice.
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+1 & 2 & 3\\
+2 & 2 & 2\\
+3 & 7 & 4
+\end{bmatrix}}_{A^{(1)}}\xrightarrow[(III)=(III)-3I]{(II)=(II)-2I}\underbrace{\begin{bmatrix}
+1 & 2 & 3\\
+0 & -2 & -4\\
+0 & 1 & -5
+\end{bmatrix}}_{A^{(2)}}\xrightarrow{(III)=(III)+\frac{(II)}{2}}\underbrace{\begin{bmatrix}
+1 & 2 & 3\\
+0 & -2 & -4\\
+0 & 0 & -7
+\end{bmatrix}}_{A^{(3)}}
+\end{equation*}
+\textbf{Osservazione. }
+
+Al passo $k$-esimo del primo ciclo sono necessarie:
+\begin{itemize}
+\item $( n-k)$ divisioni per il calcolo dei moltiplicatori,
+\item $( n-k)( n-k+1)$ moltiplicazioni e $( n-k)( n-k+1)$ somme per il calcolo di $a_{ij}$,
+\item $( n-k)$ moltiplicazioni per il calcolo di $b_{j}$.
+\end{itemize}
+Si ha quindi un costo computazionale totale di:
+\begin{equation*}
+\sum\limits ^{n-1}_{k=1}[( n-k) +2( n-k)( n-k+1) +( n-k)] \approx \frac{2}{3} n^{3} \ \text{operazioni},
+\end{equation*}
+questo usando le identità
+\begin{equation*}
+\sum\limits ^{n}_{i=1} i=\frac{n( n+1)}{2} \quad \sum\limits ^{n}_{i=1} i^{2} =\frac{n( n+1)( 2n+1)}{6}.
+\end{equation*}
+A questo costo va aggiunto il costo della sostituzione all'indietro del sistema triangolare:
+\begin{equation*}
+\text{costo totale} = \text{eliminazione} +\text{sostituzione all'indietro} = \frac{2}{3} n^{3} +\frac{n^{2}}{2} \approx \frac{2}{3} n^{3}.
+\end{equation*}
+
+Osserviamo ora che il MEG può essere usato non solo per determinare la soluzione sistema lineare, ma anche per determinare la fattorizzazione $LU$. Il passo di eliminazione porta come risultato una matrice triangolare superiore, che possiamo pensare come la candidata a diventare la matrice $U$.
+Per ricavare $\displaystyle L$, non resta che trovare l'unica matrice che moltiplicata per $\displaystyle U$ produce $\displaystyle A$.
+Sotto le ipotesi di uno dei teoremi di unicità sopra citati, siamo in grado affermare che $L$ è effettivamente unica.
+C'è modo di modificare l'algoritmo in modo da tenere traccia anche della matrice $\displaystyle L$ per non doverla ricostruire a posteriori. Si può dimostrare che infatti $L$ è la matrice dei moltiplicatori:
+\begin{equation*}
+L=\begin{bmatrix}
+1 & 0 & \dotsc  & 0\\
+m_{21} & 1 & \ddots  & \vdots \\
+\vdots  & \ddots  & \ddots  & 0\\
+m_{n1} & \dotsc  & m_{n,n-1} & 1
+\end{bmatrix}.
+\end{equation*}
+
+In termini di costo computazionale, le operazioni svolte finora si riassumono come segue:
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+ costo & azione da eseguire \\
+\midrule
+ $\approx 2n^{2}$ & risoluzione di $2$ sistemi triangolari \\
+$\approx 2/3 \ n^{3}$ & trovare la fattorizzazione con MEG \\
+\hline
+$\approx 2/3 \ n^{3}$ & risoluzione complessiva del sistema \\
+ \bottomrule
+\end{tabular}
+
+\end{center}
+La soluzione presentata è quindi molto più vantaggiosa del costo fattoriale della regola di Cramer.
+
+\section{Tecniche di Pivoting}
+
+\textit{Esempio.}
+Consideriamo ora una matrice
+\begin{equation*}
+A=\begin{bmatrix}
+1 & 1 & 3\\
+2 & 2 & 2\\
+3 & 6 & 4
+\end{bmatrix},
+\end{equation*}
+facciamo un passo del MEG:
+\begin{equation*}
+A^{(2)} =\begin{bmatrix}
+1 & 1 & 3\\
+0 & 0 & -1\\
+0 & 3 & -5
+\end{bmatrix}.
+\end{equation*}
+L'elemento pivotale $\displaystyle a^{(2)}_{22} =0$ quindi il MEG si interrompe.
+Per risolvere questo intoppo, introduciamo le tecniche di \textbf{pivoting}\index{pivoting}.
+
+L'idea in questo caso è scambiare la II e III riga.
+Si noti inoltre che il minore nord-ovest di ordine 2 della matrice $A$ è singolare:
+\begin{equation*}
+\operatorname{det}\begin{bmatrix}
+1 & 1 \\
+2 & 2
+\end{bmatrix} = 0.
+\end{equation*}
+È quindi violata la condizione necessaria e sufficiente per la fattorizzazione $LU$. Dobbiamo trovare un'altra disposizione di righe o colonne, creando una nuova matrice $PA$ che verifichi la condizione e ci permetta di fare MEG per trovare la fattorizzazione $LU$, pre-moltiplicando $A$ per una matrice $P$ appropriata.
+In generale, nell'implementazione di un algoritmo dovremo includere precise istruzioni per il calcolatore su come effettuare il pivoting.
+
+Ipotizziamo che al passo $\displaystyle k$ del MEG troviamo l'elemento pivotale $\displaystyle a^{(k)}_{kk} =0$:
+\begin{equation*}
+\begin{bmatrix}
+a^{(1)}_{11} & \dotsc  & \dotsc  & \dotsc  & a^{(1)}_{1n}\\
+ & \ddots  &  &  & \vdots \\
+ &  & a^{(k)}_{kk} =0 & \dotsc  & a^{(k)}_{kn}\\
+ &  & \begin{array}{c}
+\vdots \\
+\vdots \\
+\end{array} &  &
+\end{bmatrix}.
+\end{equation*}
+Scorriamo la $k$-esima colonna finché troviamo un elemento non nullo. Ancora meglio, troviamo l'elemento \textit{più grande in modulo} della colonna, e quello corrisponderà alla riga che vogliamo scambiare con la $k$-esima.
+Questa scelta dell'elemento è giustificata dal fatto che il calcolatore fa degli errori di approssimazione dato che deve usare un sistema floating-point. Si può vedere che l'operazione di divisione è ad alto rischio se il denominatore è molto piccolo, per cui dato che l'elemento pivotale, come visto, andrà a denominatore, scegliamo l'elemento in modulo maggiore, così da minimizzare gli errori di rappresentazione.
+
+Questa tecnica prende il nome di MEG con \textbf{pivoting per righe}\index{pivoting!per righe}.
+Scambiare righe di $A$ è equivalente a pre-moltiplicare per una appropriata matrice $P$.
+Troviamo quindi una nuova matrice $PA$ tale che
+\begin{equation*}
+PA=LU.
+\end{equation*}
+$\displaystyle P$ è detta \textbf{matrice di permutazione}\index{matrice!di permutazione} ed è una matrice binaria, ossia composta da soli 0 e 1, che tiene traccia degli scambi di riga.
+Nell'esempio di prima, per tenere traccia dello scambio tra la II e III riga, si ha la seguente matrice $P$:
+\begin{equation*}
+P=\begin{bmatrix}
+1 & 0 & 0\\
+0 & 0 & 1\\
+0 & 1 & 0
+\end{bmatrix}.
+\end{equation*}
+Il problema iniziale diventa allora
+\begin{equation*}
+PA\x =P\mathbf{b} \ \ \Leftrightarrow \ \ L\underbrace{U\x}_{\y} =P\mathbf{b} \ \ \Leftrightarrow \ \ \begin{cases}
+L\y =P\mathbf{b}\\
+U\x =\y.
+\end{cases}
+\end{equation*}
+Similmente, esiste anche il \textbf{pivoting per colonne}\index{pivoting!per colonne}, ma Matlab raramente lo utilizza.
+\begin{equation*}
+A^{(k)} =\begin{bmatrix}
+a^{(1)}_{11} & \dotsc  & \dotsc  & \\
+ & \ddots  &  & \\
+ &  & a^{(k)}_{kk} =0 & \begin{array}{c c}
+\cdots  & \cdots \\
+\end{array}\\
+ &  & \vdots  & \\
+ &  & a^{(k)}_{nk} &
+\end{bmatrix}
+\end{equation*}
+Un punto a cui bisogna dedicare particolare attenzione è che il pivoting per colonne \textit{cambia l'ordine delle incognite}. Il pivoting per colonne induce una scomposizione del tipo
+\begin{equation*}
+AQ=LU
+\end{equation*}
+con $\displaystyle Q$ matrice di permutazione. Il problema iniziale diventa allora
+\begin{equation*}
+A\x =\mathbf{b} \ \ \Leftrightarrow \ \ \underbrace{AQ}_{LU}\underbrace{Q^{T}\x}_{\mathbf{z}} =\mathbf{b} \ \ \Leftrightarrow \ \ L\underbrace{U\mathbf{z}}_{\y} =\mathbf{b} \ \ \Leftrightarrow \ \ \begin{cases}
+L\y =\mathbf{b}\\
+U\mathbf{z} =\y\\
+Q^{T}\x =\mathbf{z}.
+\end{cases}
+\end{equation*}
+Infine, è possibile anche applicare contemporaneamente il pivoting per righe e per colonne.
+
+\section{Casi particolari di Fattorizzazioni LU}
+In questa sezione presentiamo alcuni casi particolari di matrici in cui è particolarmente comodo trovare, e gestire a livello di memoria, la fattorizzazione $LU$.
+Vedremo prima le matrici SDP e poi le matrici tridiagonali.
+
+\subsection{Matrici simmetriche e definite positive}
+
+Supponiamo che $\displaystyle A$ sia simmetrica e definita positiva.
+In tal caso sappiamo dal teorema già visto \ref{thm:CS-LU} che esiste ed è unica la fattorizzazione $LU$.
+In questo caso, essa prende il nome di fattorizzazione di Cholesky.
+\begin{theorem}
+[Fattorizzazione di Cholesky]
+\index{fattorizzazione!di Cholesky}
+Sia $\displaystyle A$ SDP. Allora $\displaystyle \exists !$ matrice $\displaystyle H$ triangolare inferiore con elementi positivi sulla diagonale tale che
+\begin{equation*}
+A=HH^{T}.
+\end{equation*}
+\end{theorem}
+Questo equivale a pensare la risoluzione del sistema come:
+\begin{equation*}
+A\x =\mathbf{b} \ \ \Leftrightarrow \ \ \begin{cases}
+H\y =\mathbf{b}\\
+H^{T}\x =\y.
+\end{cases}
+\end{equation*}
+\textit{Osservazione.} Possiamo sfruttare lo spazio di memoria che avevamo già allocato per tenere sia la matrice $\displaystyle A$ sia il suo fattore di Cholesky $\displaystyle H$:
+
+\begin{equation*}
+\begin{bmatrix}
+\ddots  &  & A\\
+ & \ddots  & \\
+H &  & \ddots
+\end{bmatrix},
+\end{equation*}
+in particolare, è \textit{sempre} conveniente quando la matrice è SDP.
+
+\begin{algo}
+    $h_{11} =\sqrt{a_{11}}$\;
+    \For{$i=2$ \KwTo $n$}{
+        \For{$j=1$ \KwTo $i-1$}{
+            $h_{ij} =\frac{1}{h_{jj}}\left( a_{ij} -\sum\limits ^{j-1}_{k=1} h_{ik} h_{jk}\right)$\;
+        }
+        $h_{ii} =\sqrt{a_{ii} -\sum\limits ^{i-1}_{k=1} h^{2}_{ik}}$\;
+    }
+    \caption{Fattorizzazione di Cholesky}
+\end{algo}
+Questo algoritmo costa $\displaystyle \approx \frac{n^{3}}{3}$, circa la metà del MEG.
+
+\subsection{Matrici tridiagonali}
+% \textit{[Lezione 5 (17-03-2020)]}
+
+Supponiamo che $\displaystyle A$ sia tridiagonale, ovvero che abbia questa forma:
+\begin{equation*}
+    A=
+    \begin{bmatrix}
+        a_{1} & c_{1} &        &        & 0       \\
+        b_{2} & a_{2} & c_{2}  &        &         \\
+              & b_{3} & a_{3}  & \ddots &         \\
+              &       & \ddots & \ddots & c_{n-1} \\
+        0     &       &        & b_{n}  & a_{n}
+    \end{bmatrix}.
+\end{equation*}
+Nel caso di matrici tridiagonali si usa l'\textbf{algoritmo di Thomas}\index{algoritmo!di Thomas}\index{fattorizzazione!di Thomas} che scrive la fattorizzazione e istruisce su come risolvere i due sistemi a valle della fattorizzazione.
+Necessitiamo solo di $3$ vettori per memorizzare completamente la matrice:
+\begin{align*}
+\mathbf{a} & =[ a_{1} ,\dotsc ,a_{n}]^{T} \in \mathbb{R}^{n}\\
+\mathbf{b} & =[ b_{2} ,\dotsc ,b_{n}]^{T} \in \mathbb{R}^{n-1}\\
+\mathbf{c} & =[ c_{1} ,\dotsc ,c_{n-1}]^{T} \in \mathbb{R}^{n-1}.
+\end{align*}
+Si dimostra che i fattori $\displaystyle L$ ed $U$ di $\displaystyle A$ hanno la seguente struttura:
+\begin{equation*}
+L=\begin{bmatrix}
+1 & 0 & \dotsc  & \dotsc  & 0\\
+\beta _{2} & 1 &  &  & \vdots \\
+0 & \beta _{3} & 1 &  & \vdots \\
+\vdots  & \ddots  & \ddots  & \ddots  & 0\\
+0 & \dotsc  & 0 & \beta _{n} & 1
+\end{bmatrix} \qquad U=\begin{bmatrix}
+\alpha _{1} & c_{1} & 0 & \dotsc  & 0\\
+0 & \alpha _{2} & c_{2} & \ddots  & \vdots \\
+\vdots  &  & \alpha _{3} & \ddots  & 0\\
+\vdots  &  &  & \ddots  & c_{n-1}\\
+0 & \dotsc  & \dotsc  & 0 & \alpha _{n}
+\end{bmatrix}.
+\end{equation*}
+Si noti che i termini $c_{k}$ sono rimasti invariati.
+Per determinare i fattori $\displaystyle L$ ed $U$ è quindi sufficiente determinare:
+\begin{equation*}
+\alpha _{1} ,\alpha _{2} ,\dotsc ,\alpha _{n} \quad \text{e} \quad \beta _{1} ,\beta _{2} ,\dotsc ,\beta _{n}.
+\end{equation*}
+
+Questi si possono determinare risolvendo col seguente algoritmo. \\
+
+\begin{algo}
+    $\alpha _{1} =a_{1}$\;
+    \For{$i=2$ \KwTo $n$}{
+        $\beta _{i} =\frac{b_{i}}{\alpha _{i-1}}$\;
+        $\alpha _{i} =a_{i} -\beta _{i} c_{i-1}$\;
+    }
+    \caption{Algoritmo di Thomas}
+\end{algo}
+Possiamo usare queste relazioni per risolvere direttamente i sistemi triangolari a valle della fattorizzazione trovata:
+\begin{itemize}
+\item per risolvere $L\y =\mathbf{b}$
+\begin{equation*}
+y_{1} =b_{1} ,\quad y_{i} =b_{i} -\beta _{i} y_{i-1} ,\quad i=2,\dotsc ,n,
+\end{equation*}
+\item per risolvere $U\x =\y$
+\begin{equation*}
+x_{n} =\frac{y_{n}}{\alpha _{n}} ,\quad x_{i} =\frac{y_{i} -c_{i} x_{i+1}}{\alpha _{i}} ,\quad i=n-1,\dotsc ,1.
+\end{equation*}
+\end{itemize}
+
+Usare matrici tridiagonali è particolarmente vantaggioso perché abbatte il costo computazionale a un numero di operazioni proporzionale a $n$, invece che a $n^2$ o più.
+In particolare, si hanno $8n-7$ operazioni.
+
+\textit{Esempio }$( n=3)$\textit{. }Assegnati $a_{1} ,a_{2} ,a_{3} ,c_{1} ,c_{2} ,l_{2} ,l_{3}$ trovare $\alpha _{1} ,\alpha _{2} ,\alpha _{3} ,\beta _{2} ,\beta _{3}$.
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+a_{1} & c_{1} & 0\\
+{l_{2}} & a_{2} & c_{2}\\
+0 & l_{3} & a_{3}
+\end{bmatrix}}_{A} =\underbrace{\begin{bmatrix}
+1 & 0 & 0\\
+\beta _{2} & 1 & 0\\
+0 & \beta _{3} & 1
+\end{bmatrix}}_{L}\underbrace{\begin{bmatrix}
+\alpha _{1} & c_{1} & 0\\
+0 & \alpha _{2} & c_{2}\\
+0 & 0 & \alpha _{3}
+\end{bmatrix}}_{U}
+\end{equation*}
+Allora
+\begin{equation*}
+\begin{array}{ r c l }
+a_{1} =1\cdot \alpha _{1} & \Rightarrow  & \alpha _{1} =a_{1}\\
+l_{2} =\beta _{2} \alpha _{1} & \Rightarrow  & \beta _{2} =l_{2} /\alpha _{1}\\
+a_{2} =\beta _{2} c_{1} +\alpha _{2} & \Rightarrow  & \alpha _{2} =a_{2} -\beta _{2} c_{1}\\
+l_{3} =\beta _{3} \alpha _{2} & \Rightarrow  & \beta _{3} =l_{3} /\alpha _{2}\\
+a_{3} =\beta _{3} c_{2} +\alpha _{3} & \Rightarrow  & \alpha _{3} =a_{3} -\beta _{3} c_{2}.
+\end{array}
+\end{equation*}
+\section{Condizionamento di una matrice}
+
+Gli algoritmi che abbiamo visto finora manipolano la matrice interessata.
+Questo comporta che il calcolatore debba fare delle operazioni floating-point, a cominciare dal memorizzare certi numeri.
+Queste operazioni saranno inevitabilmente approssimazioni, in quanto è spesso impossibile avere calcoli esattamente corretti.
+Per esempio, un numero irrazionale dovrà essere troncato visto che ha infinite cifre decimali, e in particolare dopo circa $16$ cifre dopo la virgola in una normale architettura floating-point.
+
+È importante, quindi, capire quanto queste approssimazioni influiscano sul risultato finale. Questi metodi, tra cui la fattorizzazione $LU$, cadono nella categoria dei \textit{metodi diretti}. Assumendo di non manipolare la matrice, possiamo invece usare dei \textbf{metodi indiretti}\index{metodi indiretti} che ci permettono di approssimare la \textit{soluzione esatta} $\x$ con una \textbf{soluzione approssimata}\index{soluzione!approssimata} $\tilde{\x}$.
+In tal caso è però anche necessario saper stimare dall'alto l'errore: $\left\Vert \x -\tilde{\x}\right\Vert$ deve essere minore di una certa quantità nota, ovvero che non dipenda dalla soluzione esatta che è incognita.
+In generale, l'errore deve anche poter essere ridotto a piacere, sotto una soglia di tolleranza arbitrariamente fissata.
+
+La soluzione approssimata $\tilde{x}$ può essere vista come la soluzione esatta di un certo \textbf{sistema perturbato}\index{sistema!perturbato}.
+
+Il \textbf{numero di condizionamento}\index{numero di condizionamento} di una matrice rivela quanto essa sia ``buona'' o ``cattiva'', ossia in quale misura eseguire operazioni su di essa provochi errori di rappresentazione e computazione.
+
+Il \textbf{teorema di stabilità}\index{teorema!di stabilità}\index{stabilità} riassumerà quando una matrice è ``buona'' o ``cattiva'' e come ciò influenzi il risultato del calcolatore rispetto alla soluzione esatta.
+\begin{definition}
+[Norma $L^p$ di un vettore]
+\index{norma!$L^p$!di un vettore}
+Sia $\displaystyle \mathbf{z} \in \mathbb{R}^{n}$. Definiamo la sua norma $L^p$ come:
+\begin{equation*}
+\Vert \mathbf{z}\Vert _{p} =\left(\sum ^{n}_{i=1} |z_{i} |^{p}\right)^{1/p} \ \ \forall p\in [ 1,+\infty ).
+\end{equation*}
+\label{def:norma-vettore}
+\end{definition}
+\textit{Esempi di norme di vettore.}
+\begin{enumerate}
+\item Se $p=\infty $, si ha $\Vert \mathbf{z}\Vert _{\infty } =\max_{i=1,\dotsc ,n} |z_{i} |$.
+\item Se $\displaystyle p=2$, si ha la \textbf{norma euclidea} (vedi \ref{def:norma-euclidea}).
+\end{enumerate}
+
+Possiamo usare la definizione di norma di vettore ed estenderla a norma di matrice.
+\begin{definition}
+[Norma $L^p$ di una matrice]
+\index{norma!$L^p$!di una matrice}
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$. Definiamo la sua norma $L^p$ come:
+\begin{equation*}
+\Vert A\Vert _{p} =\sup _{\substack{\mathbf{z} \in \mathbb{R}^{n} \\ \mathbf{z} \neq \mathbf{0}} } \frac{\Vert A\mathbf{z}\Vert _{p}}{\Vert \mathbf{z}\Vert _{p}} \quad \forall p\in [ 1,+\infty ).
+\end{equation*}
+È detta \textbf{norma indotta}, cioè è indotta da quella vettoriale.
+\end{definition}
+\textit{Esempi di norme matriciali.}
+\begin{itemize}
+    \item Se $p=1$, si ha:
+    \begin{equation*}
+        \Vert A\Vert _{1} =\max_{j=1,\dotsc,n}\sum\limits ^{n}_{i=1} |a_{ij}|,
+    \end{equation*}
+    cioè il massimo della somma delle colonne in modulo.
+    \item Se $p=\infty$, si ha:
+    \begin{equation*}
+      \Vert A\Vert _{\infty } =\max_{i=1,\dotsc,n}\sum\limits ^{n}_{j=1} |a_{ij}|,
+    \end{equation*}
+    cioè il massimo della somma delle righe in modulo.
+    \item Se $p=2$, si ha $\Vert A\Vert _{2} =\sqrt{\rho \left( A^{T} A\right)} \equiv \sqrt{\rho \left( A A^{T}\right)}$, definendo $\rho$ come a seguire.
+\end{itemize}
+\begin{definition}
+Siano $\lambda _{i}$ gli autovalori di $M$. Definiamo il \textbf{raggio spettrale}\index{raggio spettrale} di $\displaystyle M$
+\begin{equation*}
+\rho (M) =\max_{i=1,\dotsc ,n} |\lambda _{i} |.
+\end{equation*}
+\end{definition}
+Se $\displaystyle p=2$, $\Vert A\Vert _{2}$ si chiama \textbf{norma spettrale} e ha le seguenti proprietà:
+\begin{itemize}
+\item se $A$ è SDP, allora $\Vert A\Vert _{2} =\sqrt{\rho \left( A^{2}\right)} =\sqrt{\rho (A)^{2}} =\rho (A) =\lambda _{\text{max}}(A)$,
+\item $\Vert A\Vert _{2} \geqslant 0$,
+\item $\Vert \alpha A\Vert _{2} =\alpha \Vert A\Vert _{2}$,
+\item $\Vert A+B\Vert _{2} \leqslant \Vert A\Vert _{2} +\Vert B\Vert _{2}$,
+\item $\Vert A\mathbf{v}\Vert _{2} \leqslant \Vert A\Vert _{2}\Vert \mathbf{v}\Vert _{2}$ con $\mathbf{v}$ vettore.
+\end{itemize}
+
+\subsection{Il numero di condizionamento}
+\spazioSecBox
+\begin{definition}
+[Numero di condizionamento]
+\index{numero!di condizionamento}
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ invertibile. Definiamo il numero di condizionamento in norma $\displaystyle p$ come:
+\begin{equation*}
+K_{p}(A) =\Vert A\Vert _{p} \ \left\Vert A^{-1}\right\Vert _{p} \quad p=1,2,\dotsc ,+\infty.
+\end{equation*}
+Se $\displaystyle A$ non è invertibile, lo si definisce come $K_{p}(A) =  \infty$.
+\end{definition}
+Il numero di condizionamento riassume quanto una matrice è ``buona'', o ``ben condizionata'', nel senso spiegato prima.
+Tanto più il numero condizionamento della matrice è grande, tanto più è ``cattiva'', perché si avvicina ad una matrice singolare.
+
+Possiamo misurare $K_p$ rispetto a un qualsiasi $p$, ma solitamente useremo $p=2$.
+In tal caso esso prende il nome di \textbf{numero di condizionamento spettrale}\index{numero di condizionamento!spettrale}.
+
+\textbf{Proprietà.}
+\begin{enumerate}
+\item $\displaystyle K_{p}(A) \geqslant K_{p}(I) =1$: più è basso e più la matrice si comporta come l'identità\footnote{``La matrice più \textit{bella} di tutte''.}.
+\item $\displaystyle K_{p}(A) =K_{p}\left( A^{-1}\right)$: una matrice è ``brutta'' tanto quanto la sua inversa.
+\item $\displaystyle K_{p}( \alpha A) =K_{p}(A) ,\ \ \forall \alpha \in \mathbb{R} ,\alpha \neq 0$: se abbiamo una matrice ``buona'' e la moltiplichiamo per uno scalare, essa continua a rimanere ``buona''.
+\end{enumerate}
+
+\needspace{3\baselineskip}
+\textbf{Osservazione (condizionamento spettrale).}
+
+Se $A$ è SDP, allora:
+\begin{equation*}
+K_{2}(A) =\underbrace{\Vert A\Vert _{2}}_{\lambda _{\text{max}}(A)} \ \ \underbrace{\left\Vert A^{-1}\right\Vert _{2}}_{\frac{1}{\lambda _{\text{min}}(A)}} =\frac{\lambda _{\text{max}}(A)}{\lambda _{\text{min}}(A)}.
+\end{equation*}
+Più gli autovalori estremali, cioè il minimo e il massimo, di $\displaystyle A$ sono lontani tra di loro, più $\displaystyle A$ è una matrice mal condizionata. Il caso ottimale è che tutti gli autovalori siano uguali, in cui il loro rapporto è unitario.
+\begin{definition}[Distanza $L^p$]
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ non singolare. Definiamo la distanza $L^p$ di $A$ come:
+\begin{equation*}
+\text{dist}_{p}(A) =\min\left\{\frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}} :\ A+\delta A\ \text{è singolare}\right\}.
+\end{equation*}
+\end{definition}
+Si può dimostrare che la distanza è inversamente proporzionale al numero di condizionamento:
+\begin{equation*}
+\operatorname{dist}_{p}(A) =\frac{1}{K_{p}(A)}.
+\end{equation*}
+\section{Analisi di stabilità}
+
+Siano:
+\begin{itemize}
+\item $\displaystyle A\x =\mathbf{b}$ il \textbf{problema originale (PO).}
+\item $\displaystyle ( A+\delta A)(\x +\delta \x) =\mathbf{b} +\delta \mathbf{b}$ il \textbf{problema perturbato (PP)}, quello che risolviamo con un calcolatore, introducendo perturbazioni per ciascuno dei tre elementi che lo compongono.
+\end{itemize}
+
+\begin{theorem}
+[stabilità]
+\index{teorema!di stabilità}
+\index{stabilità}
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ non singolare. Sia inoltre $\displaystyle \delta A\in \mathbb{R}^{n\times n}$ una perturbazione tale che $\displaystyle \left\Vert A^{-1}\right\Vert _{p}\Vert \delta A\Vert _{p} < 1$ per una generica norma indotta $\displaystyle p$.
+Allora se $\displaystyle \x \in \mathbb{R}^{n}$ è soluzione di (PO) con $\displaystyle \mathbf{b} \in \mathbb{R}^{n} ,\ \mathbf{b} \neq \mathbf{0}$ e $\displaystyle \x +\delta \x \in \mathbb{R}^{n}$ è soluzione di (PP) per $\displaystyle \delta \mathbf{b} \in \mathbb{R}^{n}$, si ha
+\begin{equation*}
+\frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \leqslant \left[\frac{K_{p}(A)}{1-K_{p}(A)\frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}}}\right]\left(\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} +\frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}}\right).
+\end{equation*}
+\label{thm:teorema-di-stabilita}
+\end{theorem}
+\textit{Dimostrazione.}
+
+Si ha innanzitutto che:
+\begin{equation*}
+\left\Vert A^{-1} \delta A\right\Vert _{p} \leqslant \underbrace{\left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta A\Vert _{p} < 1}_{\text{per ipotesi}}.
+\end{equation*}
+Si può inoltre dimostrare che $\displaystyle I+A^{-1} \delta A$ è invertibile se vale l'ipotesi considerata. Inoltre, vale anche la seguente disuguaglianza:
+\begin{equation}
+\left\Vert \left( I+A^{-1} \delta A\right)^{-1}\right\Vert _{p} \leqslant \frac{1}{1-\left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta A\Vert _{p}}.
+\label{eq:dis-in-teo-stab}
+\end{equation}
+A questo punto prendiamo il problema perturbato (PP):
+\begin{align*}
+( A+\delta A)(\x +\delta \x) & =\mathbf{b} +\delta \mathbf{b} & \\
+A\x +\delta A\x +A\delta \x +\delta A\delta \x & =\mathbf{b} +\delta \mathbf{b} & \\
+\delta A\x +A\delta \x +\delta A\delta \x & =\delta \mathbf{b} & \text{(ricordando che $A\x =\mathbf{b}$)}\\
+( A+\delta A) \delta \x & =\delta \mathbf{b} -\delta A\x & \\
+A^{-1}[( A+\delta A) \delta \x] & =A^{-1}[ \delta \mathbf{b} -\delta A\x] & \text{(moltiplicando per $A^{-1}$)}\\
+\left( I+A^{-1} \delta A\right) \delta \x & =A^{-1} \delta \mathbf{b} -A^{-1} \delta A\x. &
+\end{align*}
+Ricordiamoci che possiamo, per ipotesi, moltiplicare per $\left( I+A^{-1} \delta A\right)^{-1}$, ottenendo:
+\begin{equation*}
+\delta \x =\left( I+A^{-1} \delta A\right)^{-1}\left( A^{-1} \delta \mathbf{b} -A^{-1} \delta A\x\right).
+\end{equation*}
+Passando alle norme:
+\begin{equation*}
+\Vert \delta \x\Vert _{p} \leqslant \left\Vert \left( I+A^{-1} \delta A\right)^{-1}\right\Vert _{p} \ \left\Vert A^{-1} \delta \mathbf{b} -A^{-1} \delta A\x\right\Vert _{p}.
+\end{equation*}
+Usando la disuguaglianza triangolare delle norme: %essendo la norma della differenza più piccola della somma delle norme
+\begin{equation*}
+\Vert \delta \x\Vert _{p} \leqslant \left\Vert \left( I+A^{-1} \delta A\right)^{-1}\right\Vert _{p}\left(\left\Vert A^{-1} \delta \mathbf{b}\right\Vert _{p} +\left\Vert A^{-1} \delta A\x\right\Vert _{p}\right).
+\end{equation*}
+Usiamo ora la disuguaglianza \eqref{eq:dis-in-teo-stab}:
+\begin{equation*}
+\Vert \delta \x\Vert _{p} \leqslant \frac{1}{1-\left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta A\Vert _{p}}\left(\left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta \mathbf{b}\Vert _{p} +\ \left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta A\Vert _{p} \ \Vert \x\Vert _{p}\right).
+\end{equation*}
+Dividiamo per $\Vert \x\Vert _{p}$:
+\begin{equation*}
+\frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \leqslant \frac{1}{1-\left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta A\Vert _{p}}\left(\frac{\left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta \mathbf{b}\Vert _{p}}{\Vert \x\Vert _{p}} +\ \left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta A\Vert _{p}\right).
+\end{equation*}
+Raccogliendo $\left\Vert A^{-1}\right\Vert _{p}$ e dividendo e moltiplicando per $\Vert A \Vert_{p}$ si ottiene:
+\begin{equation*}
+\frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \leqslant \frac{\overbrace{\left\Vert A^{-1}\right\Vert _{p} \ \Vert A \Vert_{p}}^{K_{p}(A)}}{1-\left\Vert A^{-1}\right\Vert _{p} \ \Vert \delta A\Vert _{p}}\left(\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \x\Vert _{p}\Vert A \Vert_{p}} +\frac{\Vert \delta A\Vert _{p}}{\Vert A \Vert_{p}}\right).
+\end{equation*}
+Ricordiamo ora che:
+\begin{equation*}
+A\x =\mathbf{b} \ \ \Rightarrow \ \ \Vert \mathbf{b}\Vert _{p} =\Vert A\x\Vert _{p} \leqslant \Vert A\Vert _{p}\Vert \x\Vert _{p} \ \ \Rightarrow \ \ \frac{1}{\Vert A\Vert _{p}\Vert \x\Vert _{p}} \leqslant \frac{1}{\Vert \mathbf{b}\Vert _{p}}.
+\end{equation*}
+Abbiamo così stimato il primo termine dentro la parentesi. Ora moltiplichiamo e dividiamo a denominatore per $\Vert A \Vert_{p}$ ottenendo il numero di condizionamento $K_{p}(A)$ anche a denominatore:
+\begin{equation*}
+\frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \leqslant \frac{K_{p}(A)}{1-\left\Vert A^{-1}\right\Vert _{p}\Vert \delta A\Vert _{p} \cdot \frac{\Vert A\Vert _{p}}{\Vert A\Vert _{p}}}\left(\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} +\frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}}\right)
+\end{equation*}
+ovvero:
+\begin{gather*}
+\frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \leqslant \frac{K_{p}(A)}{1-K_{p}(A) \cdot \frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}}}\left(\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} +\frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}}\right).\qed
+\end{gather*}
+
+\textit{Osservazione.} Se $\displaystyle \delta A=0$ si ha che:
+\begin{equation*}
+\frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \leqslant K_{p}(A)\left(\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}}\right).
+\end{equation*}
+Ovvero, anche se la perturbazione è molto piccola ma il condizionamento della matrice è grande, ossia la matrice è molto ``brutta'', l'errore rispetto alla soluzione esatta rimane comunque non trascurabile.
+Da ciò segue che:
+\begin{corollario}
+Se $\displaystyle \delta A=0$, si ha che:
+\begin{equation*}
+\frac{1}{K_{p}(A)}\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} \leqslant \frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \leqslant K_{p}(A) \ \frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}}.
+\end{equation*}
+\end{corollario}
+Cioè possiamo stimare l'errore anche dal basso.
+Questo è notevole perché è spesso facile trovare stime dall'alto, mentre fornire stime dal basso è più difficile, o non sempre possibile.
+
+\textit{Dimostrazione del corollario.} Scriviamo il problema perturbato con $\displaystyle \delta A=0$ e passiamo alle norme:
+\begin{align*}
+A\delta \x & =\delta \mathbf{b} & \text{((PP) con $\delta A=0$)}\\
+\Vert \delta \mathbf{b}\Vert _{p} & =\Vert A\delta \x\Vert _{p} \leqslant \Vert A\Vert _{p}\Vert \delta \x\Vert _{p}. & \text{(passando alle norme)}
+\end{align*}
+Ricordiamo ora che:
+\begin{equation*}
+\Vert \x\Vert _{p} =\left\Vert A^{-1}\mathbf{b}\right\Vert _{p} \leqslant \left\Vert A^{-1}\right\Vert _{p} \ \Vert \mathbf{b}\Vert _{p}.
+\end{equation*}
+e moltiplichiamo quindi per $\Vert \x\Vert _{p}$:
+\begin{align*}
+\Vert \x\Vert _{p} \ \Vert \delta \mathbf{b}\Vert _{p} & \leqslant \Vert A\Vert _{p} \ \Vert \delta \x\Vert _{p} \ \underbrace{\left\Vert A^{-1}\right\Vert _{p} \ \Vert \mathbf{b}\Vert _{p}}_{\Vert \x\Vert _{p}}\\
+\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} & \leqslant \frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}} \ \underbrace{\Vert A\Vert _{p} \ \left\Vert A^{-1}\right\Vert _{p} \ }_{K_{p}(A)}\\
+\frac{1}{K_{p}(A)}\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} & \leqslant \frac{\Vert \delta \x\Vert _{p}}{\Vert \x\Vert _{p}}.
+\qed
+\end{align*}
+
+% \textit{[Lezione 6 (23-03-2020)]}
+\section{Problema del fill-in}
+Supponiamo di avere una matrice tridiagonale, che sappiamo poter fattorizzare con l'\textbf{algoritmo di Thomas}\index{algoritmo!di Thomas}.
+La fattorizzazione $LU$ preserva questa struttura\textit{ a banda}:
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+\cdot  & \cdot  &  &  & \\
+\cdot  & \cdot  & \cdot  &  & \\
+ & \cdot  & \cdot  & \cdot  & \\
+ &  & \cdot  & \cdot  & \cdot \\
+ &  &  & \cdot  & \cdot
+\end{bmatrix}}_{A}\xrightarrow{\text{Thomas}}\underbrace{\begin{bmatrix}
+1 &  &  &  & \\
+\cdot  & 1 &  &  & \\
+ & \cdot  & 1 &  & \\
+ &  & \cdot  & 1 & \\
+ &  &  & \cdot  & 1
+\end{bmatrix}}_{L}\underbrace{\begin{bmatrix}
+\cdot  & \cdot  &  &  & \\
+ & \cdot  & \cdot  &  & \\
+ &  & \cdot  & \cdot  & \\
+ &  &  & \cdot  & \cdot \\
+ &  &  &  & \cdot
+\end{bmatrix}}_{U}
+\end{equation*}
+abbiamo quindi a che fare con matrici quasi vuote.
+\begin{definition}
+[Matrice sparsa]
+Diciamo che $A$ è \textbf{sparsa}\index{matrice!sparsa} se il numero di elementi non nulli (NNZ: Number of Non Zero) è circa $O(n)$.
+\end{definition}
+Se applichiamo la fattorizzazione $LU$ a una matrice sparsa generica (non a banda) i fattori $L$ e $U$ in generale \textit{non preservano la struttura di sparsità}: anzi, talvolta sono addirittura piene.
+Per questa ragione, non possiamo fare previsioni su quanta memoria servirà per memorizzarle.
+Questo è noto come \textbf{problema del fill-in}\index{problema!del fill-in}.
+Per quantificare questo problema, si guarda il numero di elementi non zero di $A$ e di $LU$, e si fa la loro differenza.
+
+\textit{Esempio.}
+\begin{equation*}
+	\underbrace{
+		\begin{bmatrix}
+				  &       & \cdot &       &   \\
+				  &       &       &       &   \\
+			\cdot &       &       & \cdot &   \\
+				  & \cdot &       &       &   \\
+				  &       & \cdot &       &
+		\end{bmatrix}
+		}_{A}\xrightarrow{\text{Fattorizzazione} \ LU}\underbrace{
+		\begin{bmatrix}
+			1     &       &       &   &   \\
+			      & 1     &       &   &   \\
+			      &       & 1     &   &   \\
+			\cdot & \cdot &       & 1 &   \\
+			\cdot &       & \cdot &   & 1
+		\end{bmatrix}
+		}_{L}\underbrace{
+		\begin{bmatrix}
+			\cdot &       &       & \cdot & \cdot \\
+			      & \cdot &       & \cdot &       \\
+			      &       & \cdot &       & \cdot \\
+			      &       &       & \cdot &       \\
+			      &       &       &       & \cdot
+		\end{bmatrix}
+	}_{U}
+\end{equation*}
+Illustriamo qualche possibile soluzione a questo problema:
+\begin{enumerate}
+\item Riordinare le righe e le colonne in modo da ottenere le righe e le colonne di $A$ in una configurazione che minimizza il fill-in (approccio utilizzato da Matlab).
+\item Cambiare completamente prospettiva, cercando di risolvere il problema \textit{senza manipolare affatto la matrice }$A$. L'idea sarà sviluppata nel prossimo capitolo nei cosiddetti \textbf{metodi iterativi}\index{metodi iterativi}.
+\end{enumerate}

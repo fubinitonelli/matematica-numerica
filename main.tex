@@ -1,0 +1,59 @@
+\documentclass[10pt,twoside]{book}
+\usepackage[
+    paperwidth=17cm,
+    paperheight=24cm,
+    twoside,
+    left=2.5cm,
+    right=2cm,
+    top=2.5cm,
+    bottom=3cm,
+]{geometry}
+
+\input{stile.tex}
+
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\spazioSecBox}{\vspace*{0.5cm}}
+
+% indice analitico
+\usepackage{imakeidx}
+\makeindex[columns=2, title=Indice analitico, intoc]
+
+\allowdisplaybreaks[4] % Consente di rompere equazioni su più pagine
+
+\begin{document}
+
+\frontmatter
+\pagestyle{empty}
+
+\input{firstpages/copertina.tex}
+\clearpage
+
+\input{firstpages/copyright.tex}
+\clearpage
+
+\input{firstpages/prefazione.tex}
+\cleardoublepage
+
+\tableofcontents
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\thispagestyle{empty}
+\cleardoublepage
+
+\mainmatter
+\pagestyle{fancy}
+\input{capitoli/01-introduzione.tex}
+\input{capitoli/02-sistemi-metodi-diretti.tex}
+\input{capitoli/03-sistemi-metodi-iterativi.tex}
+\input{capitoli/04-approssimazione-funzioni-dati.tex}
+\input{capitoli/05-integrazione-numerica.tex}{}
+\input{capitoli/06-approssimazione-derivate.tex}
+\input{capitoli/07-edo.tex}
+\input{capitoli/08-equazioni-non-lineari.tex}
+\appendix
+\input{capitoli/A1-algebra-lineare.tex}
+\listofalgorithms
+\printindex
+\cleardoublepage
+
+\end{document}

@@ -1,0 +1,404 @@
+%!TEX root = ../main.tex
+\chapter{Richiami di algebra lineare}
+
+Il testo richiede la conoscenza di basilari concetti dall'algebra lineare.
+In questa appendice presentiamo alcuni utili richiami alla materia.
+
+\section{Vettori e spazi vettoriali}
+
+\begin{definition}
+	[Spazio vettoriale]
+	\index{Spazio vettoriale}
+	Chiamiamo spazio vettoriale $V$ su un campo $K$, solitamente con $K=\mathbb{R}$, un insieme non vuoto i cui elementi, detti vettori, sono dotati di un operatore di addizione $+:V\times V\rightarrow V$ e un operatore di moltiplicazione per scalare $\cdot :K\times V\rightarrow V$.
+  Questi operatori devono possedere le seguenti proprietà, per ogni scelta dei vettori $\mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{v}, \mathbf{w} \in V$ coinvolti:
+\begin{itemize}
+	\item l'addizione è associativa, ovvero $\mathbf{a} +(\mathbf{b} +\mathbf{c}) =(\mathbf{a} +\mathbf{b}) +\mathbf{c}$, e commutativa, cioè $\mathbf{a} +\mathbf{b} =\mathbf{b} +\mathbf{a}$;
+	\item esiste un vettore nullo $\mathbf{0} \in V$ tale che $\mathbf{v} +\mathbf{0} =\mathbf{v}$;
+	\item $0\cdot \mathbf{v} =\mathbf{0}$ e $1\cdot \mathbf{v} =\mathbf{v}$;
+	\item per ogni elemento $\mathbf{v}$ di $V$ esiste ed appartiene a $V$ il suo opposto $( -\mathbf{v})$, ovvero che sia tale che $\mathbf{v} + ( -\mathbf{v}) = \mathbf{0}$;
+	\item vale la proprietà distributiva, ovvero $( \alpha +\beta )\mathbf{v} =\alpha \mathbf{v} +\beta \mathbf{v}$ e $\alpha (\mathbf{v} +\mathbf{w}) =\alpha \mathbf{v} +\alpha \mathbf{w}$ per ogni scelta degli scalari $\alpha ,\beta \in K$.
+\end{itemize}
+\end{definition}
+Notiamo che queste proprietà sono simili a quelle possedute dai numeri scalari con cui normalmente si opera.
+
+I vettori sono quindi \textit{rappresentabili} come $n$-uple ordinate di numeri. Ai fini di questo corso è utile vederli proprio come \textit{colonne}, denotate da:
+\begin{equation*}
+\mathbf{v} =\begin{bmatrix}
+v_{1}\\
+v_{2}\\
+\vdots \\
+v_{n}
+\end{bmatrix} ,\ \ \mathbf{v} \in V.
+\end{equation*}
+\begin{definition}
+	Un insieme di vettori $\{\mathbf{v}_{1} ,\dotsc ,\mathbf{v}_{n}\}$ si dice linearmente indipendente se vale la seguente implicazione, con $\alpha _{1} ,\dotsc ,\alpha _{n} \in K$:
+	\begin{equation*}
+		\alpha _{1}\mathbf{v}_{1} +\dotsc +\alpha _{n}\mathbf{v}_{n} =\mathbf{0} \ \ \Rightarrow \ \ \alpha _{1} ,\dotsc ,\alpha _{n} =0.
+	\end{equation*}
+\end{definition}
+\begin{definition}
+[Span]
+\index{span}
+Dato $V$ uno spazio vettoriale su $K$ e un insieme di vettori di $V$: $\{\mathbf{v}_{1} ,\mathbf{v}_{2} ,\dotsc ,\mathbf{v}_{n}\}$, si dice \textit{span} o \textit{spazio generato da vettori} l'insieme di tutte le loro possibili combinazioni lineari, e si indica con:
+\begin{equation*}
+\text{span}(\mathbf{v}_{1} ,\mathbf{v}_{2} ,\dotsc ,\mathbf{v}_{n}) \coloneqq \left\{a_{1}\mathbf{v}_{1} +a_{2}\mathbf{v}_{2} +\dotsc +a_{n}\mathbf{v}_{n} \ \text{con} \ a_{1} ,a_{2} ,\dotsc ,a_{n} \in K\right\} .
+\end{equation*}
+\end{definition}
+Per esempio, si può facilmente mostrare che i vettori $[1,0]$ e $[2,0]$, che sono elementi di $\mathbb{R}^{2}$, generano $\mathbb{R}$, essendo linearmente \textit{dipendenti}. Invece, i vettori $[2,0]$ e $[4,5]$ generano $\mathbb{R}^{2}$, in quanto sono linearmente \textit{indipendenti}.
+\begin{definition}
+	[Prodotto scalare]
+	\index{prodotto scalare}
+	Dato uno spazio vettoriale $V$ su $\mathbb{R}$, un \textit{prodotto scalare} in $V$ è un operatore binario $( \cdot ,\cdot ) :V\times V\rightarrow \mathbb{R} $ tale che, per ogni $\mathbf{v} ,\mathbf{w} ,\x \in V$ e per ogni $\alpha ,\beta \in \mathbb{R} $:
+\begin{itemize}
+	\item $( \alpha \mathbf{v} +\beta \mathbf{w} ,\x) =\alpha (\mathbf{v} ,\x) +\beta (\mathbf{w} ,\x)$, cioè si ha \textit{linearità} in entrambi gli operandi;
+	\item $(\x ,\x) \geqslant 0$;
+	\item $(\x ,\x) =0$ se e solo se $\x =\mathbf{0}$.
+\end{itemize}
+\end{definition}
+\begin{definition}
+[Prodotto scalare canonico in $\mathbb{R}^{n}$] Tra i vari prodotti scalari possibili per $\mathbb{R}^{n}$, quello definito \textit{canonico} è il prodotto scalare euclideo.
+Esso è un operatore binario denotato dal simbolo ``$\, \cdot \,$'', e definito su $\mathbb{R}^{n} \times \mathbb{R}^{n}\rightarrow \mathbb{R}$ nel seguente modo:
+\begin{equation*}
+\mathbf{u} \cdot \mathbf{v} \coloneqq u_{1} v_{1} +u_{2} v_{2} +\dotsc +u_{n} v_{n}.
+\end{equation*}
+\end{definition}
+Nel seguito quando ci riferiremo al prodotto scalare in $\mathbb{R}^{n}$ indicheremo sempre quello canonico.
+\begin{definition}
+	[Ortogonalità]
+	\index{ortogonalità}
+	Due vettori $\x ,\y \in \mathbb{R}^{n}$ sono ortogonali se
+	$$(\x ,\y) =0.$$
+\end{definition}
+\begin{definition}
+	[Norma euclidea]
+	\index{norma!euclidea}
+	Si dice norma euclidea di un vettore $\x \in \mathbb{R}^{n}$ l'operatore $\Vert \cdot \Vert_{2}  :\mathbb{R}^{n}\rightarrow \mathbb{R}$ tale che:
+	\begin{equation*}
+		\Vert \x\Vert_{2} \coloneqq \sqrt{x^{2}_{1} +x^{2}_{2} +\dotsc +x^{2}_{n}}.
+	\end{equation*}
+	\label{def:norma-euclidea}
+\end{definition}
+\begin{definition}
+	[Norma indotta]
+	\index{norma!indotta}
+	Dato un prodotto scalare $( \cdot ,\cdot )$, la norma indotta da tale prodotto scalare è definita come:
+	\begin{equation*}
+		\Vert \x\Vert \coloneqq \sqrt{(\x ,\x)}.
+	\end{equation*}
+  Essa rispetta tutte le proprietà richieste ad un operatore norma.
+\end{definition}
+Per esempio, la norma euclidea è la norma indotta dal prodotto scalare canonico in $\mathbb{R}^{n}$:
+\begin{equation*}
+  \Vert \x\Vert_{2} =\sqrt{\x \cdot \x}.
+\end{equation*}
+
+\section{Matrici}
+\begin{definition}
+	[Matrice]
+	\index{matrice}
+	Una matrice $A$ di dimensioni $m\times n$ sul campo $K$ è una tabella di $mn$ elementi di $K$.
+  I suoi elementi saranno indicati con la notazione $( a_{ij})$, dove $i$ è l'indice della riga dell'elemento e $j$ quello della sua colonna, con $1\leqslant i\leqslant m$ e $1\leqslant j\leqslant n$.
+  Una matrice si rappresenta nel seguente modo:
+	\begin{equation*}
+		A=\begin{bmatrix}
+		a_{11} & a_{12} & \cdots  & a_{1n}\\
+		a_{21} & a_{22} & \cdots  & a_{2n}\\
+		\vdots  & \vdots  & \ddots  & \vdots \\
+		a_{m1} & a_{m2} & \cdots  & a_{mn}
+		\end{bmatrix}
+	\end{equation*}
+	Per indicare una matrice su $\mathbb{R}$ di $m$ righe e $n$ colonne si dirà $A\in \mathbb{R}^{m\times n}$.
+\end{definition}
+
+
+\begin{definition}
+[Prodotto tra matrici]
+\index{prodotto tra matrici}
+Date due matrici $A\in \mathbb{R}^{m\times p}$ e $B\in \mathbb{R}^{p\times n}$ (inclusi i casi in cui $m, n$ e/o $p$ siano uguali a 1), si dice prodotto righe per colonne, o semplicemente prodotto tra le due matrici, la matrice $C\in \mathbb{R}^{m\times n}$ definita per componenti da:
+\begin{equation*}
+c_{ik} =\sum _{j=1}^{p} a_{ij} b_{jk} ,\ \ \forall i=1,\dotsc ,m,\ \forall k=1,\dotsc ,n.
+\end{equation*}
+In altre parole, la componente $ik$ del risultato è il prodotto scalare canonico della riga $i$ di $A$ e della colonna $k$ di $B$.
+\end{definition}
+Evidenziamo che il numero $p$ di colonne di $A$ e di righe di $B$ devono essere uguali. \\
+La definizione è ancora valida se una o entrambe le matrici coinvolte sono in realtà vettori (``orizzontali'' oppure ``verticali''), i quali possono essere visti come casi particolari di matrici con una dimensione unitaria. \\
+\textit{Esempio.} Consideriamo:
+\begin{equation*}
+A=\begin{bmatrix}
+a & b\\
+c & d
+\end{bmatrix} \quad B=\begin{bmatrix}
+x & y & z\\
+u & v & w
+\end{bmatrix} ,
+\end{equation*}
+il loro prodotto è
+\begin{equation*}
+AB=\begin{bmatrix}
+ax+bu & ay+bv & az+bw\\
+cx+du & cy+dv & cz+dw
+\end{bmatrix} .
+\end{equation*}
+Osserviamo che in generale $AB\neq BA$, infatti:
+\begin{equation*}
+A=\begin{bmatrix}
+0 & 0\\
+0 & 1
+\end{bmatrix} \quad B=\begin{bmatrix}
+0 & 0\\
+1 & 0
+\end{bmatrix} \ \ \Rightarrow \ \ AB=\begin{bmatrix}
+0 & 0\\
+1 & 0
+\end{bmatrix} \neq \begin{bmatrix}
+0 & 0\\
+0 & 0
+\end{bmatrix} =BA.
+\end{equation*}
+Presentiamo ora una serie di comuni classificazioni per le matrici.
+\begin{definition}
+	[Matrice quadrata]
+	\index{matrice!quadrata}
+	Una matrice $m\times n$ si dice \textit{quadrata} se $m=n$, cioè se il numero di righe è uguale al numero di colonne.
+\end{definition}
+\begin{definition}
+	[Matrice invertibile]
+	\index{matrice!invertibile}
+	Data una matrice quadrata, si dice \textit{invertibile} se esiste una matrice $B$ con lo stesso numero di righe e colonne tale che:
+	\begin{equation*}
+		BA=AB=I,
+	\end{equation*}
+	dove $I$ è la \textit{matrice identità}, delle stesse dimensioni, costruita come $( I)_{ij} =\delta _{ij}$, cioè $1$ se $i=j$ e $0$ se $i\neq j$. La matrice inversa di $A$ si indica con la notazione $A^{-1}$.
+\end{definition}
+\begin{definition}
+	[Matrice trasposta]
+	\index{matrice!trasposta}
+	Data una matrice $A\in \mathbb{R}^{m\times n}$, si definisce la sua \textit{matrice trasposta} la matrice $B\in \mathbb{R}^{n\times m}$ tale che $b_{ij} = a_{ji}$ per ogni indice $i,j$, ovvero ottenuta ``ruotando'' la matrice scambiando righe e colonne ma mantenendone l'ordine.
+\end{definition}
+È facile dimostrare le seguenti proprietà della trasposta:
+\begin{gather*}
+	\left( A^{T}\right)^{T} =A,\quad ( A+B)^{T} =A^{T} +B^{T} ,\\
+	( AB)^{T} =B^{T} A^{T} ,\quad ( \alpha A)^{T} =\alpha A^{T}.
+\end{gather*}
+Inoltre, se $A$ è invertibile si ha:
+\begin{equation*}
+	\left( A^{T}\right)^{-1} =\left( A^{-1}\right)^{T} \eqqcolon A^{-T}.
+\end{equation*}
+\begin{definition}
+	Data una matrice quadrata $A\in \mathbb{R}^{n\times n}$:
+\begin{itemize}
+	\item essa è \textbf{simmetrica}\index{matrice!simmetrica} se $A=A^{T}$, cioè se $a_{ij} =a_{ji}$ per ogni $i,j=1,\dotsc ,n$;
+	\item essa è \textbf{diagonale}\index{matrice!diagonale} se $a_{ij} =0$ per ogni $i\neq j$.
+  La \textit{matrice identità} è quindi un caso particolare di matrice diagonale;
+	\item essa è \textbf{triangolare superiore}\index{matrice!triangolare} (risp. \textbf{inferiore}) se $a_{ij} =0$ per ogni $i >j$ (risp. $i< j$).
+\end{itemize}
+\end{definition}
+
+\textit{Esempi.}
+Ecco alcuni esempi delle tipologie di matrici appena presentate:
+\begin{itemize}
+\item simmetrica,\begin{equation*}
+\begin{bmatrix}
+3 & 2 & 17 & 34\\
+2 & 5 & 1 & 8\\
+17 & 1 & 9 & e\\
+34 & 8 & e & 22
+\end{bmatrix}
+\end{equation*}
+\item diagonale,\begin{equation*}
+\begin{bmatrix}
+13 & 0 & 0 & 0\\
+0 & \pi  & 0 & 0\\
+0 & 0 & 4 & 0\\
+0 & 0 & 0 & 9
+\end{bmatrix}
+\end{equation*}
+\item triangolare superiore,\begin{equation*}
+\begin{bmatrix}
+1 & 4 & 0 & 11\\
+0 & 29 & 2 & 15\\
+0 & 0 & 6 & 7\\
+0 & 0 & 0 & 5
+\end{bmatrix}
+\end{equation*}
+\item triangolare inferiore.\begin{equation*}
+\begin{bmatrix}
+5 & 0 & 0 & 0\\
+7 & 14 & 0 & 0\\
+0 & 8 & 80 & 0\\
+4 & \pi  & 9 & 66
+\end{bmatrix}
+\end{equation*}
+\end{itemize}
+
+Le matrici quadrate hanno due grandezze scalari fondamentali ad esse associate: il determinante e la traccia.
+\begin{definition}
+	[Determinante]
+	\index{determinante}
+	Data una matrice quadrata $A\in \mathbb{R}^{n\times n}$, si definisce \textit{determinante} di $A$ la seguente quantità scalare:
+	\begin{equation*}
+		\operatorname{det} A \coloneqq \sum\limits _{\sigma \in S_{n}}\sgn( \sigma ) a_{1\sigma ( 1)} \dotsc a_{n\sigma ( n)} ,
+	\end{equation*}
+	dove $S_{n}$ indica l'insieme delle $n!$ permutazioni di $\{1,\dotsc ,n\}$, e $\sgn( \sigma )$ indica il segno della permutazione, cioè $1$ (risp. $-1$) se il numero di scambi con cui si ottiene è pari (risp. dispari).
+\end{definition}
+
+\begin{theorem}
+	[Sviluppo di Laplace]
+	\index{sviluppo di Laplace}
+	Consideriamo una matrice quadrata $A\in \mathbb{R}^{n\times n}$ e una sua sottomatrice $C_{ij} \in \mathbb{R}^{( n-1) \times ( n-1)}$ ottenuta rimuovendo la $i$-esima riga e la $j$-esima colonna.
+  Allora:
+	\begin{equation*}
+		\operatorname{det} A=\sum ^{n}_{j=1}( -1)^{i+j} a_{ij}\operatorname{det}( C_{ij}) .
+	\end{equation*}
+\end{theorem}
+Nel caso molto comune di $n=2$ il determinante si trova come:
+\begin{equation*}
+A=\begin{bmatrix}
+a_{11} & a_{12}\\
+a_{21} & a_{22}
+\end{bmatrix} \quad \operatorname{det}( A) =a_{11} a_{22} -a_{12} a_{21}
+\end{equation*}
+\begin{theorem}
+	Date $A,B\in \mathbb{R}^{n\times n}$, valgono le seguenti proprietà:
+	\begin{gather*}
+		\operatorname{det}( AB) =\operatorname{det}( A)\operatorname{det}( B) ,\ \ \operatorname{det}\left( A^{-1}\right) =\frac{1}{\operatorname{det}( A)} ,\\
+		\operatorname{det}( A) =\operatorname{det}\left( A^{T}\right) ,\ \ \operatorname{det}( \alpha A) =\alpha ^{n}\operatorname{det}( A) ,\ \ \forall \alpha \in K.
+	\end{gather*}
+  La prima proprietà è nota come teorema di Binet.
+\end{theorem}
+\begin{definition}
+	[Traccia]
+	\index{traccia}
+	Si definisce \textit{traccia} di una matrice quadrata $A\in \mathbb{R}^{n\times n}$ la somma degli elementi sulla diagonale:
+	\begin{equation*}
+		\operatorname{tr}( A) \coloneqq \sum ^{n}_{i=1} a_{ii} .
+	\end{equation*}
+\end{definition}
+
+Esistono, infine, diversi spazi vettoriali associati ad una matrice.
+\begin{definition}
+	[Rango]
+	\index{rango}
+	Si dice \textit{rango} (in inglese \textit{rank}) di una matrice $A$ la dimensione dello spazio generato dalle sue colonne.
+  Esso viene indicato con $\operatorname{Rank}( A)$.
+\end{definition}
+Si può dimostrare che si ottiene lo stesso spazio se si usa lo spazio generato dalle righe invece che dalle colonne.
+\begin{definition}
+	[Nucleo e immagine]
+	\index{nucleo}
+	\index{kernel}
+	\index{immagine}
+	Data una matrice $A \in \mathbb{R}^{n \times n}$, si dice \textit{nucleo} o \textit{kernel} di $A$ il seguente spazio:
+	\begin{equation*}
+		\operatorname{Ker}( A) \coloneqq \left\{\x \in \mathbb{R}^{n} :A\x =\mathbf{0}\right\}
+	\end{equation*}
+  e \textit{immagine} di $A$ il seguente spazio:
+  \begin{equation*}
+    \operatorname{Im}( A) \coloneqq \left\{A\x :\x \in \mathbb{R}^{n}\right\} .
+  \end{equation*}
+\end{definition}
+\begin{theorem}
+	Valgono le seguenti proprietà:
+	\begin{gather*}
+		\operatorname{Rank}( A) =\operatorname{Rank}\left( A^{T}\right) ,\ \ \operatorname{Rank}( A) =\operatorname{dim}(\operatorname{Im}( A)) ,\\
+		\operatorname{dim}(\operatorname{Im}( A)) +\operatorname{dim}(\operatorname{Ker}( A)) =n.
+	\end{gather*}
+  $\operatorname{dim}(\operatorname{Ker}( A))$ viene anche detta \textit{nullità} della matrice.
+  L'ultima proprietà porta pertanto il nome di teorema di \textbf{nullità più rango}\index{nullità più rango}.
+\end{theorem}
+\begin{theorem}
+	Data $A\in \mathbb{R}^{n\times n}$, le seguenti affermazioni sono equivalenti:
+\begin{itemize}
+	\item $A$ è invertibile;
+	\item $\operatorname{det}( A) \neq 0$;
+	\item $\operatorname{Ker}( A) =\{\mathbf{0}\}$;
+	\item $\operatorname{Rank}( A) =n$;
+	\item Le righe (e le colonne) di $A$ sono linearmente indipendenti.
+\end{itemize}
+\end{theorem}
+
+\subsection{Autovalori e autovettori}
+Le matrici quadrate posseggono un insieme di valori scalari particolarmente interessanti per l'analisi numerica, gli autovalori, e dei vettori ad essi associati, gli autovettori.
+
+\begin{definition}
+	[Autovalore e autovettore]
+	\index{autovalore}
+	\index{autovettore}
+	Consideriamo una matrice $A\in \mathbb{R}^{n\times n}$.
+  Si dicono \textit{autovalori} quei $\lambda \in \mathbb{R}$ tali che
+	\begin{equation*}
+		A\x =\lambda \x ,\ \ \x \in \mathbb{R}^{n}.
+	\end{equation*}
+	L'insieme degli autovalori è chiamato \textbf{spettro}\index{spettro} di $A$, indicato con $\sigma ( A)$.
+
+	È facile verificare che gli autovalori di una matrice $A$ possono essere determinati calcolando le radici del suo \textbf{polinomio caratteristico}\index{polinomio!caratteristico}:
+	\begin{equation*}
+		p_{A}( \lambda ) =\operatorname{det}( A-\lambda I) =0.
+	\end{equation*}
+	Questo è al più un polinomio di grado $n$, per cui vi saranno al massimo $n$ autovalori distinti.
+  Inoltre gli $\x$ che soddisfano $A\x =\lambda \x$ si dicono \textit{autovettori}.
+\end{definition}
+\begin{theorem}
+	Una matrice $A\in \mathbb{R}^{n\times n}$ e la sua trasposta hanno gli stessi autovalori.
+\end{theorem}
+\begin{theorem}
+	Gli autovalori di qualsiasi matrice quadrata $A$ sono legati al suo determinante e traccia nel seguente modo:
+	\begin{equation*}
+		\operatorname{det}( A) =\prod ^{n}_{i=1} \lambda _{i} ,\ \ \operatorname{tr}( A) =\sum ^{n}_{i=1} \lambda _{i} .
+	\end{equation*}
+\end{theorem}
+\begin{definition}
+	[Matrice definita positiva/negativa]
+	\index{matrice!definita positiva}
+	\index{matrice!definita negativa}
+	Una matrice quadrata $A\in \mathbb{R} ^{n\times n} $ si dice definita positiva (risp. negativa) se $\x^{T} A\x > 0$ (risp. $< 0$) per ogni $\x \neq \mathbf{0}$, $\x \in \mathbb{R}^{n}$.
+	\label{def:matrice-definita-positiva-negativa}
+\end{definition}
+\begin{theorem}
+	Sia $A$ una matrice quadrata di dimensione $n$.
+  Le seguenti affermazioni sono equivalenti:
+	\begin{itemize}
+		\item $A$ è \textit{definita positiva} (\textit{negativa});
+		\item tutti gli autovalori di $A$ sono positivi (negativi);
+		\item \textbf{Criterio di Sylvester}\index{criterio!di Sylvester}: tutti i determinanti dei minori Nord-Ovest\footnote{Le sottomatrici di ordine $k$ ottenute eliminando le ultime $( n-k)$ righe e colonne, con $0\leqslant k\leqslant n-1$.} sono positivi (tutti i determinanti dei minori Nord-Ovest di ordine dispari sono negativi e i determinanti dei minori di testa di ordine pari sono positivi).
+	\end{itemize}
+	\label{thm:matrice-definita-positiva-negativa}
+\end{theorem}
+\begin{definition}
+	Due matrici $A,B$ sono \textbf{simili}\index{matrice!simile} se esiste una matrice $P$ invertibile, detta di passaggio, tale che:
+	\begin{equation*}
+		P^{-1} AP=B.
+	\end{equation*}
+\end{definition}
+\begin{definition}
+	Una matrice $A$ è \textbf{diagonalizzabile}\index{matrice!diagonalizzabile} se è simile ad una matrice diagonale, cioè se esiste $P$ invertibile tale che:
+	\begin{equation*}
+		P^{-1} AP=\Delta ,
+	\end{equation*}
+	con $\Delta $ matrice diagonale.
+\end{definition}
+\begin{theorem}
+	Una matrice quadrata di dimensione $n$ è diagonalizzabile se e solo se ammette $n$ autovettori linearmente indipendenti.
+  Inoltre, una matrice reale simmetrica è sempre diagonalizzabile.
+\end{theorem}
+
+\begin{definition}
+	[Matrice ortogonale]
+	\index{matrice!ortogonale}
+	Una matrice $U\in \mathbb{R}^{n\times n}$ è \textit{ortogonale} se:
+	\begin{equation*}
+		U^{T} U=I=UU^{T} .
+	\end{equation*}
+\end{definition}
+\begin{theorem}
+	Se $U\in \mathbb{R}^{n\times n}$ è una matrice quadrata ortogonale, allora:
+\begin{itemize}
+	\item $\operatorname{det}( U) =\pm 1$;
+	\item conseguentemente, $U$ è invertibile, e in particolare $U^{-1} =U^{T}$;
+	\item $U^{T}$ è ortogonale;
+	\item preserva il prodotto scalare canonico, nel senso che $( U\x ,U\y) =(\x ,\y)$, con $\x ,\y \in \mathbb{R}$.
+		Infatti $( U\x ,U\y) =\left(\x ,U^{T} U\y\right) =(\x ,\y)$;
+	\item preserva anche la norma euclidea $\Vert U\x\Vert _{2} =\Vert \x\Vert _{2}$.
+		Infatti $\Vert U\x\Vert ^{2}_{2} =( U\x ,U\x) =(\x ,\x) =\Vert \x\Vert _{2}^{2} $.
+\end{itemize}
+\end{theorem}

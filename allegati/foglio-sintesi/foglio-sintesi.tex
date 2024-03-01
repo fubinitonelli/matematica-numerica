@@ -1,0 +1,917 @@
+\documentclass[8pt,a4paper]{article}
+
+\usepackage{physics}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{mathdots}
+\usepackage{yhmath}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{shapes}
+\usepackage{makecell}
+
+\usepackage{multicol}
+%\usepackage{calc}
+\usepackage{ifthen}
+\usepackage{geometry}
+%\usepackage{hyperref}
+
+\usepackage{amsfonts}
+\usepackage{etoolbox}
+\usepackage{titlesec}
+\usepackage{lipsum}
+\usepackage{cancel}
+\newcommand{\Bot}{\perp \!\!\! \perp} % indipendenza
+\usepackage{dsfont} % per funzione indicatrice
+
+% per far essere piccoli sum e prod
+\makeatletter
+\newcommand{\changeoperator}[1]{%
+  \csletcs{#1@saved}{#1@}%
+  \csdef{#1@}{\changed@operator{#1}}%
+}
+\newcommand{\changed@operator}[1]{%
+  \mathop{%
+    \mathchoice{\textstyle\csuse{#1@saved}}
+               {\csuse{#1@saved}}
+               {\csuse{#1@saved}}
+               {\csuse{#1@saved}}%
+  }%
+}
+\makeatother
+
+\changeoperator{sum}
+\changeoperator{prod}
+
+
+
+% To make this come out properly in landscape mode, do one of the following
+% 1.
+%  pdflatex latexsheet.tex
+%
+% 2.
+%  latex latexsheet.tex
+%  dvips -P pdf  -t landscape latexsheet.dvi
+%  ps2pdf latexsheet.ps
+
+
+% If you're reading this, be prepared for confusion.  Making this was
+% a learning experience for me, and it shows.  Much of the placement
+% was hacked in; if you make it better, let me know...
+
+
+% 2008-04
+% Changed page margin code to use the geometry package. Also added code for
+% conditional page margins, depending on paper size. Thanks to Uwe Ziegenhagen
+% for the suggestions.
+
+% 2006-08
+% Made changes based on suggestions from Gene Cooperman. <gene at ccs.neu.edu>
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\geometry{top=0.5cm,left=0.5cm,right=0.5cm,bottom=0.5cm}
+
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-0.1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {0.7ex plus 0ex minus 0ex}%
+                                {-2.1ex plus 0ex}%
+                                {\normalfont\scriptsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+%\titlespacing\section{0pt}{0pt plus 0pt minus 0pt}{0pt plus 0pt minus 0pt}
+
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{2}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Risoluzione di sistemi lineari $A\mathbf{x=b}$ con metodi diretti}
+\subsection{Metodi diretti: Fattorizzazione LU}
+
+$\boxed{A=LU}$, $\mathrm{det} A\neq 0$
+
+$L\mathbf{y} =\mathbf{b}$, forward substitution $\left( \simeq n^{2}\right)$.
+
+$U\mathbf{x} =\mathbf{y}$, backward substitution $\left( \simeq n^{2}\right)$.
+
+$\exists !\Leftrightarrow A_{i} ,i=1,\dotsc ,n$ non singolari
+
+$A$ dominanza diagonale stretta per righe o colonne $\Rightarrow \exists !$
+
+$A$ simmetrica e definita positiva $\Rightarrow \exists !$
+\subsection{Metodo di eliminazione gaussiana (MEG)}
+
+Costo:$\simeq 2/3\ n^{3}$.
+\subsection{Tecniche di Pivoting.}
+
+$PA=LU$, $\displaystyle P$ \textbf{matrice di permutazione}. Se $P=I$ non c'è pivoting.
+
+$L\mathbf{y} =P\mathbf{b} ,U\mathbf{x} =\mathbf{y}$
+\subsection{Casi particolari di Fattorizzazioni LU}
+
+> Matrici simmetriche e definite positive (SDP): fattorizzazione di Cholesky $\exists !H$ triangolare inferiore tale che $\boxed{A=HH^{T}} \Rightarrow H\mathbf{y} =\mathbf{b} ,H^{T}\mathbf{x} =\mathbf{y}$.
+
+Costo: $\displaystyle \simeq 1/3\ n^{3}$.
+
+> Matrici tridiagonali: algoritmo di Thomas.
+
+Costo: $\simeq n$.
+\subsection{Norme di vettori, norme matriciali e numero di condizionamento}
+
+Norma di vettore: $\Vert \mathbf{z}\Vert _{p} =\left(\sum ^{n}_{i=1} |z_{i} |^{p}\right)^{1/p} \ \ \forall p\in [ 1,+\infty )$
+
+Norma (indotta) di una matrice: $\Vert A\Vert _{p} =\sup _{\mathbf{z} \in \mathbb{R}^{n} ,\ \mathbf{z} \neq \mathbf{0}}\frac{\Vert A\mathbf{z}\Vert _{p}}{\Vert \mathbf{z}\Vert _{p}} \ \ \ \ \ \ \forall p\in [ 1,+\infty )$
+
+Se $p=2$, si chiama \textbf{norma spettrale}: $\Vert A\Vert _{2} =\sqrt{\rho \left( A^{T} A\right)} \equiv \sqrt{\rho \left( A A^{T}\right)}$.
+
+$\displaystyle \rho ( M)$: \textbf{raggio spettrale} di $\displaystyle M$: $\boxed{\rho ( M) :=\max_{i=1,\dotsc ,n} |\lambda _{i}( M) |}$
+
+Se $\displaystyle p=2$ e $A$ è SDP, allora $\Vert A\Vert _{2} =\sqrt{\rho \left( A^{2}\right)} =\sqrt{\rho ( A)^{2}} =\rho ( A) =\lambda _{\text{max}}( A)$.
+
+Proprietà: $\Vert A\Vert _{2} \geqslant 0$, $\Vert \alpha A\Vert _{2} =\alpha \Vert A\Vert _{2}$, $\Vert A+B\Vert _{2} \leqslant \Vert A\Vert _{2} +\Vert B\Vert _{2}$, $\Vert A\mathbf{v}\Vert _{2} \leqslant \Vert A\Vert _{2}\Vert \mathbf{v}\Vert _{2}$ con $\mathbf{v}$ vettore
+
+\textbf{Numero di condizionamento }$\boxed{K_{p}( A) =\Vert A\Vert _{p} \ \left\Vert A^{-1}\right\Vert _{p}}$, $p=1,2,\dotsc ,+\infty $
+
+Se $p=2$ si dice \textbf{numero di condizionamento spettrale}.
+
+Condizionamento grande $\rightarrow $ matrice brutta.
+
+Proprietà: $\displaystyle K_{p}( A) \geqslant 1$, $\displaystyle K_{p}( I) =1$, $\displaystyle K_{p}( A) =K_{p}\left( A^{-1}\right)$, $\displaystyle K_{p}( \alpha A) =K_{p}( A) ,\ \forall \alpha \in \mathbb{R} ,\alpha \neq 0$
+
+\textbf{Condizionamento spettrale}: Se $A$ è SDP, allora $\boxed{K_{2}( A) =\frac{\lambda _{\text{max}}( A)}{\lambda _{\text{min}}( A)}}$
+\subsection{Analisi di stabilità}
+
+\textbf{Teorema di stabilità.} Sia $\displaystyle \delta A\in \mathbb{R}^{n\times n}$ una perturbazione tale che $\displaystyle \left\Vert A^{-1}\right\Vert _{p}\Vert \delta A\Vert _{p} < 1$. Allora se $\displaystyle \mathbf{x} \in \mathbb{R}^{n}$ è soluzione di (PO) con $\displaystyle \mathbf{b} \in \mathbb{R}^{n} ,\ \mathbf{b} \neq \mathbf{0}$ e $\displaystyle \mathbf{x} +\delta \mathbf{x} \in \mathbb{R}^{n}$ è soluzione di (PP) per $\displaystyle \delta \mathbf{b} \in \mathbb{R}^{n}$ allora $\boxed{\frac{\Vert \delta \mathbf{x}\Vert _{p}}{\Vert \mathbf{x}\Vert _{p}} \leqslant \left[\frac{K_{p}( A)}{1-K_{p}( A)\frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}}}\right]\left(\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} +\frac{\Vert \delta A\Vert _{p}}{\Vert A\Vert _{p}}\right)}$
+
+Corollario. Se $\displaystyle \delta A=0$ allora $\frac{1}{K_{p}( A)}\frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}} \leqslant \frac{\Vert \delta \mathbf{x}\Vert _{p}}{\Vert \mathbf{x}\Vert _{p}} \leqslant K_{p}( A) \ \frac{\Vert \delta \mathbf{b}\Vert _{p}}{\Vert \mathbf{b}\Vert _{p}}$
+\subsection{Problema del fill-in}
+
+\textbf{Matrice sparsa:} se il numero di elementi non nulli è circa $O( n)$.
+\section{Risoluzione di sistemi lineari con metodi iterativi}
+
+\textbf{Forma generale: }$\boxed{\text{Dato} \ \mathbf{x}^{( 0)} ,\ \ \ \mathbf{x}^{( k+1)} =B\mathbf{x}^{( k)} +\mathbf{g} ,\ \ \ \ \ \ k\geqslant 0}$
+
+$B$: \textbf{matrice di iterazione}, dipende solo dalla matrice $A$ di partenza, invece $\mathbf{g}$ dipende sia da $A$ che da $\mathbf{b}$.
+
+\textbf{Convergenza:} $\lim _{k\rightarrow \infty }\mathbf{e}^{( k)} =0$, con $\mathbf{e}^{( k)} =\mathbf{x} -\mathbf{x}^{( k)}$
+
+\textbf{Consistenza:} $\mathbf{x} =B\mathbf{x} +\mathbf{g} ,\left( \Longrightarrow \mathbf{g} =( I-B) A^{-1}\mathbf{b}\right)$
+
+La consistenza non implica la convergenza.
+
+$\boxed{\text{convergenza} \ \ \Leftrightarrow \ \ \rho ( B) < 1}$
+
+Se $\rho ( B) \ll 1$ allora la convergenza è più veloce.
+
+\textbf{Equazione dell'errore:} $\boxed{\mathbf{e}^{( k)} =B^{k} \ \mathbf{e}^{( 0)}}$
+\subsection{Costruzione di metodi iterativi}
+
+$\boxed{A=P-N}$
+
+$P$ \textbf{matrice di precondizionamento}. Il metodo allora si scrive in due modi
+
+$\boxed{\mathbf{x}^{( k+1)} =\underbrace{P^{-1} N}_{B}\mathbf{x}^{( k)} +\underbrace{P^{-1}\mathbf{b}}_{\mathbf{g}}}$
+
+$\boxed{\mathbf{x}^{( k+1)} =\mathbf{x}^{( k)} +\overbrace{P^{-1}\underbrace{\left(\mathbf{b} -A\mathbf{x}^{( k)}\right)}_{\text{residuo} \ \mathbf{r}^{( k)}}}^{\mathbf{z}^{( k)}}}$
+
+$\text{converge} \ \ \Leftrightarrow \ \ \rho \left( I-P^{-1} A\right) < 1$
+
+$\boxed{A=D-E-F}$ $D$ parte diagonale, $-E$ triangolare bassa, $-F$ triangolare alta
+\subsection{Metodo di Jacobi}
+
+$\boxed{P=D} \ \boxed{N=E+F} \Rightarrow \boxed{B_{J} =P^{-1} N=D^{-1}( E+F)}$
+\subsection{Metodo di Gauss-Seidel}
+
+$\boxed{P=D-E} \ \boxed{N=F} \Rightarrow \boxed{B_{GS} =P^{-1} N=( D-E)^{-1} F}$
+
+$2$ volte più veloce di Jacobi.
+
+\textbf{Convergenza.}
+
+$A$ è a dominanza diagonale stretta per righe $\Rightarrow $ J e GS convergono
+
+$A$ è simmetrica e definita positiva $\Rightarrow $ GS converge
+
+$A$ tridiagonale: J converge $\Leftrightarrow $ GS converge, se convergono $\rho \left( B_{GS}\right) =\left[ \rho \left( B_{J}\right)\right]^{2}$
+\subsection{Metodi di rilassamento}
+\subsubsection{JOR (Jacobi Over Relaxation)}
+
+$\boxed{P=\frac{1}{\omega } D,\ \ \ \ 0< \omega < 1}$
+
+$\boxed{B_{JOR} =\omega B_{J} +( 1-\omega ) I=I-\omega D^{-1} A}$
+
+Se $\omega =1$ si ritrova il metodo di Jacobi.
+
+$\mathbf{x}^{( k+1)} =\mathbf{x}^{( k)} +\omega D^{-1}\mathbf{r}^{( k)} \ \ \ \ k=0,1,2,\dotsc $
+\subsubsection{SOR (Successive Over Relaxation)}
+
+$\boxed{P=\frac{1}{\omega } D-E,\ \ \ \ 0< \omega < 1}$
+
+$\boxed{B_{SOR} =\left( I-\omega D^{-1} E\right)^{-1}\left[( 1-\omega ) I+\omega D^{-1} F\right]}$
+
+Se $\omega =1$ si ritrova il metodo di Gauss-Seidel.
+
+$\mathbf{x}^{( k+1)} =\mathbf{x}^{( k)} +\left(\frac{1}{\omega } D-E\right)^{-1}\mathbf{r}^{( k)} ,\ \ \ \ k=0,1,2,\dotsc $
+
+\textbf{Convergenza.}
+
+JOR, $A$ SDP $\Rightarrow \text{JOR converge} \ \ \Leftrightarrow \ \ 0< \omega < \frac{2}{\rho \left( D^{-1} A\right)}$
+
+Se Jacobi converge, allora il metodo JOR converge purché $0< \omega \leqslant 1$.
+
+SOR, $A$ SDP $\Rightarrow \text{SOR converge} \ \ \Leftrightarrow \ \ 0< \omega < 2$, se $A$ è anche tridiagonale allora $\omega _{opt} =\frac{2}{1+\sqrt{1-\rho ^{2}( B_{J})}}$
+
+SOR, $A$ a dominanza diagonale stretta per righe: $0< \omega \leqslant 1\Longrightarrow \text{SOR converge}$
+\subsection{Metodo di Richardson}
+
+\textit{Metodo di Richardson stazionario}, $\alpha _{k} =\alpha \ \ \forall k\Rightarrow \mathbf{x}^{( k+1)} =\mathbf{x}^{( k)} +\boxed{\alpha } P^{-1}\mathbf{r}^{( k)}$
+
+\textit{Metodo di Richardson dinamico }$\Rightarrow \mathbf{x}^{( k+1)} =\mathbf{x}^{( k)} +\boxed{\alpha _{k}} P^{-1}\mathbf{r}^{( k)}$
+
+Jacobi, Gauss-Seidel, JOR sono tutti casi particolari di Richardson con $\alpha =1$.
+
+Se $P=I$ otteniamo il metodo di Richardson \textit{non precondizionato.}
+
+Se $P\neq I$ otteniamo il metodo di Richardson \textit{precondizionato.}
+
+Matrice di iterazione $\boxed{B_{\alpha _{k}} =I-\alpha _{k} P^{-1} A}$
+
+\textbf{Convergenza.}
+
+Richardson stazionario, $P$ invertibile.
+
+$\text{converge} \Leftrightarrow \frac{2\Re ( \lambda _{i})}{\alpha |\lambda _{i} |^{2}}  >1,\ \ \ \ \forall i=1,\dotsc ,n,$$\lambda _{i}$ gli autovalori di $P^{-1} A$.
+
+Se $P^{-1} A$ con autovalori reali e positivi, ordinati come $\lambda _{1} \geqslant \lambda _{2} \geqslant \dotsc \geqslant \lambda _{n}  >0$ allora $\text{converge} \Leftrightarrow 0< \alpha < \frac{2}{\lambda _{1}}$ e $\alpha _{opt} =\frac{2}{\lambda _{1} +\lambda _{n}}$.
+\subsection{Metodo del gradiente (Richardson dinamico)}
+
+\textbf{Energia del sistema}, $\Phi :\mathbb{R}^{n}\rightarrow \mathbb{R} ,\ \ \ \ \Phi (\mathbf{y}) =\frac{1}{2} \ \mathbf{y}^{T} A\mathbf{y} -\mathbf{y}^{T}\mathbf{b} ,$
+
+$\mathbf{x} \ \text{soluzione di} \ A\mathbf{x} =\mathbf{b} \ \ \Leftrightarrow \ \ \Phi (\mathbf{x}) =\min_{\mathbf{y} \in \mathbb{R}^{n}} \Phi (\mathbf{y}) .$
+
+$\boxed{\alpha _{k} =\frac{\left[\mathbf{r}^{( k)}\right]^{T}\mathbf{r}^{( k)}}{\left[\mathbf{r}^{( k)}\right]^{T} A\ \mathbf{r}^{( k)}}}$
+
+\textbf{Convergenza.}
+
+$A$ e $P$ SDP, il metodo del gradiente (con o senza precondizionatore) converge per ogni scelta di $\mathbf{x}^{( 0)}$ e la convergenza è monotona: $\boxed{\left\Vert \mathbf{e}^{( k+1)}\right\Vert _{A} \leqslant \left[\frac{K_{2}\left( P^{-1} A\right) -1}{K_{2}\left( P^{-1} A\right) +1}\right]\left\Vert \mathbf{e}^{( k)}\right\Vert _{A}}$ dove $\Vert \cdot \Vert _{A}$ è la \textbf{norma dell'energia} definita come $\forall \mathbf{w} \in \mathbb{R}^{n} \ \ \ \Vert \mathbf{w}\Vert _{A} =\sqrt{\mathbf{w}^{T} A\mathbf{w}}$.
+
+I vettori del residuo sono a due a due ortogonali: $\left(\mathbf{r}^{( k+1)}\right)^{T}\mathbf{r}^{( k)} =0$
+\subsection{Metodo del gradiente coniugato, CG (Conjugate Gradient)}
+
+$\mathbf{x}^{( k+1)} =\mathbf{x}^{( k)} +\alpha _{k}\mathbf{p}^{( k)}$
+\subsubsection{Scelta della direzione di discesa}
+
+$\begin{cases}
+\mathbf{p}^{( 0)} =\mathbf{r}^{( 0)}\\
+\mathbf{p}^{( k+1)} =\mathbf{r}^{( k+1)} -\beta _{k}\mathbf{p}^{( k)}
+\end{cases} \ \ \ \ \beta _{k} =\frac{\left( A\mathbf{p}^{( k)}\right)^{T}\mathbf{r}^{( k+1)}}{\left( A\mathbf{p}^{( k)}\right)^{T}\mathbf{p}^{( k)}}$
+
+La soluzione $\mathbf{x}^{( k+1)}$ è ottimale rispetto a \textit{tutte} le direzioni di discesa precedenti
+
+$\mathbf{x}^{( n)}$ \textit{è la soluzione esatta}.
+\subsubsection{Scelta del parametro di accelerazione}
+
+$\alpha _{k} =\frac{\left[\mathbf{p}^{( k)}\right]^{T}\mathbf{r}^{( k)}}{\left[\mathbf{p}^{( k)}\right]^{T} A\ \mathbf{p}^{( k)}} \ \ $
+
+\textbf{Convergenza.}
+
+$A$ SDP in aritmetica esatta, CG converge in al più $n$ passi e $\left\Vert \mathbf{e}^{( k)}\right\Vert _{A} \leqslant \left[\frac{2c^{k}}{1+c^{2k}}\right]\left\Vert \mathbf{e}^{( 0)}\right\Vert _{A} \ \ \ \ \text{con} \ \ \ \ c=\frac{\sqrt{K_{2}( A)} -1}{\sqrt{K_{2}( A)} +1}$
+
+Nel caso precondizionato, uguale ma con $c=\frac{\sqrt{K_{2}\left( P^{-1} A\right)} -1}{\sqrt{K_{2}\left( P^{-1} A\right)} +1}$
+\subsection{Criteri di arresto}
+
+\textbf{Criterio sul residuo.} $\frac{\left\Vert \mathbf{r}^{( k+1)}\right\Vert }{\Vert \mathbf{b}\Vert } \leqslant \mathrm{TOL}$
+
+\textbf{Criterio sull'incremento.} $\left\Vert \mathbf{x}^{( k+1)} -\mathbf{x}^{( k)}\right\Vert \leqslant \mathrm{TOL}$
+
+\textbf{Criterio di controllo.} Arrestiamo il ciclo dopo $n_{\text{max}}$ iterazioni.
+\section{Approssimazione di funzioni e dati}
+\subsection{Polinomio di interpolazione di Lagrange}
+
+\textbf{Polinomio di Lagrange} $\mathcal{L}_{i}( x)$ è un polinomio di grado $n$ e $\boxed{\mathcal{L}_{i}( x) =\begin{cases}
+1 & \text{se} \ x=x_{i}\\
+0 & \text{se} \ x=x_{j} ,\ j\neq i
+\end{cases}}$
+
+$\boxed{\mathcal{L}_{i}( x) =\prod\nolimits ^{n}_{j=0,j\neq i}\frac{( x-x_{j})}{( x_{i} -x_{j})} \ \ \ \ i=0,\dotsc ,n}$
+
+$\Pi _{n}( x) =y_{0}\mathcal{L}_{0}( x) +y_{0}\mathcal{L}_{1}( x) +\dotsc +y_{n}\mathcal{L}_{n}( x)$
+
+\textbf{Polinomio di interpolazione di Lagrange }$\Pi _{n}( x) =\sum ^{n}_{i=0} y_{i}\mathcal{L}_{i}( x)$
+
+$\mathcal{L}_{i}( x) =\frac{w_{n+1}( x)}{( x-x_{i}) w'_{n+1}( x_{i})} \ \ \ \ i=0,\dotsc ,n$ dove $w_{n+1}( x)$ è il \textbf{polinomio nodale} $\boxed{w_{n+1}( x) =\prod\nolimits ^{n}_{i=0}( x-x_{i})}$
+
+Errore di interpolazione. $x_{0} ,\dotsc ,x_{n}$ $n+1$ punti, $f\in C^{n+1}( I)$ allora $\boxed{E( x) =f( x) -\Pi _{n} f( x) =\frac{\omega _{n+1}( x)}{( n+1) !} f^{( n+1)}( \xi ) ,\ \xi ( x) \in I}$
+\subsection{Stabilità del polinomio di interpolazione}
+
+$\left\Vert \Pi _{n} f( x) -\tilde{\Pi }_{n} f( x)\right\Vert _{\infty } \leqslant \underbrace{\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}( x)\right\Vert _{\infty }}_{\Lambda _{n}( x)} \cdot \underbrace{\max_{i=1,\dotsc ,n}\left| f( x_{i}) -\tilde{f}( x_{i})\right| }_{\text{dipende solo dalla perturbazione}}$
+
+$\Lambda _{n}( x)$ \textbf{costante di Lebesgue}, cresce per $n\rightarrow +\infty $. Se nodi \textit{equispaziati}, allora $\Lambda _{n}( x) =\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}( x)\right\Vert _{\infty } \simeq \frac{2^{n+1}}{en(\log n+\gamma )} ,\ \ \ \ \gamma \simeq \frac{1}{2} .$
+\subsection{Utilizzo dei nodi non equispaziati}
+\subsubsection{Nodi di Chebyshev-Gauss-Lobatto}
+
+$\boxed{x_{i} =-\cos\left(\frac{\pi i}{n}\right) ,\ \ \ \ i=0,\dotsc ,n.}$
+
+$E_{n} =| \Pi _{n} f-f| \xrightarrow{n\rightarrow \infty } 0$
+
+$\Lambda _{n}( x) \leqslant \frac{2}{\pi }\left[\log n+\gamma +\log\frac{8}{\pi ^{2}}\right] +\frac{\pi }{72n^{2}}$
+\subsubsection{Nodi di Chebyshev-Gauss}
+
+$\boxed{x_{i} =-\cos\left(\frac{\pi ( 2i+1)}{2( n+1)}\right) ,\ \ \ \ i=0,\dotsc ,n.}$
+
+$E_{n} =| \Pi _{n} f-f| \xrightarrow{n\rightarrow \infty } 0$
+
+$\Lambda _{n}( x) \leqslant \frac{2}{\pi }\left[\log( n+1) +\gamma +\log\frac{8}{\pi }\right] +\frac{\pi }{72( n+1)^{2}}$
+
+Sull'intervallo generico $[ a,b]$: $\boxed{\hat{x}_{i} =\frac{a+b}{2} +\frac{b-a}{2} x_{i} ,\ \ \ \ i=0,\dotsc ,n.}$
+\subsection{Interpolazione composita}
+
+Sia $f\in C^{k+1}( I) ,I=[ a,b]$ e sia $\Pi ^{k}_{h} f( x)$ il suo polinomio di interpolazione composita. Allora: $\boxed{\left\Vert f( x) -\Pi ^{k}_{h} f( x)\right\Vert _{\infty } \leqslant C\ h^{k+1} \ \left\Vert f^{( k+1)}\right\Vert _{\infty }}$
+\subsection{Approssimazione nel senso dei minimi quadrati}
+
+$\boxed{\sum\nolimits ^{n}_{i=0}( y_{i} -p_{m}( x_{i}))^{2} \leqslant \sum\nolimits ^{n}_{i=0}( y_{i} -q_{m}( x_{i}))^{2} ,\ \ \ \ \forall q_{m} \in \mathbb{P}^{m}}$
+
+Se $m=1$ si chiama \textbf{retta dei minimi quadrati} o \textbf{retta di regressione}. 
+\subsection{Sistemi sovradeterminati}
+
+Data $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, e $\mathbf{b} \in \mathbb{R}^{m}$, diciamo che $\mathbf{x}^{\star } \in \mathbb{R}^{n}$ è soluzione di $A\mathbf{x} =\mathbf{b}$ nel senso dei minimi quadrati se $\boxed{\Phi \left(\mathbf{x}^{\star }\right) =\min_{\mathbf{x} \in \mathbb{R}^{n}} \Phi (\mathbf{x})}$
+
+Si trova con le equazioni ortonormali $\boxed{A^{T} A\mathbf{x}^{\star } =A^{T}\mathbf{b}}$
+\subsubsection{Fattorizzazione QR}
+
+Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$. $A$ ammette una fattorizzazione $QR$ se esistono:
+
+- $Q\in \mathbb{R}^{m\times m}$ ortogonale ($Q^{-1} =Q^{T}$ o ugualmente $Q^{T} Q=I$)
+
+- $R\in \mathbb{R}^{m\times n}$ trapeziodale superiore con le righe dalla $n+1$ in poi tutte nulle
+
+tali che $A=QR$.
+
+$\underbrace{\begin{bmatrix}
+\cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp 
+\end{bmatrix}}_{A\in \mathbb{R}^{m\times n}} =\underbrace{\begin{bmatrix}
+\cdotp  & \cdotp  & \cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp  & \cdotp  & \cdotp \\
+\cdotp  & \cdotp  & \cdotp  & \cdotp  & \cdotp 
+\end{bmatrix}}_{Q\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
+\cdotp  & \cdotp  & \cdotp \\
+0 & \cdotp  & \cdotp \\
+0 & 0 & \cdotp \\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}}_{R\in \mathbb{R}^{m\times n}}$
+
+\textbf{Fattorizzazione }$QR$\textbf{ ridotta.} Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, di rango massimo di cui sia data la fattorizzazione $QR$. Allora $\exists !$ fattorizzazione di $A$ della forma: $\boxed{A=\tilde{Q} \ \tilde{R}}$
+
+In tal caso $\exists !$ soluzione $\mathbf{x}^{\star } \in \mathbb{R}^{n}$ nel senso dei minimi quadrati del sistema sovradimensionato $A\mathbf{x} =\mathbf{b}$ data da: $\boxed{\mathbf{x}^{\star } =\tilde{R}^{-1}\tilde{Q}^{T}\mathbf{b}}$
+\section{Integrazione numerica}
+
+\textbf{Formula di quadratura }$\boxed{I_{n}( f) =\sum\nolimits ^{n}_{i=0} f( x_{i}) \alpha _{i}}$
+
+$x_{i} ,i=0,\dotsc ,n$ si chiamano \textit{nodi di quadratura}
+
+$\alpha _{i} ,i=0,\dotsc ,n$ si chiamano \textit{pesi di quadratura}
+\subsection{Formule di quadratura semplici}
+
+Formula del punto medio $\boxed{I_{0}( f) =( b-a) f\left(\frac{a+b}{2}\right)}$
+
+Formula del trapezio $\boxed{I_{1}( f) =( b-a)\left[\frac{f( a) +f( b)}{2}\right]}$
+
+Formula di Cavalieri-Simpson $\boxed{I_{2}( f) =\frac{b-a}{6}\left[ f( a) +4f\left(\frac{a+b}{2}\right) +f( b)\right]}$
+\subsection{Errore delle formule di quadratura semplici}
+
+\textbf{Errore di quadratura}: $\boxed{E_{n}( f) =I( f) -I_{n}( f)}$
+
+\textbf{Grado di esattezza} $r\geqslant 0$ se: $\boxed{E_{n}( p_{r}) =0\ \ \ \ \forall p_{r} \in \mathbb{P}^{r}}$
+
+\textbf{Punto medio.} Sia $f\in C^{2}([ a,b])$, allora $\exists \xi \in ( a,b)$ tale che $\boxed{E_{0}( x) =\frac{1}{24} f''( \xi )( b-a)^{3}}$
+
+\textbf{Trapezio.} Sia $f\in C^{2}([ a,b])$, allora $\exists \xi _{2} \in ( a,b)$ tale che $\boxed{E_{1}( x) =-\frac{1}{12} f''( \xi _{2})( b-a)^{3}}$
+
+\textbf{Cavalieri-Simpson.} Sia $f\in C^{4}([ a,b])$, allora $\exists \xi _{3} \in ( a,b)$ tale che $\boxed{E_{2}( x) =-\frac{1}{90}\frac{1}{32} f^{( 4)}( \xi _{3})( b-a)^{5}}$
+
+Se $n$ è pari, il g.d.e. è $n+1$, se $n$ è dispari il g.d.e. è $n$.
+\subsection{Formule di quadratura composite}
+
+$I( f) =\int\nolimits ^{b}_{a} f( x) dx\simeq I( f) =\int\nolimits ^{b}_{a} \Pi ^{k}_{H} f( x) dx=I^{c}_{k}( f)$ con $H=\frac{b-a}{N}$
+
+\textbf{Punto medio composito.}
+
+Ogni nodo è $x_{k} =a+kH$. $\boxed{I^{c}_{0}( f) =\sum\nolimits ^{N-1}_{k=0} Hf\left(\frac{x_{k} +x_{k+1}}{2}\right)}$
+
+Sia $f\in C^{2}([ a,b])$ allora $\exists \xi \in ( a,b)$ $\boxed{E^{c}_{0}( f) =I( f) -I^{c}_{0}( f) =\frac{b-a}{24} H^{2} f''( \xi )}$
+
+ODA: 2, GDE: 1.
+
+L'esponente di $H$ è detto \textbf{ordine di accuratezza della formula di quadratura}.
+
+\textbf{Trapezio composito.}
+
+Ogni nodo è $x_{k} =a+kH$. $\boxed{I^{c}_{1}( f) =\sum\nolimits ^{N-1}_{k=0}\frac{H}{2}[ f( x_{k}) +f( x_{k+1})]}$
+
+Sia $f\in C^{2}([ a,b])$ allora $\exists \eta \in ( a,b)$ $\boxed{E^{c}_{1}( f) =I( f) -I^{c}_{1}( f) =-\frac{b-a}{12} H^{2} f''( \eta )}$
+
+ODA: 2, GDE: 1.
+
+\textbf{Cavalieri-Simpson composito}
+
+$\boxed{I^{c}_{2}( f) =\sum\nolimits ^{N-1}_{k=0}\frac{H}{6}\left[ f( x_{k}) +4f\left(\frac{x_{k} +x_{k+1}}{2}\right) +f( x_{k+1})\right]}$
+
+Sia $f\in C^{4}([ a,b])$ allora $\exists \zeta \in ( a,b)$ $\boxed{E^{c}_{2}( f) =I( f) -I^{c}_{2}( f) =-\frac{b-a}{180}\frac{1}{16} H^{4} f^{( 4)}( \zeta )}$
+
+ODA: 4, GDE: 3.
+\subsection{Formule di Newton-Cotes}
+
+Interpolazione di Lagrange su nodi \textit{equispaziati}. $\boxed{I_{n}( f) =\sum\nolimits ^{n}_{i=0} \alpha _{i} f( x_{i})}$
+
+\textit{Formule aperte}, $x_{0} =a+h,x_{n} =b-h,h=\frac{b-a}{n+2} \ ( n\geqslant 0)$ (\textit{esempio}: punto medio.);
+
+$\boxed{I_{n}( f) =h\sum\nolimits ^{n}_{i=0} w_{i} f( x_{i}) ,\ \ \ \ w_{i} =\int\nolimits ^{n+1}_{-1} \varphi _{i}( t) dt}$
+
+\textit{Formule chiuse}, $x_{0} =a,x_{n} =b,h=\frac{b-a}{n} \ ( n\geqslant 1)$ (\textit{esempio}: trapezi, Cavalieri-Simpson).
+
+$\boxed{I_{n}( f) =h\sum\nolimits ^{n}_{i=0} w_{i} f( x_{i}) ,\ \ \ \ w_{i} =\int\nolimits ^{n}_{0} \varphi _{i}( t) dt}$
+
+\begin{center}
+
+\begin{tabular}{cc}
+\toprule 
+ \multicolumn{2}{c}{$n$ pari, $f\in C^{n+2}([ a,b])$} \\
+\hline 
+ \multicolumn{2}{c}{$E_{n}( f) =\frac{M_{n}}{( n+2) !} h^{n+3} f^{( n+2)}( \xi )$} \\
+\midrule 
+ aperte & chiuse \\
+$M_{n} =\int\limits ^{n+1}_{-1} t\ \pi _{n+1}( t) dt >0$ & $M_{n} =\int\limits ^{n}_{0} t\ \pi _{n+1}( t) dt< 0$ \\
+\multicolumn{2}{c}{\makecell[c]{ODA: $n+3$\\GDE: $n+1$}} \\
+\hline\hline 
+ \multicolumn{2}{c}{$n$ dispari, $f\in C^{n+1}([ a,b])$} \\
+\hline 
+ \multicolumn{2}{c}{$E_{n}( f) =\frac{K_{n}}{( n+1) !} h^{n+2} f^{( n+1)}( \eta )$} \\
+\hline 
+ aperte & chiuse \\
+$K_{n} =\int\limits ^{n+1}_{-1} \pi _{n+1}( t) dt >0$ & $K_{n} =\int\limits ^{n}_{0} \pi _{n+1}( t) dt< 0$ \\
+\multicolumn{2}{c}{\makecell[c]{ODA: $n+2$\\GDE: $n$}} \\
+ \bottomrule
+\end{tabular}
+\end{center}
+$\pi _{n+1}( t) =\prod\nolimits ^{n}_{i=0}( t-i)$
+\subsection{Formule di Newton-Cotes composite}
+
+$\boxed{I_{n,m}( f) =\sum\limits ^{m-1}_{j=0}\sum\limits ^{n}_{k=0} \alpha ^{( j)}_{k} f\left( x^{( j)}_{k}\right)}$
+
+\begin{center}
+
+\begin{tabular}{c}
+\toprule 
+ $n$ pari, $f\in C^{n+2}([ a,b])$ \\
+\midrule 
+ $E_{n,m}( f) =\frac{b-a}{( n+2) !}\frac{M_{n}}{\gamma ^{n+3}_{n}} H^{n+2} f^{( n+2)}( \xi )$ \\
+\makecell[c]{GDE: $n+1$\\ODA: $n+2$} \\
+\hline\hline 
+ $n$ dispari, $f\in C^{n+1}([ a,b])$ \\
+\hline 
+ $E_{n,m}( f) =\frac{b-a}{( n+1) !}\frac{K_{n}}{\gamma ^{n+2}_{n}} H^{n+1} f^{( n+1)}( \eta )$ \\
+\makecell[c]{GDE: $n$\\ODA: $n+1$} \\
+ \bottomrule
+\end{tabular}
+\end{center}
+$\gamma _{n} =\begin{cases}
+n+2 & \text{per formule aperte}\\
+n & \text{per formule chiuse}
+\end{cases}$
+\subsection{Formule di quadratura su nodi non equispaziati (Integrazione Gaussiana)}
+
+\textit{Formule di quadratura di Gauss-Legendre (GL), estremi esclusi / Gauss-Legendre-Lobatto (GLL), estremi inclusi}
+
+$\{( x_{i} ,\alpha _{i})\}^{n}_{i=0}\rightarrow I_{n}( f) =\sum\limits ^{n}_{i=0} \alpha _{i} f( x_{i}) \ \begin{cases}
+\text{GDE} =( 2n+1) & \text{GL}\\
+\text{GDE} =( 2n-1) & \text{GLL}
+\end{cases}$
+
+\textbf{Errore.} $f$ suffucientemente regolare $| E_{n}( f)| \leqslant \frac{C}{n^{5}}\Vert f\Vert _{s}$ dove $\Vert f\Vert _{s} =\left(\sum\limits ^{s}_{k=0}\left\Vert f^{( k)}\right\Vert ^{2}_{L^{2}( -1,1)}\right)^{1/2}$ nel quale $\Vert f\Vert _{L^{2}( -1,1)} =\left[\int\limits ^{1}_{-1}[ f( x)]^{2} dx\right]^{1/2}$
+\section{Approssimazione di derivate}
+
+\textbf{Differenza finita in avanti} $\boxed{f'(\overline{x}) \approx ( \delta _{+} f)(\overline{x}) :=\frac{f(\overline{x} +h) -f(\overline{x})}{h}}$
+
+\textbf{Differenza finita all'indietro} $\boxed{f'(\overline{x}) \approx ( \delta _{-} f)(\overline{x}) :=\frac{f(\overline{x}) -f(\overline{x} -h)}{h}}$
+
+\textbf{Differenza finita centrata} $\boxed{f'(\overline{x}) \approx ( \delta f)(\overline{x}) :=\frac{f(\overline{x} +h) -f(\overline{x} -h)}{2h}}$
+
+Errore.
+
+Sia $f\in C^{2}(( a,b))$, $\boxed{E^{+}(\overline{x}) =\frac{h}{2} f''( \xi )}$
+
+Sia $f\in C^{2}(( a,b))$, $\boxed{E^{-}(\overline{x}) =-\frac{h}{2} f''( \xi )}$
+
+Sia $f\in C^{3}(( a,b))$, $\boxed{| E(\overline{x})| =\left| \frac{h^{2}}{12}[ f'''( \xi ) +f'''( \eta )]\right| \leqslant \frac{h^{2}}{6}\Vert f'''( x)\Vert _{\infty }}$
+\subsection{Approssimazione della derivata seconda}
+
+$\boxed{f''(\overline{x}) \approx \frac{f(\overline{x} +h) +f(\overline{x} -h) -2f(\overline{x})}{h^{2}}}$
+
+$E(\overline{x}) =-\frac{h^{2}}{24}\left[ f^{\text{(iv)}}( \xi ) +f^{\text{(iv)}}( \eta )\right]$
+\section{Risoluzione di Equazioni Differenziali Ordinarie (EDO)}
+\subsection{Metodi a un passo}
+\subsubsection{Metodo di Eulero Esplicito (Eulero in avanti) (EE)}
+
+$\boxed{\text{(EE)} \ \begin{cases}
+u_{n+1} =u_{n} +hf( t_{n} ,u_{n})\\
+u_{0} =y_{0}
+\end{cases}}$
+\subsubsection{Metodo di Eulero Implicito (Eulero all'indietro) (EI)}
+
+$\boxed{\text{(EI)} \ \begin{cases}
+u_{n+1} =u_{n} +hf( t_{n+1} ,u_{n+1})\\
+u_{0} =y_{0}
+\end{cases}}$
+\subsubsection{Metodo di Crank–Nicolson (CN)}
+
+$\boxed{\text{(CN)} \ \begin{cases}
+u_{n+1} =u_{n} +\frac{h}{2}[ f( t_{n+1} ,u_{n+1}) +f( t_{n} ,u_{n})]\\
+u_{0} =y_{0}
+\end{cases}}$
+\subsubsection{Metodo di Heun (H)}
+
+$\boxed{\text{(H)} \ \begin{cases}
+\hat{u}_{n+1} =u_{n} +hf( t_{n} ,u_{n})\\
+u_{n+1} =u_{n} +\frac{h}{2}[ f( t_{n+1} ,\hat{u}_{n+1}) +f( t_{n} ,u_{n})]\\
+u_{0} =y_{0}
+\end{cases}}$
+\subsection{Analisi dei metodi a un passo}
+\subsubsection{Consistenza.}
+
+$\begin{cases}
+y( t_{n+1}) =y( t_{n}) +h\Phi ( t_{n} ,y( t_{n}) ,f( t_{n} ,y( t_{n})) ;h) +\boxed{\varepsilon _{n+1}}\\
+y( t_{0}) =y_{0}
+\end{cases}$
+
+$\varepsilon _{n+1}$ \textbf{residuo} che si genera all'istante $t_{n+1}$. Ha la forma $\varepsilon _{n+1} =h\ \tau _{n+1}( h)$.
+
+La quantità $\tau _{n+1}( h)$ è l'\textbf{errore di troncamento locale}. Definiamo allora l'\textbf{errore di troncamento globale} $\tau ( h) =\max_{0\leqslant n\leqslant N_{h} -1}| \tau _{n+1}( h)| $.
+
+Un metodo è \textbf{consistente} se $\boxed{\lim _{h\rightarrow 0} \tau ( h) =0}$
+
+Inoltre diciamo che il metodo ha ordine $p$ se $\tau ( h) =O\left( h^{p}\right)$ per $h\rightarrow 0$.
+\subsubsection{Zero-stabilità}
+
+$\begin{cases}
+z_{n+1} =z_{n} +h\Phi ( t_{n} ,z_{n} ,f( t_{n} ,z_{n}) ;h) +\boxed{\delta _{n+1}}\\
+z_{0} =y_{0} +\boxed{\delta _{0}}
+\end{cases}$
+
+Il metodo numerico è $0$-stabile se $\exists h_{0}  >0$, $\exists C >0$, ed $\exists \varepsilon _{0}  >0$ tali che $\forall h\in ( 0,h_{0}]$ e $\forall \varepsilon \in ( 0,\varepsilon _{0}]$, se $| \delta _{n}| \leqslant \varepsilon ,0\leqslant n\leqslant N_{h}$, allora $\boxed{\left| u^{( h)}_{n} -z^{( h)}_{n}\right| \leqslant C\varepsilon }$
+\subsubsection{Convergenza}
+
+Diciamo che un metodo è \textbf{convergente} se $\boxed{| y( t_{n}) -u_{n}| \leqslant C( h)}$ dove $C( h)$ è un infinitesimo rispetto ad $h$. In tal caso diciamo che il metodo è convergente con ordine $p$ se $C( h) =O\left( h^{p}\right)$.
+
+Consideriamo un metodo consistente. Allora $\boxed{\text{convergenza} \Leftrightarrow 0\text{-stabilità}}$
+
+Sia $y\in C^{2}( I)$ la soluzione del (PC). Allora
+
+$ \begin{array}{l}
+\boxed{\max_{n=0,\dotsc ,N_{h}}\left| y( t_{n}) -u^{EE}_{n}\right| \leqslant C_{EE} h}\\
+\boxed{\max_{n=0,\dotsc ,N_{h}}\left| y( t_{n}) -u^{EI}_{n}\right| \leqslant C_{EI} h}
+\end{array}$
+
+dove $C_{EE} =C_{EE}(\Vert y''( t)\Vert _{\infty } ,T)  >0$ e $C_{EI} =C_{EI}(\Vert y''( t)\Vert _{\infty } ,T)  >0$. Quindi i metodi di EE e EI convergono con ordine $1$ rispetto ad $h$.
+
+Se invece $y\in C^{3}( I)$, allora
+
+$ \begin{array}{l}
+\boxed{\max_{n=0,\dotsc ,N_{h}}\left| y( t_{n}) -u^{CN}_{n}\right| \leqslant C_{CN} h^{2}}\\
+\boxed{\max_{n=0,\dotsc ,N_{h}}\left| y( t_{n}) -u^{H}_{n}\right| \leqslant C_{H} h^{2}}
+\end{array}$
+
+dove $C_{CN} =C_{CN}(\Vert y'''( t)\Vert _{\infty } ,T)  >0$ e $C_{H} =C_{H}(\Vert y'''( t)\Vert _{\infty } ,T)  >0$. Quindi i metodi di CN e H convergono con ordine $2$ rispetto ad $h$.
+\subsubsection{Assoluta stabilità ($\mathcal{A}$-stabilità o stabilità su intervalli illimitati)}
+
+Un metodo numerico per l'approssimazione di (P) è assolutamente stabile se $| u_{n}| \rightarrow 0\ \ \ \ \text{per} \ \ \ \ t_{n}\rightarrow +\infty $ nella risoluzione del problema modello.
+
+Regione di assoluta stabilità: $\mathcal{A} =\{z=h\lambda \in \mathbb{C}$ tali che la relazione di prima è soddisfatta$\}$.
+
+Poiché $h >0$ e $\Re ( \lambda ) < 0$ per ipotesi, sicuramente $\mathcal{A} \subseteq \mathbb{C}^{-}$.
+
+Un metodo è $\mathcal{A}$-stabile se è tale che $\mathcal{A} \cap \mathbb{C}^{-} =\mathbb{C}^{-}$.
+
+\textbf{Eulero Esplicito:} $| 1+h\lambda | < 1\ \ \Leftrightarrow \ \ h\lambda \in \mathbb{C}^{-} \ \text{e} \ 0< h< \frac{-2\Re ( \lambda )}{| \lambda | ^{2}}$
+
+Se $\lambda \in \mathbb{R} ,\lambda < 0$ diventa $h< \frac{2}{| \lambda | }$.
+
+\begin{center}
+
+\begin{tabular}{ccccc}
+\toprule 
+  & Cons. & 0-stab. & Ordine & Assoluta stabilità \\
+\midrule 
+ EE & sì & sì & $h$ & condiz. ass. stabile \\
+EI & sì & sì & $h$ & $\mathcal{A}$-stabile \\
+CN & sì & sì & $h^{2}$ & $\mathcal{A}$-stabile \\
+H & sì & sì & $h^{2}$ & condiz. ass. stabile \\
+ \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Metodi Runge-Kutta}
+
+$\boxed{\begin{cases}
+u_{n+1} =u_{n} +h\sum\limits ^{s}_{i=1} b_{i} K_{i}\\
+u_{0} =y_{0}
+\end{cases}}$
+
+$s$ è detto \textbf{numero di stadi} del metodo (legato all'ordine del metodo).
+
+$\boxed{K_{i} =f\left( t_{n} +c_{i} h,u_{n} +h\sum\limits ^{s}_{j=1} a_{ij} K_{j}\right) ,\ \ \ \ i=1,\dotsc ,s}$
+
+\textit{Array di Butcher}
+
+$\begin{array}{ c|c c c c }
+c_{1} & a_{11} & a_{12} & \cdots  & a_{1s}\\
+c_{2} & a_{21} & a_{22} & \cdots  & a_{2s}\\
+\vdots  & \vdots  & \vdots  & \ddots  & \vdots \\
+c_{s} & a_{s1} & a_{s2} & \cdots  & a_{ss}\\
+\hline
+ & b_{1} & b_{2} & \cdots  & b_{s}
+\end{array} \ \ \ \ \text{o} \ \ \ \ \begin{array}{ c|c }
+\mathbf{c} & A\\
+\hline
+ & \mathbf{b}^{T}
+\end{array}$
+
+Richiederemo sempre che le sguenti relazioni siano soddisfatte
+
+$c_{i} =\sum\limits ^{s}_{j=1} a_{ij} ,\ \ \ \ \sum\limits ^{s}_{i=1} b_{i} =1$
+\subsubsection{Classificazione dei metodi Runge-Kutta}
+
+\textbf{RK espliciti }$( a_{ij} =0,\forall j\geqslant i)$, $k_{i}$ può essere calcolato noti $k_{1} ,k_{2} ,\dotsc ,k_{i-1}$.
+
+\textbf{RK semi-impliciti }$( a_{ij} =0,\forall j >i)$, $k_{i}$ dipende non linearmente solo da $k_{i}$. Abbiamo un sistema di $s$ equazioni non-lineari disaccoppiate in $k_{1} ,\dotsc ,k_{s}$
+
+\textbf{RK impliciti. }Non ho restrizioni su $a_{ij}$, abbiamo un sistema di $s$ equazioni non-lineari in $k_{1} ,\dotsc ,k_{s}$.
+\subsubsection{Consistenza di un metodo RK a $s$ stadi}
+
+Definiamo l'\textbf{errore di troncamento locale} $\tau _{n+1}( h)$ nell'istante temporale $t_{n+1}$
+
+$\boxed{h\tau _{n+1}( h) =y( t_{n+1}) -y( t_{n}) -h\sum\limits ^{s}_{i=1} b_{i} K_{i}}$
+
+Il metodo RK è consistente se l'\textbf{errore di troncamento globale} $\tau ( h) =\max_{n}| \tau _{n}( h)| \xrightarrow{h\rightarrow 0} 0$
+
+Diciamo inoltre che l'errore di troncamento globale è di ordine $p\geqslant 1$ se $\tau ( h) =O\left( h^{p}\right)$ per $h\rightarrow 0$.
+
+Un metodo RK a $s$ stadi è consistente se e solo se $\sum\nolimits ^{s}_{i=1} b_{i} =1$. Essendo metodi a un passo la consistenza implica la $0$-stabilità e quindi la convergenza.
+
+Un metodo RK esplicito a $s$ stadi non può avere ordine maggiore di $s$. Inoltre, non esistono metodi RK espliciti a $s$ stadi con ordine $s$, per $s\geqslant 5$.
+\begin{equation*}
+\begin{array}{ c c c c c|c c c c }
+\hline
+\text{ordine richiesto} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+\hline
+\text{numero di stadi necessario} \ s & 1 & 2 & 3 & 4 & 6 & 7 & 9 & 11\\
+\hline
+\end{array}
+\end{equation*}
+\subsubsection{Regione di assoluta stabilità dei metodi RK}
+
+$\boxed{u_{n+1} =\left[ 1+h\lambda \mathbf{b}^{T}( I-h\lambda A)^{-1}\mathbf{1}\right] u_{n} =R( h\lambda ) u_{n}}$
+
+avendo denotato con $R( h\lambda )$ la \textbf{funzione di stabilità}.
+
+Il metodo RK è assolutamente stabile se e solo se $| R( h\lambda )| < 1$. La sua regione di assoluta stabilità è $\mathcal{A} =\left\{z=h\lambda \in \mathbb{C} \ \text{tali che} \ | R( h\lambda )| < 1\right\}$.
+\subsection{Metodi multi-step}
+
+Un metodo si dice a $q$ passi $( q\geqslant 1)$ se $\forall n\geqslant q-1$, $u_{n+1}$ dipende da $u_{n+1-q}$, ma non da valori $u_{k}$ con $k< n+1-q$.
+
+Forma generale di un \textit{metodo multistep lineare} a $p+1$ passi, con $p\geqslant 0$:
+
+$\boxed{u_{n+1} =\sum\limits ^{p}_{j=0} a_{j} u_{n-j} +h\sum\limits ^{p}_{j=0} b_{j} f_{n-j} +hb_{-1} f_{n+1} ,\ \ \ \ n=p,p+1,\dotsc }$
+
+se $b_{-1} =0$: metodo multistep esplicito
+
+se $b_{-1} \neq 0$: metodo multistep implicito
+
+Se $p=0$: metodi a un passo.
+
+Errore di troncamento locale:
+
+$h\tau _{n+1}( h) =y( t_{n+1}) -\left[\sum\limits ^{p}_{j=0} a_{j} y( t_{n-j}) +h\sum\limits ^{p}_{j=-1} b_{j} y'( t_{n-j})\right] ,\ \ \ \ n\geqslant p$
+
+Un metodo multistep è consistente se $\tau ( h) =\max_{n}| \tau _{n}( h)| \xrightarrow{h\rightarrow 0} 0$
+
+Inoltre se $\tau ( h) =O\left( h^{q}\right)$, per qualche $q\geqslant 1$, allora il metodo si dirà di ordine $q$.
+\subsubsection{Metodi di Adams}
+
+$\boxed{u_{n+1} =u_{n} +h\sum\limits ^{p}_{j=-1} b_{j} f( t_{n-j} ,u_{n-j})}$
+
+se $b_{-1} =0$, stiamo interpolando su $p+1$ nodi, ovvero $t_{n} ,t_{n-1} ,\dotsc ,t_{n-p}$, otteniamo i metodi di Adams espliciti (Adams-Bashforth)
+
+se $b_{-1} \neq 0$, stiamo interpolando su $p+2$ nodi, ovvero $t_{n+1} ,t_{n} ,t_{n-1} ,\dotsc ,t_{n-p}$, otteniamo i metodi di Adams impliciti (Adams-Moulton)
+
+\textit{Esempi.}
+
+\textbf{AB, cioè esplicito, con }$p=1$\textbf{, cioè }$2$\textbf{ passi}
+
+$\boxed{u_{n+1} =u_{n} +\frac{h}{2}[ 3f( t_{n} ,u_{n}) -f( t_{n-1} ,u_{n-1})]}$
+
+Si dimostra che è uno schema con ordine di convergenza $2$.
+
+\textbf{AM, cioè implicito, con }$p=1$\textbf{, cioè }$2$\textbf{ passi}
+
+$\boxed{u_{n+1} =u_{n} +\frac{h}{12}[ 5f( t_{n+1} ,u_{n+1}) +8f( t_{n} ,u_{n}) -f( t_{n-1} ,u_{n-1})]}$
+
+Si dimostra che è uno schema con ordine di convergenza $3$.
+
+AB, $p=0$ è (EE)
+
+AM, $p=0$ è (CN)
+\subsubsection{Metodi BDF (Backward Differentiation Formula)}
+
+$\boxed{u_{n+1} =\sum\limits ^{p}_{j=0} a_{j} u_{n-j} +hb_{-1} f( t_{n+1} ,u_{n+1}) ,\ \ \ \ b_{-1} \neq 0}$
+\subsubsection{Analisi dei metodi multistep}
+
+AB a $p+1$ passi ha ordine $p+1$.
+
+AM a $p+1$ passi ha ordine $p+2$.
+
+Un metodo multistep è \textbf{consistente} se e solo se i coefficienti $\{a_{j}\}$ e $\{b_{j}\}$ soddisfano la seguente condizione $\boxed{\sum\nolimits ^{p}_{j=0} a_{j} =1,\ \ \ \ -\sum\nolimits ^{p}_{j=0} ja_{j} +\sum\nolimits ^{p}_{j=-1} b_{j} =1}$
+
+Se la soluzione $y\in C^{q+1}( I) ,q\geqslant 1$, allora il metodo multistep è di ordine $q$ se e solo se vale la consistenza e e inoltre $\boxed{\sum\nolimits ^{p}_{j=0}( -j)^{i} a_{j} +i\sum\nolimits ^{p}_{j=-1}( -j)^{i-1} b_{j} =1,\ \ \ \ i=2,\dotsc ,q}$
+\section{Risoluzione di equazioni e sistemi non lineari}
+
+Sia $f:[ a,b]\rightarrow \mathbb{R}$ continua e tale che $f( a) f( b) < 0$, allora esiste almeno un punto $\alpha \in ( a,b)$ tale che $f( \alpha ) =0$.
+
+Scegliamo $x^{( 0)} \in [ a,b]$ e costruiamo una successione $x^{( 1)} ,x^{( 2)} ,\dotsc ,x^{( k)}$ tale che $\lim\limits _{k\rightarrow \infty } x^{( k)} =\alpha $.
+\subsection{Metodo di bisezione}
+\begin{itemize}
+\item Se $f\left( x^{( 0)}\right) =0$ abbiamo finito, $\alpha =x^{( 0)}$.
+\item Se $f\left( a^{( 0)}\right) f\left( x^{( 0)}\right) < 0$ allora $\alpha \in \left( a^{( 0)} ,x^{( 0)}\right)$ quindi ridefiniamo
+\begin{itemize}
+\item $a^{( 1)} =a^{( 0)} ,b^{( 1)} =x^{( 0)} ,I^{( 1)} =\left( a^{( 1)} ,b^{( 1)}\right) ,x^{( 1)} =\frac{a^{( 1)} +b^{( 1)}}{2}$
+\end{itemize}
+\item Se $f\left( x^{( 0)}\right) f\left( b^{( 0)}\right) < 0$ allora $\alpha \in \left( x^{( 0)} ,b^{( 0)}\right)$ quindi ridefiniamo
+\begin{itemize}
+\item $a^{( 1)} =x^{( 0)} ,b^{( 1)} =b^{( 0)} ,I^{( 1)} =\left( a^{( 1)} ,b^{( 1)}\right) ,x^{( 1)} =\frac{a^{( 1)} +b^{( 1)}}{2}$
+\end{itemize}
+\end{itemize}
+
+Si ha $\left| I^{( k)}\right| =\left| b^{( k)} -a^{( k)}\right| =\frac{1}{2}\left| b^{( k-1)} -a^{( k-1)}\right| =\dotsc =\frac{1}{2^{k}}( b-a)$
+
+quindi $0\leqslant \left| e^{( k)}\right| \leqslant \frac{1}{2^{k+1}}( b-a) \Rightarrow \boxed{\lim _{k\rightarrow \infty }\left| e^{( k)}\right| =0}$
+
+Se vogliamo calcolare l'errore a meno di una precisione $\varepsilon $, cioè vogliamo essere sicuri che $\left| e^{( k)}\right| \leqslant \varepsilon $, ci basta fermare l'algoritmo alla $k_{\text{min}}$ interazione $\boxed{k_{\text{min}} =\left\lceil \log_{2}\frac{b-a}{\varepsilon } -1\right\rceil }$
+
+In generale la successione degli errori $e^{( k)}$ generata dal metodo di bisezione non converge a zero \textit{monotonamente}.
+
+\textbf{Convergenza.} Diciamo che la successione $\left\{x^{( k)}\right\}_{k\geqslant 0}$ converge ad $\alpha $ con ordine $p\geqslant 1$ se $\exists C >0$ tale che $\frac{\left| x^{( k+1)} -\alpha \right| }{\left| x^{( k)} -\alpha \right| ^{p}} \leqslant C,\ \ \ \ \forall k\geqslant k_{0} ,\ \ \ \ k_{0} \in \mathbb{Z}_{+} \cup \{0\} .$
+\subsection{Approccio geometrico per l'approssimazione di radici}
+
+$\boxed{x^{( k+1)} =x^{( k)} -\frac{1}{q^{( k)}} f\left( x^{( k)}\right) ,\ \ \forall k\geqslant 0}$
+\subsubsection{Metodo di Newton}
+
+Se $f\in C^{1}( a,b)$, scegliamo $q^{( k)} =f'\left( x^{( k)}\right) ,\ \ \forall k\geqslant 0$
+
+$\boxed{x^{( k+1)} =x^{( k)} -\frac{f\left( x^{( k)}\right)}{f'\left( x^{( k)}\right)} ,\ \ \forall k\geqslant 0}$
+\subsubsection{Metodo delle secanti}
+
+Scegliamo $q_{k} =\frac{f\left( x^{(k)}\right) -f\left( x^{(k-1)}\right)}{x^{(k)} -x^{(k-1)}} ,\ \ \forall k\geqslant 1$
+
+$\boxed{x^{(k+1)} =x^{(k)} -\frac{x^{(k)} -x^{(k-1)}}{f\left( x^{(k)}\right) -f\left( x^{(k-1)}\right)} f\left( x^{(k)}\right) ,\ \ \forall k\geqslant 1}$
+\subsubsection{Metodo delle corde}
+
+Scegliamo $q_{k} =q=\frac{f(b)-f(a)}{b-a} ,\ \ \forall k\geqslant 0$
+
+$\boxed{x^{(k+1)} =x^{(k)} -\frac{b-a}{f(b)-f(a)} f\left( x^{(k)}\right) ,\ \ \forall k\geqslant 0}$
+
+Sono tutti metodi che convergono \textit{localmente.}
+\subsection{Metodo delle iterazioni di punto fisso}
+
+Cercare gli zeri di $f$ è equivalente a cercare i \textbf{punti fissi} della \textit{funzione di iterazione }$\Phi ( x) =x-f( x)$, infatti $\boxed{f( \alpha ) =0\Leftrightarrow \Phi ( \alpha ) =\alpha }$
+
+$\boxed{x^{( k+1)} =\Phi \left( x^{( k)}\right) ,\ \ k\geqslant 0}$
+
+Il metodo delle corde e il metodo di Newton possono essere scritti come metodi di iterazione di punto fisso:
+
+$ \begin{array}{l}
+\Phi _{\text{corde}}( x) =x-\frac{b-a}{f(b)-f(a)} f( x)\\
+\Phi _{\text{Newton}}( x) =x-\frac{f( x)}{f'( x)}
+\end{array}$
+
+\textbf{Convergenza.}
+
+Supponiamo $\Phi $ continua in $[ a,b]$ e tale che $\Phi ( x) \in [ a,b]$ per ogni $x\in [ a,b]$; allora esiste almeno un punto fisso $\alpha \in [ a,b]$. Se supponiamo inoltre che $\Phi $ sia una contrazione, cioè che $\exists L< 1\ \text{t.c.} \ | \Phi ( x_{1}) -\Phi ( x_{2})| \leq L| x_{1} -x_{2}| \ \ \ \ \forall x_{1} ,x_{2} \in [a,b]$. Allora $\Phi $ ha un unico punto fisso $\alpha \in [ a,b]$ e la successione converge ad $\alpha $, qualunque sia la scelta del dato iniziale $x^{( 0)} \in [ a,b]$.
+
+\textbf{Teorema di Ostrowski.} Sia $\alpha $ un punto fisso di una funzione $\Phi $ continua e derivabile con continuità in un opportuno intorno $I$ di $\alpha $. Se risulta $| \Phi '(\alpha )| < 1$, allora esiste $\delta  >0$ in corrispondenza del quale la successione $\left\{x^{(k)}\right\}$ converge ad $\alpha $, per ogni $x^{(0)}$ tale che $\left| x^{(0)} -\alpha \right| < \delta $. Inoltre si ha $\boxed{\lim\nolimits _{k\rightarrow \infty }\frac{x^{(k+1)} -\alpha }{x^{(k)} -\alpha } =\Phi '(\alpha )}$
+
+La quantità $| \Phi '(\alpha )| $ è detta \textbf{fattore asintotico di convergenza} e, in analogia con il caso dei metodi iterativi per la risoluzione di sistemi lineari, si definisce la \textbf{velocità asintotica di convergenza}
+\begin{equation*}
+R=-\log(| \Phi '(\alpha )| )
+\end{equation*}
+Se $\Phi \in C^{p+1} (I)$ per un opportuno intorno $I$ di $\alpha $ e per un intero $p\geqslant 1,$ e se $\Phi ^{(i)} (\alpha )=0$ per $i=1,\dotsc ,p$ mentre $\Phi ^{(p+1)} (\alpha )\neq 0,$ allora il metodo di punto fisso con funzione di iterazione $\Phi $ ha ordine $p+1$ e risulta inoltre $\lim _{k\rightarrow \infty }\frac{x^{(k+1)} -\alpha }{\left( x^{(k)} -\alpha \right)^{p+1}} =\frac{\Phi ^{(p+1)} (\alpha )}{(p+1)!}$
+\subsubsection{Analisi di convergenza del metodo delle corde}
+
+Converge se
+
+$\begin{cases}
+f'( \alpha ) \neq 0\\
+\frac{b-a}{f(b)-f(a)} \ \text{e} \ f'( \alpha ) \ \text{concordi}\\
+b-a< \frac{2[ f(b)-f(a)]}{f'( \alpha )}
+\end{cases}$
+\subsubsection{Analisi di convergenza del metodo di Newton}
+
+Se $\alpha $ è uno zero con molteplicità $1$ per $f$ (zero semplice), cioè $f( \alpha ) =0$, $f'( \alpha ) \neq 0$, converge localmente con ordine $2$.
+
+Se $\alpha $ è uno zero con molteplicità $m >1$, converge localmente con ordine $1$. Abbiamo perso un ordine, ma possiamo ripristinarlo utilizzando il \textit{metodo di Newton modificato.}
+
+$\boxed{x^{( k+1)} =x^{( k)} -m\frac{f\left( x^{( k)}\right)}{f'\left( x^{( k)}\right)}}$
+\subsection{Criteri di arresto}
+\subsubsection{Controllo del residuo}
+
+Fissiamo una tolleranza $\varepsilon  >0$. Terminiamo il ciclo quando $\left| f\left( x^{( k)}\right)\right| \leqslant \varepsilon $
+
+Si può dimostrare che
+\begin{enumerate}
+\item Se $| f'( \alpha )| \simeq 1$ allora $\left| e^{( k)}\right| \simeq \varepsilon $ e quindi il criterio di arresto è \textit{affidabile}
+\item Se $| f'( \alpha )| \ll 1$ allora $\left| e^{( k)}\right| \gg \varepsilon $ e quindi il criterio di arresto è \textit{inaffidabile}
+\item Se $| f'( \alpha )| \gg 1$ allora $\left| e^{( k)}\right| \ll \varepsilon $ e quindi il criterio di arresto è \textit{troppo stringente}
+\end{enumerate}
+\subsubsection{Controllo sull'incremento}
+
+Fissiamo una tolleranza $\varepsilon  >0$. Terminiamo il ciclo quando $\left| x^{( k+1)} -x^{( k)}\right| < \varepsilon $
+
+Si può dimostrare che
+\begin{enumerate}
+\item Se $-1< \Phi '( \alpha ) < 0$ allora il criterio è \textit{soddisfacente}
+\item Per i metodi del secondo ordine, se $\Phi '( \alpha ) =0$ allora il criterio è \textit{soddisfacente}
+\item Se $\Phi '( \alpha ) \simeq 1$ allora il criterio è \textit{insoddisfacente}
+\end{enumerate}
+\subsection{Sistemi di equazioni non lineari}
+
+Consideriamo lo stesso tipo di problema, ma in versione vettoriale. Sia assegnata $\mathbf{F} :\mathbb{R}^{n}\rightarrow \mathbb{R}^{n}$, vogliamo trovare $\mathbf{x}^{\star } \in \mathbb{R}^{n}$ tale che $\mathbf{F}\left(\mathbf{x}^{\star }\right) =\mathbf{0}$.
+
+Ricordiamo che la \textbf{matrice jacobiana} associata a $\mathbf{F}$ e valutata nel punto $\mathbf{x} =( x_{1} ,x_{2} ,\dotsc ,x_{n})^{T}$ è data da $( J_{\mathbf{F}}(\mathbf{x}))_{ij} =\frac{\partial F_{i}}{\partial x_{j}}(\mathbf{x}) ,\ \ \ \ i,j=1,\dotsc ,n$
+
+Nel seguito supporremo sempre che $\mathbf{F}$ sia una funzione continua e con derivate parziali positive.
+
+\textbf{Convergenza metodo di Newton per sistemi di equazioni non lineari.} Sia $\mathbf{F} :\mathbb{R}^{n}\rightarrow \mathbb{R}^{n}$, $\mathbf{F} \in C^{1}( D)$, dove $D$ è un aperto convesso di $\mathbb{R}^{n}$ che contiene $\mathbf{x}^{\star }$. Supponiamo inoltre che $J^{-1}_{\mathbf{F}}\left(\mathbf{x}^{\star }\right)$ esista che esistano delle costanti positive $R,C,L$ tali che $\left\Vert J^{-1}_{\mathbf{F}}\left(\mathbf{x}^{\star }\right)\right\Vert \leqslant C$ e $\Vert J_{\mathbf{F}}(\mathbf{z}) -J_{\mathbf{F}}(\mathbf{y})\Vert \leqslant L\Vert \mathbf{z} -\mathbf{y}\Vert ,\ \ \ \ \forall \mathbf{z} ,\mathbf{y} \in B\left(\mathbf{x}^{\star } ,R\right)$ avendo indicato con lo stesso simbolo $\Vert \cdotp \Vert $ una norma vettoriale ed una norma matriciale consistenti. Esiste allora $r >0$ tale che, per ogni $\mathbf{x}^{(0)} \in B\left(\mathbf{x}^{\star } ,r\right)$ il metodo di Newton è univocamente definito, converge a $\mathbf{x}^{\star }$ e $\left\Vert \mathbf{x}^{(k+1)} -\mathbf{x}^{\star }\right\Vert \leq CL\left\Vert \mathbf{x}^{(k)} -\mathbf{x}^{\star }\right\Vert ^{2}$.
+\end{multicols}
+\end{document}
