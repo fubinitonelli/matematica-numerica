@@ -228,7 +228,7 @@ u_{11} & u_{12}\\
 0 & u_{22}
 \end{bmatrix}
 \end{equation*}
-in questo sistema abbiamo $\displaystyle 3+3$ incognite nel menbro destro e i $\displaystyle 4$ vincoli del membro sinistro. Questo problema è irrisolvibile in quanto sottodimensionato: abbiamo troppe incognite rispetto ai vincoli, il che produrrebbe infinite fattorizzazioni possibili.
+in questo sistema abbiamo $\displaystyle 3+3$ incognite nel membro destro e i $\displaystyle 4$ vincoli del membro sinistro. Questo problema è irrisolvibile in quanto sottodimensionato: abbiamo troppe incognite rispetto ai vincoli, il che produrrebbe infinite fattorizzazioni possibili.
 Dobbiamo dunque eliminare almeno $2$ incognite.
 Per esempio, possiamo fissare gli elementi $\displaystyle l_{11} =1,l_{22} =1$.
 Avendo ora incognite e vincoli in egual numero, siamo nelle condizioni di poter trovare una soluzione, e non ci resta che svolgere i calcoli per trovarla.
@@ -630,7 +630,7 @@ L\y =P\mathbf{b}\\
 U\x =\y.
 \end{cases}
 \end{equation*}
-Similmente, esiste anche il \textbf{pivoting per colonne}\index{pivoting!per colonne}, ma Matlab raramente lo utilizza.
+Similmente, esiste anche il \textbf{pivoting per colonne}\index{pivoting!per colonne}, ma MATLAB raramente lo utilizza.
 \begin{equation*}
 A^{(k)} =\begin{bmatrix}
 a^{(1)}_{11} & \dotsc  & \dotsc  & \\
@@ -1082,6 +1082,6 @@ Per quantificare questo problema, si guarda il numero di elementi non zero di $A
 \end{equation*}
 Illustriamo qualche possibile soluzione a questo problema:
 \begin{enumerate}
-\item Riordinare le righe e le colonne in modo da ottenere le righe e le colonne di $A$ in una configurazione che minimizza il fill-in (approccio utilizzato da Matlab).
+\item Riordinare le righe e le colonne in modo da ottenere le righe e le colonne di $A$ in una configurazione che minimizza il fill-in (approccio utilizzato da MATLAB).
 \item Cambiare completamente prospettiva, cercando di risolvere il problema \textit{senza manipolare affatto la matrice }$A$. L'idea sarà sviluppata nel prossimo capitolo nei cosiddetti \textbf{metodi iterativi}\index{metodi iterativi}.
 \end{enumerate}

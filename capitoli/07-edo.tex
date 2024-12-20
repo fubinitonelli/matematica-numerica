@@ -114,20 +114,20 @@ z'(t) =f( t,z(t)) +\delta (t)\\
 z(0) =y_{0} +\delta _{0}
 \end{cases} \quad t\in I
 \end{equation*}
-dove $\delta _{0} \in \mathbb{R}$ e $\delta (t)$ è una funzione continua in $I$. Vogliamo caratterizzare la sensibilità di $z(t)$ alle perturbazioni $\delta _{0}$ e $\delta (t)$. Questo è il concetto di stabilità secondo Liapunov.
+dove $\delta _{0} \in \mathbb{R}$ e $\delta (t)$ è una funzione continua in $I$. Vogliamo caratterizzare la sensibilità di $z(t)$ alle perturbazioni $\delta _{0}$ e $\delta (t)$. Questo è il concetto di stabilità secondo Lyapunov.
 
 \begin{definition}
-[Stabilità secondo Liapunov]
-\index{stabilità!secondo Liapunov}
+[Stabilità secondo Lyapunov]
+\index{stabilità!secondo Lyapunov}
 Sia $I=[ t_{0} ,t_{0} +T]$ un intervallo limitato $( T< +\infty )$.
-Diciamo che \eqref{eq:problema-di-cauchy} è stabile secondo Liapunov se per ogni perturbazione $( \delta _{0} ,\delta (t))$ tale che
+Diciamo che \eqref{eq:problema-di-cauchy} è stabile secondo Lyapunov se per ogni perturbazione $( \delta _{0} ,\delta (t))$ tale che
 \begin{equation*}
 | \delta _{0}| < \varepsilon ,\quad | \delta (t)| < \varepsilon ,\quad \forall t\in I,\quad \varepsilon  >0,
 \end{equation*}
 con $\varepsilon $ sufficientemente piccolo da garantire che $(\widetilde{\text{PC}})$ ammetta una e una sola soluzione, allora esiste $c >0$, indipendente da $\varepsilon $, tale che
 \begin{equation}
 | y(t) -z(t)| < c\ \varepsilon ,\quad \forall t\in I.
-\label{eq:stabilita-liapunov}
+\label{eq:stabilita-lyapunov}
 \end{equation}
 \end{definition}
 
@@ -135,7 +135,7 @@ con $\varepsilon $ sufficientemente piccolo da garantire che $(\widetilde{\text{
 [Stabilità asintotica]
 \index{stabilità!asintotica}
 Sia $I$ un intervallo superiormente illimitato.
-Si dice che \eqref{eq:problema-di-cauchy} è asintoticamente stabile se vale \eqref{eq:stabilita-liapunov} e inoltre
+Si dice che \eqref{eq:problema-di-cauchy} è asintoticamente stabile se vale \eqref{eq:stabilita-lyapunov} e inoltre
 \begin{equation*}
 \lim _{t\rightarrow \infty }| y(t) -z(t)| =0
 \end{equation*}
@@ -208,7 +208,7 @@ Definendo $c \coloneqq ( 1+T) e^{LT}$, allora:
 \begin{theorem}
 [Buona posizione]
 \index{teorema!della buona posizione}
-Sotto le ipotesi del teorema \ref{thm:esistenza-unicita-PC} il \eqref{eq:problema-di-cauchy} è ben posto, cioè esiste un'unica soluzione $y(t) \in C^{1}(I)$ che dipende con continuità dai dati, ovvero è stabile secondo Liapunov.
+Sotto le ipotesi del teorema \ref{thm:esistenza-unicita-PC} il \eqref{eq:problema-di-cauchy} è ben posto, cioè esiste un'unica soluzione $y(t) \in C^{1}(I)$ che dipende con continuità dai dati, ovvero è stabile secondo Lyapunov.
 \end{theorem}
 
 \textit{Osservazioni.}
@@ -339,7 +339,7 @@ u_{0} =y_{0}
 
 \subsection{Metodo di Heun}
 Analizziamo il metodo di \textbf{Heun}\index{metodo!di Heun}, che abbrevieremo con \eqref{eq:heun}.
-Ripendiamo il metodo di \eqref{eq:crank-nicolson}:
+Riprendiamo il metodo di \eqref{eq:crank-nicolson}:
 \begin{equation*}\tag{CN}
 \begin{cases}
 u_{n+1} =u_{n} +\frac{h}{2}[ f( t_{n+1} ,u_{n+1}) +f( t_{n} ,u_{n})]\\
