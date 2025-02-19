@@ -241,15 +241,20 @@ I valori degli elementi sulla diagonale principale di $\displaystyle L$ sono irr
 Per ragioni di stabilità numerica degli algoritmi, li scegliamo uguali a $\displaystyle 1$.
 Ricordiamo infatti che gli autovalori di una matrice triangolare sono i valori sulla diagonale principale.
 \begin{definition}
-[Minori principali]
-\index{minori principali}
-Data una matrice quadrata $A \in \mathbb{R}^{n\times n}$, si definiscono \textbf{minori principali} di ordine $k$, con $k=0,\dots,n$, le sottomatrici quadrate di dimensione $k$ ottenute eliminando righe e colonne \emph{dello stesso indice}. Più in particolare, si definisce \textbf{minore principale di testa}\index{minori principale di testa} (o \textbf{minore Nord-Ovest})\index{minore di nord-ovest} di ordine $k$ quel minore principale ottenuto eliminando le ultime $(n-k)$ righe e colonne, con $0\le k\le n-1$.
+[Sottomatrici principali]
+\index{sottomatrici principali}
+Data una matrice quadrata $A \in \mathbb{R}^{n\times n}$, si definiscono \textbf{sottomatrici principali} di ordine $k$, con $k=1,\dots,n$, le sottomatrici quadrate di dimensione $k$ ottenute eliminando righe e colonne \emph{dello stesso indice}. Più in particolare, si definisce \textbf{sottomatrice principale di testa}\index{sottomatrice principale di testa} di ordine $k$ quella sottomatrice principale ottenuto eliminando le ultime $(n-k)$ righe e colonne, con $1\le k\le n$.
+\end{definition}
+\begin{definition}
+    [Minori principali]
+    \index{minori principali}
+    Data una matrice quadrata $A \in \mathbb{R}^{n\times n}$, si definisce \textbf{minore principale}\index{minore principale} di ordine $k$ il determinante della sottomatrice principale di ordine $k$. Più in particolare, si definisce \textbf{minore principale di testa}\index{minore principale di testa} (o \textbf{minore di Nord-Ovest})\index{minore di nord-ovest} il determinante della sottomatrice principale di testa di ordine $k$.
 \end{definition}
 Naturalmente quindi una matrice quadrata di dimensione $n$ ha esattamente $n$ minori principali di testa.
 \begin{theorem}
 [Esistenza e unicità della fattorizzazione $\displaystyle LU$]
 \index{fattorizzazione!LU!esistenza e unicità}
-Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ una matrice non singolare. La matrice $\displaystyle A$ ammette una e una sola fattorizzazione $\displaystyle LU$ se e solo se tutti i minori principali di testa $\displaystyle A_{i}$ di ordine $\displaystyle i=1,\dotsc ,n$ sono non singolari.
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ una matrice. La matrice $\displaystyle A$ ammette una e una sola fattorizzazione $\displaystyle LU$ se e solo se tutti i minori principali di testa $\displaystyle A_{i}$ di ordine $\displaystyle i=1,\dotsc ,n-1$ sono non nulli.
 \label{thm:esist-unicita-LU}
 \end{theorem}
 \textit{Esempio.}
@@ -268,7 +273,7 @@ u_{11} & u_{12} & u_{13}\\
 0 & 0 & u_{33}
 \end{bmatrix}
 \end{equation*}
-I suoi minori di testa principali sono:
+Le sue sottomatrici principali di testa sono:
 \begin{equation*}
 A_{1} =[ 1] \qquad A_{2} =\begin{bmatrix}
 1 & 2\\
@@ -583,7 +588,7 @@ L'elemento pivotale $\displaystyle a^{(2)}_{22} =0$ quindi il MEG si interrompe.
 Per risolvere questo intoppo, introduciamo le tecniche di \textbf{pivoting}\index{pivoting}.
 
 L'idea in questo caso è scambiare la II e III riga.
-Si noti inoltre che il minore nord-ovest di ordine 2 della matrice $A$ è singolare:
+Si noti inoltre che il minore di nord-ovest di ordine 2 della matrice $A$ è nullo:
 \begin{equation*}
 \operatorname{det}\begin{bmatrix}
 1 & 1 \\
