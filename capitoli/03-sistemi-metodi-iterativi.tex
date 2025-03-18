@@ -139,7 +139,7 @@ In quest'ultima espressione riconosciamo i termini
 \begin{itemize}
 \item $P$ caratterizza un metodo con questa forma; quindi è sufficiente scegliere $P$ per ottenere il metodo.
 \item Un metodo così costruito è automaticamente consistente per costruzione, poiché lo abbiamo ottenuto a partire da $A\x =\mathbf{b}$.
-\item Per calcolare $P^{-1}\mathbf{r}^{(k)}$, non serve calcolare l'inversa\footnote{In generale, l'inversione di matrice è un'operazione dispendiosa e potenzialmente instabile dal punto di vista numerico, quindi si cerca di utlizzarla il meno possibile, preferendo risoluzioni di sistemi lineari come nell'esempio appena mostrato.}, bensì basta risolvere il sistema $P\mathbf{z}^{(k)} =\mathbf{r}^{(k)}$; la soluzione $\mathbf{z}^{(k)}$ viene detta residuo precondizionato\index{residuo!precondizionato}.
+\item Per calcolare $P^{-1}\mathbf{r}^{(k)}$, non serve calcolare l'inversa\footnote{In generale, l'inversione di matrice è un'operazione dispendiosa e potenzialmente instabile dal punto di vista numerico, quindi si cerca di utlizzarla il meno possibile, preferendo risoluzioni di sistemi lineari come nell'esempio appena mostrato.}, bensì basta risolvere il sistema $P\mathbf{z}^{(k)} =\mathbf{r}^{(k)}$, la cui soluzione $\mathbf{z}^{(k)}$ prende il nome di \textbf{residuo precondizionato}\index{residuo!precondizionato}.
 Ovviamente risolvere questo sistema dovrebbe essere notevolmente più facile rispetto a quello iniziale $A\x =\mathbf{b}$, a patto di aver scelto una matrice di precondizionamento $P$ semplice, per esempio diagonale o triangolare.
 \item La \textbf{velocità di convergenza}\index{velocità!di convergenza} di un metodo è data da: $R(B) =-\log( \rho _{B})$.
 \end{itemize}
