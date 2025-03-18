@@ -139,7 +139,7 @@ In quest'ultima espressione riconosciamo i termini
 \begin{itemize}
 \item $P$ caratterizza un metodo con questa forma; quindi è sufficiente scegliere $P$ per ottenere il metodo.
 \item Un metodo così costruito è automaticamente consistente per costruzione, poiché lo abbiamo ottenuto a partire da $A\x =\mathbf{b}$.
-\item Per calcolare $P^{-1}\mathbf{r}^{(k)}$, non serve calcolare l'inversa, bensì basta risolvere il sistema $\mathbf{z}^{(k)} =P^{-1}\mathbf{r}^{(k)}$\footnote{In generale, l'inversione di matrice è un'operazione dispendiosa e potenzialmente instabile dal punto di vista numerico, quindi si cerca di utlizzarla il meno possibile, preferendo risoluzioni di sistemi lineari come nell'esempio appena mostrato.}.
+\item Per calcolare $P^{-1}\mathbf{r}^{(k)}$, non serve calcolare l'inversa\footnote{In generale, l'inversione di matrice è un'operazione dispendiosa e potenzialmente instabile dal punto di vista numerico, quindi si cerca di utlizzarla il meno possibile, preferendo risoluzioni di sistemi lineari come nell'esempio appena mostrato.}, bensì basta risolvere il sistema $P\mathbf{z}^{(k)} =\mathbf{r}^{(k)}$; la soluzione $\mathbf{z}^{(k)}$ viene detta residuo precondizionato\index{residuo!precondizionato}.
 Ovviamente risolvere questo sistema dovrebbe essere notevolmente più facile rispetto a quello iniziale $A\x =\mathbf{b}$, a patto di aver scelto una matrice di precondizionamento $P$ semplice, per esempio diagonale o triangolare.
 \item La \textbf{velocità di convergenza}\index{velocità!di convergenza} di un metodo è data da: $R(B) =-\log( \rho _{B})$.
 \end{itemize}
@@ -757,7 +757,7 @@ I passaggi dell'algoritmo sono analoghi, per cui ci limitiamo a riportare dirett
 	inizializza $\x^{(0)}$\;
 	calcola $\mathbf{r}^{(0)}$\;
 	\For{$k=0,1,2,\dotsc $}{
-		calcola del residuo precondizionato $P\mathbf{z}^{(k)} =\mathbf{r}^{(k)}$\;
+		calcola il residuo precondizionato $P\mathbf{z}^{(k)} =\mathbf{r}^{(k)}$\;
 		calcola il parametro ottimale di accelerazione $\alpha _{k} =\frac{\left[\mathbf{z}^{(k)}\right]^{T}\mathbf{r}^{(k)}}{\left[\mathbf{z}^{(k)}\right]^{T}\textcolor[rgb]{0.61,0.61,0.61}{A\ }\mathbf{\textcolor[rgb]{0.61,0.61,0.61}{z}}\textcolor[rgb]{0.61,0.61,0.61}{^{(k)}}}$\;
 		aggiorna $\x^{( k+1)} =\x^{(k)} +\alpha _{k}\mathbf{z}^{(k)}$\;
 		aggiorna $\mathbf{r}^{( k+1)} =\mathbf{r}^{(k)} -\alpha _{k}\textcolor[rgb]{0.61,0.61,0.61}{A\ }\mathbf{\textcolor[rgb]{0.61,0.61,0.61}{z}}\textcolor[rgb]{0.61,0.61,0.61}{^{\textcolor[rgb]{0.61,0.61,0.61}{(}\textcolor[rgb]{0.61,0.61,0.61}{k}\textcolor[rgb]{0.61,0.61,0.61}{)}}}$\;
@@ -858,7 +858,7 @@ Notiamo tuttavia che \textit{non è garantito} che $\x^{( k+1)}$ sia ottimale ri
 \begin{equation*}
 \left[\mathbf{r}^{( k+1)}\right]^{T}\mathbf{r}^{(k)} =0,\quad\text{ma} \quad\left[\mathbf{r}^{( k+1)}\right]^{T}\mathbf{r}^{(j)} \neq 0,\quad j=0,\dotsc ,k-1.
 \end{equation*}
-Infatti, il metodo del gradiente non tiene traccia di tutte le direzioni precedenti, ma solo di quella immadiatamente precedente.
+Infatti, il metodo del gradiente non tiene traccia di tutte le direzioni precedenti, ma solo di quella immediatamente precedente.
 
 \section{Metodo del gradiente coniugato}
 \index{metodo!del gradiente coniugato}
