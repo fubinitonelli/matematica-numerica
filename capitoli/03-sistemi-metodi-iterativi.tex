@@ -525,6 +525,21 @@ Sia $A$ una matrice a predominanza diagonale stretta per righe. Allora:
     Gauss-Seidel rilassato (SOR) & $B_{SOR} =\left( I-\omega D^{-1} E\right)^{-1}\left[( 1-\omega ) I+\omega D^{-1} F\right]$ \\ \hline
   \end{tabular}
 \end{table}
+
+Per ciascuno dei metodi descritti, è inoltre possibile ricavare il vettore $\mathbf g$ caratteristico del metodo iterativo.
+
+\begin{table}[H]
+  \def\arraystretch{1.5}
+  \begin{tabular}{|l|l|}
+    \hline
+    Jacobi                       & $\mathbf g_{J} =D^{-1}\mathbf b$ \\ \hline
+    Gauss-Seidel                 & $\mathbf g_{GS} =( D-E)^{-1}\mathbf b$ \\ \hline
+    Jacobi rilassato (JOR)       & $\mathbf g_{JOR} =\omega D^{-1} \mathbf{b}$ \\ \hline
+    %hspace per allargare la tabella senza usare tabularx
+    Gauss-Seidel rilassato (SOR) & $\mathbf g_{SOR} =\left( I-\omega D^{-1} E\right)^{-1}\omega D^{-1}\mathbf b$ \hspace{2cm} \\ \hline
+  \end{tabular}
+\end{table}
+
 % \textit{[Lezione 8 (30-03-2020)]}
 
 \section{Metodo di Richardson}
