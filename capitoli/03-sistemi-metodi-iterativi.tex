@@ -514,13 +514,13 @@ Sia $A$ una matrice a predominanza diagonale stretta per righe. Allora:
 0< \omega \leqslant 1\ \ \Rightarrow \ \ \text{SOR converge}.
 \end{equation*}
 \end{theorem}
-\section{Riassunto matrici di iterazioni}
+\section{Riassunto matrici di iterazione}
 \begin{table}[H]
   \def\arraystretch{1.5}
   \begin{tabular}{|l|l|}
     \hline
-    Jacobi                       & $B_{J} =D^{-1}( E+F)$ \\ \hline
-    Gauss-Seidel                 & $B_{GS} =( D-E)^{-1} F$ \\ \hline
+    Jacobi                       & $B_{J} =D^{-1}( E+F)=I-D^{-1}A$ \\ \hline
+    Gauss-Seidel                 & $B_{GS} =( D-E)^{-1} F=I-(D-E)^{-1}A$ \\ \hline
     Jacobi rilassato (JOR)       & $B_{JOR} =\omega B_{J} +( 1-\omega ) I=I-\omega D^{-1} A$ \\ \hline
     Gauss-Seidel rilassato (SOR) & $B_{SOR} =\left( I-\omega D^{-1} E\right)^{-1}\left[( 1-\omega ) I+\omega D^{-1} F\right]$ \\ \hline
   \end{tabular}
