@@ -553,16 +553,27 @@ A seconda che il parametro per cui moltiplichiamo sia costante o dipenda dall'it
 \begin{itemize}
 \item \textit{Metodo di Richardson stazionario}:
 \begin{equation*}
-\x^{( k+1)} =\x^{(k)} +\alpha P^{-1}\mathbf{r}^{(k)} \quad \text{ovvero } \alpha _{k} =\alpha \ \ \forall k.
+\mathbf x^{( k+1)} =\mathbf x^{(k)} +\alpha P^{-1}\mathbf{r}^{(k)} \quad \text{ovvero } \alpha _{k} =\alpha \ \ \forall k.
 \end{equation*}
 \item \textit{Metodo di Richardson dinamico}:
 \begin{equation*}
-\x^{( k+1)} =\x^{(k)} +\alpha _{k} P^{-1}\mathbf{r}^{(k)}.
+\mathbf x^{( k+1)} =\mathbf x^{(k)} +\alpha _{k} P^{-1}\mathbf{r}^{(k)}.
 \end{equation*}
 \end{itemize}
 \textit{Osservazioni.}
 \begin{itemize}
-\item Jacobi, Gauss-Seidel, JOR, SOR sono tutti casi particolari di metodi di Richardson con $\alpha =1 \, \forall k$.
+\item Jacobi, Gauss-Seidel, JOR, SOR sono tutti casi particolari di metodi di Richardson stazionario:
+\begin{table}[H]
+  \centering
+  \def\arraystretch{1.5}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    Jacobi                       & $P_{J} =D$& $\alpha_{J} =1$\\ \hline
+    Gauss-Seidel                 & $P_{GS} =( D-E)$ & $\alpha_{GS}=1$ \\ \hline
+    Jacobi rilassato (JOR)       & $P_{JOR}=P_J=D$ & $\alpha_{JOR}=\omega$ \\ \hline
+    Gauss-Seidel rilassato (SOR) & $P_{SOR}=D-\omega E$ & $\alpha_{SOR}=\omega$ \\ \hline
+  \end{tabular}
+\end{table}
 \item Se $P=I$ otteniamo il metodo di Richardson \textit{non precondizionato,} altrimenti abbiamo il metodo di Richardson \textit{precondizionato.}
 \item La matrice di iterazione per il metodo di Richardson dinamico precondizionato è:
 \begin{equation*}
