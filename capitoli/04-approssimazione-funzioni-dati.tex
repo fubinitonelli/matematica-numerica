@@ -213,7 +213,7 @@ con $a_{0} ,a_{1} ,\dotsc ,a_{n} \in \mathbb{R}$ da determinare imponendo i vinc
 \begin{equation*}
 \mathbb{P}^{n} =\operatorname{span}\{\mathcal{L}_{0}(x) ,\dotsc ,\mathcal{L}_{n}(x)\}
 \end{equation*}
-dove per ogni $i=0,\dotsc ,n$ l'$i$-esimo \textbf{polinomio di Lagrange}\index{polinomio!di Lagrange} $\mathcal{L}_{i}(x)$ è definito in questo modo:
+dove per ogni $i=0,\dotsc ,n$ l'$i$-esimo \textbf{polinomio di Lagrange}\index{polinomio!di Lagrange} $\mathcal{L}_{i}(x)$ è definito in modo da soddisfare le seguenti condizioni:
 \begin{equation*}
 \begin{array}{{>{\displaystyle}l}}
 \mathcal{L}_{i}(x) \ \text{è un polinomio di grado} \ n\\
@@ -225,8 +225,10 @@ dove per ogni $i=0,\dotsc ,n$ l'$i$-esimo \textbf{polinomio di Lagrange}\index{p
 \end{equation*}
 L'espressione analitica di ogni $\mathcal{L}_{i}(x) ,i=0,\dotsc ,n$ è:
 \begin{equation*}
-\mathcal{L}_{i}(x) =\prod ^{n}_{j=0,j\neq i}\frac{( x-x_{j})}{( x_{i} -x_{j})} \quad i=0,\dotsc ,n.
+\mathcal{L}_{i}(x) =\prod ^{n}_{j=0,j\neq i}\frac{( x-x_{j})}{( x_{i} -x_{j})} \quad i=0,\dotsc ,n,
 \end{equation*}
+in quanto il numeratore si annulla in ogni $x_j$ con $j\ne i$, mentre il denominatore coincide con il numeratore calcolato in $x_i$.
+
 In figura \ref{fig-polinomi-lagrange} si può vedere un esempio di un set di polinomi di Lagrange costruiti su un specifico insieme di nodi.
 \fg[Polinomi di Lagrange nei nodi $x_{i}=1,3,4,6,8$.]{0.75}{fig-polinomi-lagrange}
 
@@ -240,7 +242,7 @@ Ovvero in forma compatta otteniamo:
 \end{equation*}
 Questo ne dimostra l'esistenza.
 
-\textit{Unicità.} Per assurdo supponiamo che esistano due polinomi distinti $\Pi _{n}(x)$ e $\tilde{\Pi }_{n}(x)$ tali che rispettano le proprietà richieste, ovvero:
+\textit{Unicità.} Per assurdo supponiamo che esistano due polinomi di grado $n$ distinti $\Pi _{n}(x)$ e $\tilde{\Pi }_{n}(x)$ che rispettino le proprietà richieste, ovvero:
 \begin{equation*}
 \Pi _{n}( x_{i}) =y_{i} \quad \forall i=0,\dotsc ,n \quad \text{e} \quad \tilde{\Pi }_{n}( x_{i}) =y_{i} \quad \forall i=0,\dotsc ,n.
 \end{equation*}
@@ -251,9 +253,9 @@ $$
 	=y_{i} -y_{i}
 	=0.
 $$
-Quindi $\mathcal{Y}_{n}(x)$ è un polinomio di grado $n$ che ha $n+1$ zeri. Dunque per il teorema fondamentale dell'algebra:
+Quindi $\mathcal{Y}_{n}(x)$ è un polinomio di grado $n$ che ha $n+1$ zeri. Per il teorema fondamentale dell'algebra un polinomio di grado $n$ ha al più $n$ zeri, quindi non può che essere:
 \begin{equation*}
-\mathcal{Y}_{n}(x) \equiv 0\ \ \Rightarrow \ \ \Pi _{n}(x) =\tilde{\Pi }_{n}(x)
+\mathcal{Y}_{n}(x) \equiv 0\ \ \Rightarrow \ \ \Pi _{n}(x) \equiv \tilde{\Pi }_{n}(x)
 \end{equation*}
 ma questo è assurdo in quanto si è supposto fossero distinti, pertanto abbiamo dimostrato l'unicità. \textqed
 
