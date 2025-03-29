@@ -639,7 +639,7 @@ Nonostante l'errore tenda a $0$ più velocemente all'aumentare di $M$, le richie
 
 \subsection{Splines cubiche interpolatorie}
 Queste funzioni soddisfano le seguenti proprietà\footnote{
-Le proprietà presentate in realtà danno origine a $4M-2$ equazioni, ma bisogna dare l'identità a $4 M$ coefficienti in quanto abbiamo $M$ polinomi di grado $3$. Per garantire l'unicità dell'approssimazione bisognerebbe dunque aggiungere 2 condizioni.}:
+Le proprietà presentate in realtà danno origine a $4M-2$ equazioni, ma bisogna dare l'identità a $4 M$ coefficienti in quanto vanno definiti $M$ polinomi di grado $3$. Per garantire l'unicità dell'approssimazione bisognerebbe dunque aggiungere 2 condizioni.}:
 \begin{itemize}
     \item $S_3(x_i)=f(x_i)\quad \forall x_i$
     \item $S_3|_{I_i}\in \mathbb P^3(I_i)\quad \forall I_ i$
@@ -650,7 +650,7 @@ Le splines cubiche sono talmente accurate che si possono usare anche per appross
 \begin{theorem}
 Sia $f$ sufficientemente regolare e sia $S_3(x)$ la sua spline cubica interpolatoria. Allora per $q=0,1,2$:
 \begin{equation*}
-\left\Vert f^{(q)}(x) -S_3^{(q)}(x)\right\Vert _{\infty } \leqslant C_q H^{4-q} \ \left\Vert f^{(q)}(x)\right\Vert _{\infty }
+\left\Vert f^{(q)}(x) -S_3^{(q)}(x)\right\Vert _{\infty } \leqslant C_q H^{4-q} \ \left\Vert f^{(4)}(x)\right\Vert _{\infty }
 \end{equation*}
 \end{theorem}
 
