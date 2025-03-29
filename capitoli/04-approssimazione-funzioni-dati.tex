@@ -421,10 +421,11 @@ I nodi sono definiti da
 \end{equation*}
 
 È possibile dimostrare che per i nodi equispaziati $|\omega_{n+1}|\le \frac{h^{n+1}} 4 n!$. Valutiamo quindi l'errore massimo nell'intervallo $I$:
-\begin{align*}
-    \|E_n f\|_\infty \le \frac{\|\omega_{n+1}(x)\|_\infty}{(n+1)!}\| f^{(n+1)}(x) \|_\infty&\le   \frac{1}{(n+1)!} \frac{h^{n+1}}{4}\ n!\ \| \!f^{(n+1)}(x) \|_\infty\\
-    &=\underbrace{\frac{h^{n+1}}{4(n+1)}}_A \ \underbrace{\| \!f^{(n+1)}(x) \|_\infty}_B
-\end{align*}
+\begin{multline*}
+    \|E_n\|_\infty=\|f(x)-\Pi_n f(x)\|_\infty \le \frac{\|\omega_{n+1}(x)\|_\infty}{(n+1)!}\| f^{(n+1)}(x) \|_\infty\\
+    \le   \frac{1}{(n+1)!} \frac{h^{n+1}}{4}\ n!\ \| \!f^{(n+1)}(x) \|_\infty
+    =\underbrace{\frac{h^{n+1}}{4(n+1)}}_A \ \underbrace{\| \!f^{(n+1)}(x) \|_\infty}_B
+\end{multline*}
 Il termine $A$ tende a $0$ per $n\to\infty$, ma non sappiamo nulla del termine $B$: se dovesse tendere a $\infty$ più velocemente di $A$, allora l'approssimazione polinomiale diventerebbe meno accurata quando usiamo polinomi di grado superiore.
 
 \textit{Controesempio (Fenomeno di Runge).}
@@ -441,14 +442,15 @@ Le oscillazioni, all'aumentare del grado, peggiorano solo \textit{in prossimità
 
  Le possibili soluzioni al fenomeno di Runge sono:
 \begin{enumerate}
-\item Utilizzo di \textbf{nodi non equispaziati}\index{nodi!non equispaziati}, concentrati agli estremi, dove ci sono oscillazioni
-\item Utilizzo di \textbf{nodi equispaziati} ma con metodi diversi:
+\item Utilizzo di \textbf{nodi non equispaziati}, concentrati agli estremi, dove ci sono oscillazioni
+\item Utilizzo di \textbf{nodi equispaziati o non equispaziati} ma con metodi diversi:
 \begin{enumerate}
 \item \textit{Interpolazione composita}: si divide l'intervallo di approssimazione in più parti calcolando su ciascun sottointervallo un polinomio interpolante di grado $n$ non elevato $\Pi ^{n}_{h} f$.
 \item \textit{Approssimazione nel senso dei minimi quadrati}, un approccio diverso dall'interpolazione vista finora.
 \end{enumerate}
 \end{enumerate}
 \section{Utilizzo di nodi non equispaziati}
+\index{nodi!non equispaziati}
 \subsection{Nodi di Chebyshev-Gauss-Lobatto (CGL)}
 \index{nodi!di Chebyshev-Gauss-Lobatto}
 Il seguente ragionamento sarà applicato all'intervallo $I=[ -1,1]$, ma esso può essere esteso a tutto $\mathbb{R}$. Consideriamo la semicirconferenza unitaria, fissando $n$ e dividendola in $n$ spicchi di ampiezza $\frac{\pi }{n}$.
@@ -511,12 +513,7 @@ I nodi $x_{i}$ sono definiti come
 x_{i} =-\cos\left(\frac{\pi i}{n}\right) ,\quad i=0,\dotsc ,n.
 \label{eq:def-nodi-cgl}
 \end{equation}
-Si può dimostrare che:
-\begin{itemize}
-\item $E_{n} =| \Pi _{n} f-f| \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CGL.
-\item Vale che:
-$$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log n+\gamma +\log\frac{8}{\pi ^{2}}\right] +\frac{\pi }{72n^{2}}.$$
-\end{itemize}
+Si può dimostrare che se $f\in C^1(I)$, $\|E_{n}\|_\infty =\| \Pi _{n} f-f\|_\infty \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CGL.
 \subsection{Nodi di Chebyshev-Gauss (CG)}
 \index{nodi!di Chebyshev-Gauss}
 Scegliamo solo i nodi che sono interni ad $I=[ -1,1]$, quindi tralasciando gli estremi. In questo modo:
@@ -524,12 +521,8 @@ Scegliamo solo i nodi che sono interni ad $I=[ -1,1]$, quindi tralasciando gli e
 x_{i} =-\cos\left(\frac{\pi ( 2i+1)}{2( n+1)}\right) ,\quad i=0,\dotsc ,n.
 \label{eq:def-nodi-cg}
 \end{equation}
-Si può dimostrare che:
-\begin{itemize}
-\item $E_{n} =| \Pi _{n} f-f| \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CG ($f$ sufficientemente regolare).
-\item Vale che:
-$$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log( n+1) +\gamma +\log\frac{8}{\pi }\right] +\frac{\pi }{72( n+1)^{2}}.$$
-\end{itemize}
+Si può dimostrare che se $f$ sufficientemente regolare, $\|E_{n}\|_\infty =\| \Pi _{n} f-f\|_\infty \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CG.
+
 \textbf{NB.}
 Sull'intervallo generico $[ a,b]$ i nodi di CGL e CG si ottengono da \eqref{eq:def-nodi-cgl} e da \eqref{eq:def-nodi-cg} con una trasformazione lineare:
 \begin{equation*}
@@ -538,81 +531,129 @@ Sull'intervallo generico $[ a,b]$ i nodi di CGL e CG si ottengono da \eqref{eq:d
 
 \section{Interpolazione composita}
 \index{interpolazione!composita}
-Assegnata $f:[ a,b]\rightarrow \mathbb{R}$, vogliamo approssimare $f$ usando nodi equispaziati con $n$ piccolo e dividendo $[ a,b]$ in sottointervalli.
-In particolare:
+\subsection{Interpolazione composita con nodi generici}
+Assegnata $f:I\rightarrow \mathbb{R}$, vogliamo approssimare $f$ usando nodi qualunque, dividendo $[ a,b]$ in sottointervalli.
 \begin{enumerate}
-\item Dividiamo $[ a,b]$ in $M\ $intervalli di ampiezza $h$, con
-$$I_{i} =[ x_{i} ,x_{i+1}] \quad i=0,\dotsc ,M-1 \quad \text{e} \quad x_{i} =a+ih.$$
-\item Su ciascun sottointervallo $I_{i}$ approssimiamo la funzione con un polinomio $\Pi ^{k}_{h} f(x)$ di interpolazione di Lagrange di grado $k\geqslant 1$, con $k$ \textit{non troppo grande} in modo da ovviare ai problemi di stabilità. Quindi il polinomio di interpolazione composita $\Pi ^{k}_{h} f(x)$ appartiene allo spazio
-\begin{equation*}
-\Pi ^{k}_{h} f(x) \in X^{k}_{h} =\left\{v\in C^{0}([ a,b]) \ t.c.\ v|_{I_{i}} \in \mathbb{P}_{k}( I_{i}), \quad \forall i=0,\dotsc ,n-1\right\}.
-\end{equation*}
+    \item Scegliamo i nodi di interpolazione $x_0,\dots,x_M$, dividendo quindi $I$ in $M$ sottointervalli di ampiezza $h_i$
+    $$I_{i} =[ x_{i} ,x_{i+1}] \quad i=0,\dotsc ,M-1, \quad h_{i} =x_{i+1}-x_i,\quad H=\max_{i}h_i.$$
+    \item Su ciascun sottointervallo $I_{i}$ approssimiamo la funzione con un polinomio $\Pi ^{H}_{k} f(x)$ di interpolazione di Lagrange di grado $k\geqslant 1$, con $k$ \textit{non troppo grande} in modo da ovviare ai problemi di oscillazione.
 \end{enumerate}
+Quindi il polinomio di interpolazione composita $\Pi ^{H}_{k} f(x)$ soddisfa le seguenti proprietà:
+\begin{itemize}
+    \item $\Pi ^{H}_{k} f\in C^0([a,b])$
+    \item $\Pi ^{H}_{k} f|_{I_i}\in \mathbb P^k(I_i)\quad \forall i=0,\dots ,M-1$
+    \item $\Pi ^{H}_{k} f(x_i)=y_i\quad \forall i=0,\dots ,M$
+\end{itemize}
 
-\begin{figure}[ht]
+\subsection{Interpolazione composita lineare}
+Per $k=1$, in ogni intervallo possiamo scrivere il polinomio di interpolazione di Lagrange come
+\begin{equation*}
+    \Pi ^{H}_{k} f|_{I_i}(x)=f(x_i)+\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}(x-x_i)
+\end{equation*}
+Poiché questa è un'interpolazione lineare effettuata su $2$ nodi (che essendo solo $2$ sono "equispaziati"), supponendo $f\in C^2$ possiamo usare la disuguaglianza dell'errore presentata precedentemente:
+\begin{equation*}
+    \|E_n\|_{\infty,I_i}=\|f(x)- \Pi ^{H}_{k} f|_{I_i}(x)\|_\infty \le \frac{h^{k+1}}{4(k+1)}\| \!f^{(k+1)}(x) \|_{\infty,I_i} = \frac{h_i^2}{8}\ \|f''(x)\|_{\infty,I_i}
+\end{equation*}
+Ora valutiamo l'errore nell'intero intervallo $I$, considerando il massimo che l'errore assume tra tutti gli $I_i$:
+\begin{equation*}
+    \|E_n\|_{\infty,I}\le \underbrace{\frac{H^2}8}_A \underbrace{\|f''(x)\|_{\infty,I}}_B
+\end{equation*}
+Come nel caso trattato precedentemente, il termine $A$ tende a $0$ per $M\to\infty$, ma adesso $B$ è una costante e ciò garantisce che $\|E_M\|_\infty \xrightarrow{M\to \infty}0$.
+\begin{figure}[htpb]
 	\centering
-	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
-
-	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
-	%uncomment if require: \path (0,201); %set diagram left start at 0, and has height of 201
-
-	%Shape: Axis 2D [id:dp5938785059494647]
-	\draw  (177.5,157.6) -- (481.5,157.6)(207.9,48) -- (207.9,169.78) (474.5,152.6) -- (481.5,157.6) -- (474.5,162.6) (202.9,55) -- (207.9,48) -- (212.9,55)  ;
-	%Straight Lines [id:da34535391593873066]
-	\draw    (320.33,153.67) -- (320.33,162.33) ;
-	%Curve Lines [id:da7054939579876551]
-	\draw    (255.6,149.8) .. controls (259.67,137.33) and (260.4,136.2) .. (270.33,120.67) .. controls (279.6,108.6) and (289.87,89.94) .. (320.33,114.67) .. controls (350.8,139.4) and (406.27,149.14) .. (430.33,98.67) .. controls (441.2,74.2) and (445.6,66.6) .. (451.6,53) ;
-	%Straight Lines [id:da09149373809642669]
-	\draw    (360.33,153.67) -- (360.33,162.33) ;
-	%Straight Lines [id:da5265988284811343]
-	\draw    (400.33,153.67) -- (400.33,162.33) ;
-	%Straight Lines [id:da7794878884155887]
-	\draw    (280.33,153.67) -- (280.33,162.33) ;
-	%Straight Lines [id:da3837028907033768]
-	\draw    (440.33,153.67) -- (440.33,162.33) ;
-	%Straight Lines [id:da6132551084075859]
-	\draw    (360.33,172.33) -- (400.33,172.33) ;
-	\draw [shift={(400.33,172.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
-	\draw [shift={(360.33,172.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
-	%Straight Lines [id:da9684821626942524]
-	\draw    (400.33,129.17) -- (440.33,77.17) ;
-	%Straight Lines [id:da5816617011874519]
-	\draw    (400.33,129.17) -- (360.33,134.17) ;
-	%Straight Lines [id:da057117751608081635]
-	\draw    (320.33,114.67) -- (360.33,134.17) ;
-	%Straight Lines [id:da4096132454663459]
-	\draw    (320.33,114.67) -- (280.33,109.17) ;
-	%Shape: Circle [id:dp7809648208205671]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (278.33,109.17) .. controls (278.33,108.06) and (279.23,107.17) .. (280.33,107.17) .. controls (281.44,107.17) and (282.33,108.06) .. (282.33,109.17) .. controls (282.33,110.27) and (281.44,111.17) .. (280.33,111.17) .. controls (279.23,111.17) and (278.33,110.27) .. (278.33,109.17) -- cycle ;
-	%Shape: Circle [id:dp8526518373813228]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (318.33,114.67) .. controls (318.33,113.57) and (319.23,112.67) .. (320.33,112.67) .. controls (321.44,112.67) and (322.33,113.57) .. (322.33,114.67) .. controls (322.33,115.78) and (321.44,116.67) .. (320.33,116.67) .. controls (319.23,116.67) and (318.33,115.78) .. (318.33,114.67) -- cycle ;
-	%Shape: Circle [id:dp07951403743329943]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (358.33,134.17) .. controls (358.33,133.06) and (359.23,132.17) .. (360.33,132.17) .. controls (361.44,132.17) and (362.33,133.06) .. (362.33,134.17) .. controls (362.33,135.27) and (361.44,136.17) .. (360.33,136.17) .. controls (359.23,136.17) and (358.33,135.27) .. (358.33,134.17) -- cycle ;
-	%Shape: Circle [id:dp37361977339450303]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (398.33,129.17) .. controls (398.33,128.06) and (399.23,127.17) .. (400.33,127.17) .. controls (401.44,127.17) and (402.33,128.06) .. (402.33,129.17) .. controls (402.33,130.27) and (401.44,131.17) .. (400.33,131.17) .. controls (399.23,131.17) and (398.33,130.27) .. (398.33,129.17) -- cycle ;
-	%Shape: Circle [id:dp03985157045169618]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (438.33,77.17) .. controls (438.33,76.06) and (439.23,75.17) .. (440.33,75.17) .. controls (441.44,75.17) and (442.33,76.06) .. (442.33,77.17) .. controls (442.33,78.27) and (441.44,79.17) .. (440.33,79.17) .. controls (439.23,79.17) and (438.33,78.27) .. (438.33,77.17) -- cycle ;
-
-	% Text Node
-	\draw (186,37.4) node [anchor=north west][inner sep=0.75pt]    {$y$};
-	% Text Node
-	\draw (493,146.4) node [anchor=north west][inner sep=0.75pt]    {$x$};
-	% Text Node
-	\draw (375,177.4) node [anchor=north west][inner sep=0.75pt]    {$h$};
-	\end{tikzpicture}
-	\caption{Già nel caso di interpolazione composita con $k=1$ si può notare visivamente una maggiore \textit{precisione} nell'interpolazione, data dal fatto che stiamo lavorando su tanti intervalli di ampiezza $h$, pur usando un banale polinomio lineare.}
+    \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+    
+    \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+    %uncomment if require: \path (0,235); %set diagram left start at 0, and has height of 235
+    
+    %Shape: Axis 2D [id:dp18444718817100658] 
+    \draw  (161.5,168.37) -- (465.5,168.37)(191.9,38.67) -- (191.9,182.78) (458.5,163.37) -- (465.5,168.37) -- (458.5,173.37) (186.9,45.67) -- (191.9,38.67) -- (196.9,45.67)  ;
+    %Straight Lines [id:da062172154656692125] 
+    \draw    (293.33,164.67) -- (293.33,173.33) ;
+    %Shape: Circle [id:dp7214422439638635] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (261.17,100.17) .. controls (261.17,98.42) and (262.58,97) .. (264.33,97) .. controls (266.08,97) and (267.5,98.42) .. (267.5,100.17) .. controls (267.5,101.92) and (266.08,103.33) .. (264.33,103.33) .. controls (262.58,103.33) and (261.17,101.92) .. (261.17,100.17) -- cycle ;
+    %Shape: Circle [id:dp3795620538286856] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (289.17,97.67) .. controls (289.17,95.92) and (290.58,94.51) .. (292.33,94.51) .. controls (294.08,94.51) and (295.5,95.92) .. (295.5,97.67) .. controls (295.5,99.42) and (294.08,100.84) .. (292.33,100.84) .. controls (290.58,100.84) and (289.17,99.42) .. (289.17,97.67) -- cycle ;
+    %Curve Lines [id:da4712863514460399] 
+    \draw    (229.6,150.8) .. controls (236.4,139.2) and (244.4,127.2) .. (254.33,111.67) .. controls (263.6,99.6) and (273.87,80.94) .. (304.33,105.67) .. controls (334.8,130.4) and (390.27,140.14) .. (414.33,89.67) .. controls (425.2,65.2) and (429.6,57.6) .. (435.6,44) ;
+    %Straight Lines [id:da3752186519870171] 
+    \draw    (344.33,164.67) -- (344.33,173.33) ;
+    %Straight Lines [id:da4559519736586207] 
+    \draw    (384.33,164.67) -- (384.33,173.33) ;
+    %Straight Lines [id:da8960631674092833] 
+    \draw    (264.33,164.67) -- (264.33,173.33) ;
+    %Straight Lines [id:da8212422896339734] 
+    \draw    (424.33,164.67) -- (424.33,173.33) ;
+    %Shape: Circle [id:dp7699308608601513] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (341.17,125.17) .. controls (341.17,123.42) and (342.58,122) .. (344.33,122) .. controls (346.08,122) and (347.5,123.42) .. (347.5,125.17) .. controls (347.5,126.92) and (346.08,128.33) .. (344.33,128.33) .. controls (342.58,128.33) and (341.17,126.92) .. (341.17,125.17) -- cycle ;
+    %Shape: Circle [id:dp7749796192574097] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (381.17,120.17) .. controls (381.17,118.42) and (382.58,117) .. (384.33,117) .. controls (386.08,117) and (387.5,118.42) .. (387.5,120.17) .. controls (387.5,121.92) and (386.08,123.33) .. (384.33,123.33) .. controls (382.58,123.33) and (381.17,121.92) .. (381.17,120.17) -- cycle ;
+    %Shape: Circle [id:dp21920595374543028] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (421.17,68.17) .. controls (421.17,66.42) and (422.58,65) .. (424.33,65) .. controls (426.08,65) and (427.5,66.42) .. (427.5,68.17) .. controls (427.5,69.92) and (426.08,71.33) .. (424.33,71.33) .. controls (422.58,71.33) and (421.17,69.92) .. (421.17,68.17) -- cycle ;
+    %Straight Lines [id:da711773099353101] 
+    \draw    (344.33,183.33) -- (384.33,183.33) ;
+    \draw [shift={(384.33,183.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+    \draw [shift={(344.33,183.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+    %Straight Lines [id:da2561639103232428] 
+    \draw    (384.33,120.17) -- (400.75,109.17) ;
+    %Straight Lines [id:da030147884442299544] 
+    \draw    (384.33,120.17) -- (344.33,125.17) ;
+    %Straight Lines [id:da9060532424330414] 
+    \draw    (292.33,97.67) -- (344.33,125.17) ;
+    %Straight Lines [id:da9160326772746151] 
+    \draw    (292.33,97.67) -- (261.17,100.17) ;
+    %Straight Lines [id:da7721416652906353] 
+    \draw    (401.33,164.67) -- (401.33,173.33) ;
+    %Shape: Circle [id:dp5685147729949077] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (397.58,109.17) .. controls (397.58,107.42) and (399,106) .. (400.75,106) .. controls (402.5,106) and (403.92,107.42) .. (403.92,109.17) .. controls (403.92,110.92) and (402.5,112.33) .. (400.75,112.33) .. controls (399,112.33) and (397.58,110.92) .. (397.58,109.17) -- cycle ;
+    %Straight Lines [id:da854138099346445] 
+    \draw    (400.75,109.17) -- (424.33,68.17) ;
+    
+    % Text Node
+    \draw (170,28.4) node [anchor=north west][inner sep=0.75pt]    {$y$};
+    % Text Node
+    \draw (477,157.4) node [anchor=north west][inner sep=0.75pt]    {$x$};
+    % Text Node
+    \draw (359,188.4) node [anchor=north west][inner sep=0.75pt]    {$h_{i}$};
+    
+    
+    \end{tikzpicture}
+    
+	\caption{Già nel caso di interpolazione composita con $k=1$ si può notare visivamente una maggiore \textit{precisione} nell'interpolazione, data dal fatto che stiamo lavorando su tanti intervalli di ampiezza $h_i$, pur usando un banale polinomio lineare.}
 \end{figure}
 
+\subsection{Interpolazione composita di gradi superiori al primo}
+Vogliamo ora generalizzare il risultato ottenuto per l'interpolazione lineare a tratti.
+Poiché un polinomio di grado superiore al primo richiede più di due nodi, all'interno di ciascun sottointervallo andiamo a scegliere ulteriori nodi, che ipotizziamo equispaziati.
+
+In maniera analoga al caso lineare possiamo applicare in ciascun sottointervallo la stima dell'errore per nodi equispaziati, ottenendo il seguente teorema.
+
 \begin{theorem}
-Sia $f\in C^{k+1}(I) ,I=[ a,b]$ e sia $\Pi ^{k}_{h} f(x)$ il suo polinomio di interpolazione composita. Allora:
+Sia $f\in C^{k+1}(I)$ e sia $\Pi ^{H}_{k} f(x)$ il suo polinomio di interpolazione composita. Allora:
 \begin{equation*}
-\left\Vert f(x) -\Pi ^{k}_{h} f(x)\right\Vert _{\infty } \leqslant C\ h^{k+1} \ \left\Vert f^{( k+1)}\right\Vert _{\infty }.
+\left\Vert f(x) -\Pi ^{H}_{k} f(x)\right\Vert _{\infty } \leqslant \frac{H^{k+1}}{4(k+1)} \ \left\Vert f^{( k+1)}\right\Vert _{\infty }.
 \end{equation*}
 \end{theorem}
-\textit{Osservazione.} Per $k=1$ il teorema diventa
+\textit{Osservazione.}
+Nonostante l'errore tenda a $0$ più velocemente all'aumentare di $M$, le richieste di regolarità sulla funzione sono sempre più gravose. Oltretutto la regolarità di $f$ non viene rispecchiata dal polinomio di interpolazione composita, che continua ad essere solo $C^0$. Per garantire una maggiore regolarità dell'interpolante, bisogna ricorrere a oggetti più sofisticati, come le splines.
+
+\subsection{Splines cubiche interpolatorie}
+Queste funzioni soddisfano le seguenti proprietà\footnote{
+Le proprietà presentate in realtà danno origine a $4M-2$ equazioni, ma bisogna dare l'identità a $4 M$ coefficienti in quanto abbiamo $M$ polinomi di grado $3$. Per garantire l'unicità dell'approssimazione bisognerebbe dunque aggiungere 2 condizioni.}:
+\begin{itemize}
+    \item $S_3(x_i)=f(x_i)\quad \forall x_i$
+    \item $S_3|_{I_i}\in \mathbb P^3(I_i)\quad \forall I_ i$
+    \item $S_3\in C^2(I)$
+\end{itemize}
+
+Le splines cubiche sono talmente accurata che si possono usare anche per approssimare $f'$ e $f''$.
+\begin{theorem}
+Sia $f$ sufficientemente regolare e sia $S_3(x)$ la sua spline cubica interpolatoria. Allora per $q=0,1,2$:
 \begin{equation*}
-\left\Vert f(x) -\Pi ^{1}_{h} f(x)\right\Vert _{\infty } \leqslant C\ h^{2} \ \Vert f''\Vert _{\infty }\xrightarrow{h\rightarrow 0} 0.
+\left\Vert f^{(q)}(x) -S_3^{(q)}(x)\right\Vert _{\infty } \leqslant C_q H^{4-q} \ \left\Vert f^{(q)}(x)\right\Vert _{\infty }.
 \end{equation*}
+\end{theorem}
+
 
 % \textit{[Lezione 11 (06-04-2020)]}
 \section{Stabilità del polinomio di interpolazione}
@@ -695,11 +736,19 @@ Passando ora alla norma infinito:
 Notiamo che $\Lambda_{n}(x)$ dipende solo dalla distribuzione dei nodi di approssimazione.
 Essa prende il nome di \textbf{costante di Lebesgue} in quanto valore noto se i nodi sono fissati, e indipendente dalla funzione approssimata. In un certo senso è il \textit{condizionamento} del problema.
 
-Concludiamo che l'errore di perturbazione è piccolo solo se $\Lambda_{n}(x)$ è piccola. In generale, non possiamo garantirlo, in quanto cresce per $n\rightarrow +\infty $. Si può dimostrare che prendendo i nodi di interpolazione \textit{equispaziati}:
-\begin{equation*}
-\Lambda _{n}(x) =\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty } \approx \frac{2^{n+1}}{e\, n\, (\log n+\gamma )} ,\quad\gamma \approx \frac{1}{2} ,
-\end{equation*}
-quindi con questi nodi all'aumentare di $n$ il polinomio di interpolazione diventa sempre più sensibile alle perturbazioni.
+Concludiamo che l'errore di perturbazione è piccolo solo se $\Lambda_{n}(x)$ è piccola. In generale, non possiamo garantirlo, in quanto cresce per $n\rightarrow +\infty $. Si può dimostrare che
+\begin{itemize}
+    \item prendendo i nodi di interpolazione \textit{equispaziati}:
+        \begin{equation*}
+            \Lambda _{n}(x) =\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty } \approx \frac{2^{n+1}}{e\, n\, (\log n+\gamma )} ,\quad\gamma \approx \frac{1}{2} ,
+        \end{equation*}
+    quindi con questi nodi all'aumentare di $n$ il polinomio di interpolazione diventa rapidamente più sensibile alle perturbazioni ($\approx 2^n$).
+    \item Per i nodi CGL, l'andamento è logaritmico:
+    $$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log n+\gamma +\log\frac{8}{\pi ^{2}}\right] +\frac{\pi }{72n^{2}}.$$
+    \item Per i nodi CG, similmente, vale:
+    $$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log( n+1) +\gamma +\log\frac{8}{\pi }\right] +\frac{\pi }{72( n+1)^{2}}.$$
+        
+\end{itemize}
 
 % \textit{[Lezione 12 (07-04-2020)]}
 \section{Approssimazione nel senso dei minimi quadrati}
