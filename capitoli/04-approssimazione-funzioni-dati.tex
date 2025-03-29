@@ -282,15 +282,40 @@ Ne consegue che
 \begin{equation*}
 \Pi _{n}(x) =\sum\limits ^{n}_{i=0} y_{i}\frac{w_{n+1}(x)}{( x-x_{i}) w'_{n+1}( x_{i})}.
 \end{equation*}
+\item Per trovare il polinomio di interpolazione, sarebbe anche possibile risolvere un sistema che imponga il passaggio per i punti campionati:
+\begin{equation*}
+    \begin{cases}
+        a_0 +a_1x_0+\dots+a_nx_0^n=y_0\\
+        \ \vdots \\
+        a_0+a_1x_n+\dots+a_nx_n^n=y_n
+    \end{cases}
+    \iff
+    \begin{bmatrix}
+        1 & x_0 & \cdots & x_0^n\\
+        \vdots&\vdots&\ddots&\vdots\\
+        1 & x_n & \cdots & x_n^n
+    \end{bmatrix}
+    \begin{bmatrix}
+        a_0\\
+        \vdots\\
+        a_n
+    \end{bmatrix}=
+    \begin{bmatrix}
+        y_0\\
+        \vdots\\
+        y_n
+    \end{bmatrix}
+\end{equation*}
+La matrice del sistema si chiama \textbf{matrice di Vandermonde}\index{matrice!di Vandermonde} ed è non singolare se gli $x_i$ sono distinti. Questo metodo tuttavia è difficilmente percorribile perché la matrice è mal condizionata.
 \end{itemize}
 \begin{theorem}
 [Errore di interpolazione]
 \index{errore!di interpolazione}
-Siano $x_{0} ,x_{1} ,\dotsc ,x_{n}$ un set di $n+1$ punti distinti in $I\subseteq \mathbb{R}$ e sia $f\in C^{n+1}(I)$. Per ogni $x\in I$ l'errore $E(x) =f(x) -\Pi _{n} f(x)$ è dato da
+Siano $x_{0} ,x_{1} ,\dotsc ,x_{n}$ un set di $n+1$ punti distinti in $I\subseteq \mathbb{R}$ e sia $f\in C^{n+1}(I)$. Per ogni $x\in I$, $\exists \xi = \xi(x)\in I$ tale che l'errore $E(x) =f(x) -\Pi _{n} f(x)$ sia dato da
 \begin{equation*}
 E(x) =\frac{\omega _{n+1}(x)}{( n+1) !} f^{( n+1)}( \xi )
 \end{equation*}
-dove $\xi (x) \in I$ e $\omega _{n+1}(x)$ è il polinomio nodale associato ai nodi $x_{0} ,x_{1} ,\dotsc ,x_{n}$, ossia $\omega _{n+1}(x) =\prod ^{n}_{i=0}( x-x_{i})$.
+dove $\omega _{n+1}(x)$ è il polinomio nodale associato ai nodi $x_{0} ,x_{1} ,\dotsc ,x_{n}$, ossia $\omega _{n+1}(x) =\prod ^{n}_{i=0}( x-x_{i})$.
 \end{theorem}
 
 Per capire l'utilizzo del teorema, diamo la seguente definizione.
@@ -307,7 +332,7 @@ Per capire l'utilizzo del teorema, diamo la seguente definizione.
 L'utilizzo della norma infinito è fondamentale in quanto la formula dell'errore è valida quando la funzione viene valutata in un punto $\xi$, ma questo punto non è noto, e si sa solo che esso appartiene all'intervallo $I$.
 Possiamo naturalmente maggiorare il valore che la $f^{(n+1)}$ assume in $\xi$ con il massimo valore assunto nell'intervallo. Questo avviene proprio grazie alla norma infinito, che essendo un massimo su $x$ è una costante rispetto a $x$:
 \begin{equation*}
-| E(x)| \leqslant \frac{1}{( n+1) !} \ | \omega _{n+1}(x)| \ \underbrace{\left\Vert f^{( n+1)}(x)\right\Vert _{\infty }}_{\leqslant C} \leqslant \frac{C}{( n+1) !} \ | \omega _{n+1}(x)|.
+| E(x)| \leqslant \frac{1}{( n+1) !} \ | \omega _{n+1}(x)| \ \underbrace{\left\Vert f^{( n+1)}(x)\right\Vert _{\infty }}_{\leqslant C} \leqslant \frac{C}{( n+1) !} \ | \omega _{n+1}(x)|\ \ \forall x\in I.
 \end{equation*}
 
 \textit{Dimostrazione.}
@@ -334,7 +359,7 @@ Osserviamo che:
 
 Quindi $G(t)$ è una funzione di classe $C^{n+1}$ in $I$ con almeno $n+2$ zeri distinti. Quindi per il teorema del valor medio possiamo concludere che $G'(t)$ ha almeno $n+1$ zeri distinti e, con lo stesso ragionamento, che $G^{( n+1)}(t)$ ammette uno zero che chiamiamo $\xi =\xi (x)$, cioè $G^{( n+1)}( \xi ) =0$.
 
-Adesso calcoliamo l'espressione di $G^{( n+1)}(t)$. Per linearità si ha:
+Adesso calcoliamo l'espressione di $G^{( n+1)}(t)$. Per linearità della derivata si ha:
 \begin{align*}
 G^{( n+1)}(t) & =E^{( n+1)}_{n}(t) -\omega ^{( n+1)}_{n+1}(t)\frac{E_{n}(x)}{\omega _{n+1}(x)}\\
  & =f^{( n+1)}(t) -\underbrace{( \Pi _{n} f)^{( n+1)}(t)}_{=0} -\underbrace{\omega ^{( n+1)}_{n+1}(t)}_{=( n+1) !}\frac{E_{n}(x)}{\omega _{n+1}(x)}\\
@@ -350,92 +375,57 @@ E_{n}(x) = & \frac{\omega _{n+1}(x)}{( n+1) !} f^{( n+1)}( \xi ).
 \end{align*}
 \end{itemize}
 
-% \textit{[Lezione 11 (06-04-2020)]}
-\section{Stabilità del polinomio di interpolazione}
-\label{sec:stabilita-pol-interpolazione}
-Una proprietà desiderabile per un polinomio di interpolazione $\Pi _{n} f(x)$ è che l'errore tenda a zero se $n\rightarrow \infty $. In questa sezione sarà presentato un significativo controesempio (detto \textit{di Runge}), che mostra come basti aumentare $n$ di poco per far emergere problemi di stabilità agli estremi dell'intervallo. Nelle sezioni successive saranno presentati metodi per risolvere questo problema, ad esempio usando nodi non equispaziati.
+\section{Utilizzo di nodi equispaziati}
+\index{nodi!equispaziati}
+Una proprietà desiderabile per un polinomio di interpolazione $\Pi _{n} f(x)$ è che l'errore tenda a zero se $n\rightarrow \infty $.
 
-Sia $x_{0} ,x_{1} ,\dotsc ,x_{n}$ un insieme di $n+1$ punti distinti:
-
+Ipotizziamo di approssimare la funzione nell'intervallo $I=[x_0,x_n]$ usando $n+1$ nodi equispaziati $\{x_i\}_{i=0}^n$. L'intervallo tra ciascuno dei nodi è $h=(x_n-x_0)/n$.
 \begin{figure}[htpb]
 	\centering
 	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
 
 	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
-	%uncomment if require: \path (0,206); %set diagram left start at 0, and has height of 206
+	%uncomment if require: \path (0,102); %set diagram left start at 0, and has height of 102
 
-	%Shape: Axis 2D [id:dp038954507211826694]
-	\draw  (169.5,167.78) -- (441.5,167.78)(169.5,36.88) -- (169.5,167.78) -- cycle (434.5,162.78) -- (441.5,167.78) -- (434.5,172.78) (164.5,43.88) -- (169.5,36.88) -- (174.5,43.88)  ;
-	%Straight Lines [id:da22495486660852104]
-	\draw    (230.33,163.67) -- (230.33,172.33) ;
-	%Straight Lines [id:da3716248754905518]
-	\draw    (280.33,163.67) -- (280.33,172.33) ;
-	%Straight Lines [id:da11285799476919367]
-	\draw    (390.33,163.67) -- (390.33,172.33) ;
-	%Shape: Circle [id:dp13795261112398616]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (228.17,112.51) .. controls (228.17,111.4) and (229.06,110.51) .. (230.17,110.51) .. controls (231.27,110.51) and (232.17,111.4) .. (232.17,112.51) .. controls (232.17,113.61) and (231.27,114.51) .. (230.17,114.51) .. controls (229.06,114.51) and (228.17,113.61) .. (228.17,112.51) -- cycle ;
-	%Shape: Circle [id:dp9020925580317134]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (278.17,107.51) .. controls (278.17,106.4) and (279.06,105.51) .. (280.17,105.51) .. controls (281.27,105.51) and (282.17,106.4) .. (282.17,107.51) .. controls (282.17,108.61) and (281.27,109.51) .. (280.17,109.51) .. controls (279.06,109.51) and (278.17,108.61) .. (278.17,107.51) -- cycle ;
-	%Shape: Circle [id:dp5253082829397973]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (388.17,91.51) .. controls (388.17,90.4) and (389.06,89.51) .. (390.17,89.51) .. controls (391.27,89.51) and (392.17,90.4) .. (392.17,91.51) .. controls (392.17,92.61) and (391.27,93.51) .. (390.17,93.51) .. controls (389.06,93.51) and (388.17,92.61) .. (388.17,91.51) -- cycle ;
-	%Curve Lines [id:da009567426004889468]
-	\draw    (205.6,152.8) .. controls (212.4,141.2) and (220.4,129.2) .. (230.33,113.67) .. controls (239.6,101.6) and (249.87,82.94) .. (280.33,107.67) .. controls (310.8,132.4) and (366.27,142.14) .. (390.33,91.67) .. controls (401.2,67.2) and (405.6,59.6) .. (411.6,46) ;
-	%Shape: Circle [id:dp5136163342396867]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (228.17,121.51) .. controls (228.17,120.4) and (229.06,119.51) .. (230.17,119.51) .. controls (231.27,119.51) and (232.17,120.4) .. (232.17,121.51) .. controls (232.17,122.61) and (231.27,123.51) .. (230.17,123.51) .. controls (229.06,123.51) and (228.17,122.61) .. (228.17,121.51) -- cycle ;
-	%Shape: Circle [id:dp5738347562536119]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (278.17,95.51) .. controls (278.17,94.4) and (279.06,93.51) .. (280.17,93.51) .. controls (281.27,93.51) and (282.17,94.4) .. (282.17,95.51) .. controls (282.17,96.61) and (281.27,97.51) .. (280.17,97.51) .. controls (279.06,97.51) and (278.17,96.61) .. (278.17,95.51) -- cycle ;
-	%Shape: Circle [id:dp3104281695353788]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (388.17,101.51) .. controls (388.17,100.4) and (389.06,99.51) .. (390.17,99.51) .. controls (391.27,99.51) and (392.17,100.4) .. (392.17,101.51) .. controls (392.17,102.61) and (391.27,103.51) .. (390.17,103.51) .. controls (389.06,103.51) and (388.17,102.61) .. (388.17,101.51) -- cycle ;
+	%Straight Lines [id:da20621224248267156]
+	\draw    (250,30) -- (280,30) ;
+	\draw [shift={(280,30)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+	\draw [shift={(250,30)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+	%Straight Lines [id:da9554369535839922]
+	\draw    (190,50) -- (340,50) (220,46) -- (220,54)(250,46) -- (250,54)(280,46) -- (280,54)(310,46) -- (310,54) ;
+	\draw [shift={(340,50)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+	\draw [shift={(190,50)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
 
 	% Text Node
-	\draw (146,27.4) node [anchor=north west][inner sep=0.75pt]    {$y$};
+	%\draw (187,22.4) node [anchor=north west][inner sep=0.75pt]    {$x_0$};
 	% Text Node
-	\draw (453,156.4) node [anchor=north west][inner sep=0.75pt]    {$x$};
+	%\draw (337,22.4) node [anchor=north west][inner sep=0.75pt]    {$x_n$};
 	% Text Node
-	\draw (223,172.4) node [anchor=north west][inner sep=0.75pt]    {$x_{0}$};
+	\draw (181,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_0$};
 	% Text Node
-	\draw (273,172.4) node [anchor=north west][inner sep=0.75pt]    {$x_{1}$};
+	\draw (241,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_{k}$};
 	% Text Node
-	\draw (383,172.4) node [anchor=north west][inner sep=0.75pt]    {$x_{n}$};
+	\draw (271,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_{k+1}$};
 	% Text Node
-	\draw (373.4,70.4) node [anchor=north west][inner sep=0.75pt]    {$f$};
+	\draw (260,8) node [anchor=north west][inner sep=0.75pt]    {$h$};
 	% Text Node
-	\draw (392.17,104.91) node [anchor=north west][inner sep=0.75pt]    {$\tilde{f}$};
-	% Text Node
-	\draw (323,172.4) node [anchor=north west][inner sep=0.75pt]    {$\dotsc $};
+	\draw (331,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_{n}$};
+
+
 	\end{tikzpicture}
 \end{figure}
-\FloatBarrier
 
-Costruiamo il polinomio di interpolazione di Lagrange di $f(x)$ dato da:
+I nodi sono definiti da 
 \begin{equation*}
-\Pi _{n} f(x) =\sum ^{n}_{i=0} f( x_{i})\mathcal{L}_{i}(x)
+    x_{k+1}=x_0+(k+1)\,h,\ k=0,\dots,n-1
 \end{equation*}
-dove
-\begin{equation*}
-\mathcal{L}_{i}(x) =\prod ^{n}_{j=0,j\neq i}\frac{( x-x_{j})}{( x_{i} -x_{j})} \quad\forall i=0,\dotsc ,n.
-\end{equation*}
-I valori $f( x_{i})$ possono essere affetti da errori di rappresentazione al calcolatore. Consideriamo quindi il polinomio di interpolazione ottenuto perturbando le valutazioni di $f( \cdot )$ nei nodi $x_{i}$:
-\begin{equation*}
-\tilde{\Pi }_{n} f(x) =\sum ^{n}_{i=0}\tilde{f}( x_{i})\mathcal{L}_{i}(x).
-\end{equation*}
-Come si comporta l'errore di perturbazione $\Pi _{n} f(x) -\tilde{\Pi }_{n} f(x)$ per $n\rightarrow \infty $?
-\begin{align*}
-\Pi _{n} f(x) -\tilde{\Pi }_{n} f(x) & =\sum ^{n}_{i=0} f( x_{i})\mathcal{L}_{i}(x) -\sum ^{n}_{i=0}\tilde{f}( x_{i})\mathcal{L}_{i}(x)\\
- & =\sum ^{n}_{i=0}\mathcal{L}_{i}(x)\underbrace{\left[ f( x_{i}) -\tilde{f}( x_{i})\right].}_{\text{errore di perturbazione}}
-\end{align*}
-Passando ora alla norma infinito:
-\begin{align*}
-\left\Vert \Pi _{n} f(x) -\tilde{\Pi }_{n} f(x)\right\Vert _{\infty } & \leqslant \underbrace{\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty }}_{\Lambda _{n}(x)} \cdot \underbrace{\max_{i=1,\dotsc ,n}\left| f( x_{i}) -\tilde{f}( x_{i})\right| }_{\text{dipende solo dalla perturbazione}}\\
-\left\Vert \Pi _{n} f(x) -\tilde{\Pi }_{n} f(x)\right\Vert _{\infty } & \leqslant \Lambda _{n}(x) \cdot \max_{i=1,\dotsc ,n}\left| f( x_{i}) -\tilde{f}( x_{i})\right| .
-\end{align*}
-Notiamo che $\Lambda_{n}(x)$ dipende solo dalla distribuzione dei nodi di approssimazione.
-Essa prende il nome di \textbf{costante di Lebesgue} in quanto valore noto se i nodi sono fissati, e indipendente dalla funzione approssimata. In un certo senso è il \textit{condizionamento} del problema.
 
-Concludiamo che l'errore di perturbazione è piccolo solo se $\Lambda_{n}(x)$ è piccola. In generale, non possiamo garantirlo, in quanto cresce per $n\rightarrow +\infty $. Si può però dimostrare che prendendo i nodi di interpolazione \textit{equispaziati}, allora:
-\begin{equation*}
-\Lambda _{n}(x) =\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty } \approx \frac{2^{n+1}}{e\, n\, (\log n+\gamma )} ,\quad\gamma \approx \frac{1}{2} .
-\end{equation*}
+È possibile dimostrare che per i nodi equispaziati $|\omega_{n+1}|\le \frac{h^{n+1}} 4 n!$. Valutiamo quindi l'errore massimo nell'intervallo $I$:
+\begin{align*}
+    \|E_n f\|_\infty \le \frac{\|\omega_{n+1}(x)\|_\infty}{(n+1)!}\| f^{(n+1)}(x) \|_\infty&\le   \frac{1}{(n+1)!} \frac{h^{n+1}}{4}\ n!\ \| \!f^{(n+1)}(x) \|_\infty\\
+    &=\underbrace{\frac{h^{n+1}}{4(n+1)}}_A \ \underbrace{\| \!f^{(n+1)}(x) \|_\infty}_B
+\end{align*}
+Il termine $A$ tende a $0$ per $n\to\infty$, ma non sappiamo nulla del termine $B$: se dovesse tendere a $\infty$ più velocemente di $A$, allora l'approssimazione polinomiale diventerebbe meno accurata quando usiamo polinomi di grado superiore.
 
 \textit{Controesempio (Fenomeno di Runge).}
 Consideriamo la cosiddetta funzione di Runge, definita come:
@@ -446,16 +436,19 @@ Se si prova a interpolare la \textbf{funzione di Runge}\index{funzione!di Runge}
 
 \fg[Fenomeno di Runge con polinomi interpolanti di grado $n$ crescente.]{0.6}{fig-runge}
 
-Le oscillazioni, all'aumentare del grado, peggiorano solo \textit{in prossimità degli estremi dell'intervallo}. Le possibili soluzioni al fenomeno di Runge sono:
+Le oscillazioni, all'aumentare del grado, peggiorano solo \textit{in prossimità degli estremi dell'intervallo}.
+
+
+ Le possibili soluzioni al fenomeno di Runge sono:
 \begin{enumerate}
-\item Utilizzo di \textbf{nodi non equispaziati}\index{nodi!non equispaziati}, concentrati dove ci sono oscillazioni agli estremi
-\item Utilizzo di \textbf{nodi equispaziati}\index{nodi!equispaziati} ma con metodi diversi:
+\item Utilizzo di \textbf{nodi non equispaziati}\index{nodi!non equispaziati}, concentrati agli estremi, dove ci sono oscillazioni
+\item Utilizzo di \textbf{nodi equispaziati} ma con metodi diversi:
 \begin{enumerate}
 \item \textit{Interpolazione composita}: si divide l'intervallo di approssimazione in più parti calcolando su ciascun sottointervallo un polinomio interpolante di grado $n$ non elevato $\Pi ^{n}_{h} f$.
 \item \textit{Approssimazione nel senso dei minimi quadrati}, un approccio diverso dall'interpolazione vista finora.
 \end{enumerate}
 \end{enumerate}
-\section{Utilizzo dei nodi non equispaziati}
+\section{Utilizzo di nodi non equispaziati}
 \subsection{Nodi di Chebyshev-Gauss-Lobatto (CGL)}
 \index{nodi!di Chebyshev-Gauss-Lobatto}
 Il seguente ragionamento sarà applicato all'intervallo $I=[ -1,1]$, ma esso può essere esteso a tutto $\mathbb{R}$. Consideriamo la semicirconferenza unitaria, fissando $n$ e dividendola in $n$ spicchi di ampiezza $\frac{\pi }{n}$.
@@ -620,6 +613,93 @@ Sia $f\in C^{k+1}(I) ,I=[ a,b]$ e sia $\Pi ^{k}_{h} f(x)$ il suo polinomio di in
 \begin{equation*}
 \left\Vert f(x) -\Pi ^{1}_{h} f(x)\right\Vert _{\infty } \leqslant C\ h^{2} \ \Vert f''\Vert _{\infty }\xrightarrow{h\rightarrow 0} 0.
 \end{equation*}
+
+% \textit{[Lezione 11 (06-04-2020)]}
+\section{Stabilità del polinomio di interpolazione}
+\label{sec:stabilita-pol-interpolazione}
+
+Sia $x_{0} ,x_{1} ,\dotsc ,x_{n}$ un insieme di $n+1$ punti distinti:
+
+\begin{figure}[htpb]
+	\centering
+	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
+
+	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+	%uncomment if require: \path (0,206); %set diagram left start at 0, and has height of 206
+
+	%Shape: Axis 2D [id:dp038954507211826694]
+	\draw  (169.5,167.78) -- (441.5,167.78)(169.5,36.88) -- (169.5,167.78) -- cycle (434.5,162.78) -- (441.5,167.78) -- (434.5,172.78) (164.5,43.88) -- (169.5,36.88) -- (174.5,43.88)  ;
+	%Straight Lines [id:da22495486660852104]
+	\draw    (230.33,163.67) -- (230.33,172.33) ;
+	%Straight Lines [id:da3716248754905518]
+	\draw    (280.33,163.67) -- (280.33,172.33) ;
+	%Straight Lines [id:da11285799476919367]
+	\draw    (390.33,163.67) -- (390.33,172.33) ;
+	%Shape: Circle [id:dp13795261112398616]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (228.17,112.51) .. controls (228.17,111.4) and (229.06,110.51) .. (230.17,110.51) .. controls (231.27,110.51) and (232.17,111.4) .. (232.17,112.51) .. controls (232.17,113.61) and (231.27,114.51) .. (230.17,114.51) .. controls (229.06,114.51) and (228.17,113.61) .. (228.17,112.51) -- cycle ;
+	%Shape: Circle [id:dp9020925580317134]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (278.17,107.51) .. controls (278.17,106.4) and (279.06,105.51) .. (280.17,105.51) .. controls (281.27,105.51) and (282.17,106.4) .. (282.17,107.51) .. controls (282.17,108.61) and (281.27,109.51) .. (280.17,109.51) .. controls (279.06,109.51) and (278.17,108.61) .. (278.17,107.51) -- cycle ;
+	%Shape: Circle [id:dp5253082829397973]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (388.17,91.51) .. controls (388.17,90.4) and (389.06,89.51) .. (390.17,89.51) .. controls (391.27,89.51) and (392.17,90.4) .. (392.17,91.51) .. controls (392.17,92.61) and (391.27,93.51) .. (390.17,93.51) .. controls (389.06,93.51) and (388.17,92.61) .. (388.17,91.51) -- cycle ;
+	%Curve Lines [id:da009567426004889468]
+	\draw    (205.6,152.8) .. controls (212.4,141.2) and (220.4,129.2) .. (230.33,113.67) .. controls (239.6,101.6) and (249.87,82.94) .. (280.33,107.67) .. controls (310.8,132.4) and (366.27,142.14) .. (390.33,91.67) .. controls (401.2,67.2) and (405.6,59.6) .. (411.6,46) ;
+	%Shape: Circle [id:dp5136163342396867]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (228.17,121.51) .. controls (228.17,120.4) and (229.06,119.51) .. (230.17,119.51) .. controls (231.27,119.51) and (232.17,120.4) .. (232.17,121.51) .. controls (232.17,122.61) and (231.27,123.51) .. (230.17,123.51) .. controls (229.06,123.51) and (228.17,122.61) .. (228.17,121.51) -- cycle ;
+	%Shape: Circle [id:dp5738347562536119]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (278.17,95.51) .. controls (278.17,94.4) and (279.06,93.51) .. (280.17,93.51) .. controls (281.27,93.51) and (282.17,94.4) .. (282.17,95.51) .. controls (282.17,96.61) and (281.27,97.51) .. (280.17,97.51) .. controls (279.06,97.51) and (278.17,96.61) .. (278.17,95.51) -- cycle ;
+	%Shape: Circle [id:dp3104281695353788]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (388.17,101.51) .. controls (388.17,100.4) and (389.06,99.51) .. (390.17,99.51) .. controls (391.27,99.51) and (392.17,100.4) .. (392.17,101.51) .. controls (392.17,102.61) and (391.27,103.51) .. (390.17,103.51) .. controls (389.06,103.51) and (388.17,102.61) .. (388.17,101.51) -- cycle ;
+
+	% Text Node
+	\draw (146,27.4) node [anchor=north west][inner sep=0.75pt]    {$y$};
+	% Text Node
+	\draw (453,156.4) node [anchor=north west][inner sep=0.75pt]    {$x$};
+	% Text Node
+	\draw (223,172.4) node [anchor=north west][inner sep=0.75pt]    {$x_{0}$};
+	% Text Node
+	\draw (273,172.4) node [anchor=north west][inner sep=0.75pt]    {$x_{1}$};
+	% Text Node
+	\draw (383,172.4) node [anchor=north west][inner sep=0.75pt]    {$x_{n}$};
+	% Text Node
+	\draw (373.4,70.4) node [anchor=north west][inner sep=0.75pt]    {$f$};
+	% Text Node
+	\draw (392.17,104.91) node [anchor=north west][inner sep=0.75pt]    {$\tilde{f}$};
+	% Text Node
+	\draw (323,172.4) node [anchor=north west][inner sep=0.75pt]    {$\dotsc $};
+	\end{tikzpicture}
+\end{figure}
+\FloatBarrier
+
+Costruiamo il polinomio di interpolazione di Lagrange di $f(x)$ dato da:
+\begin{equation*}
+\Pi _{n} f(x) =\sum ^{n}_{i=0} f( x_{i})\mathcal{L}_{i}(x)
+\end{equation*}
+dove
+\begin{equation*}
+\mathcal{L}_{i}(x) =\prod ^{n}_{j=0,j\neq i}\frac{( x-x_{j})}{( x_{i} -x_{j})} \quad\forall i=0,\dotsc ,n.
+\end{equation*}
+I valori $f( x_{i})$ possono essere affetti da errori di rappresentazione al calcolatore. Consideriamo quindi il polinomio di interpolazione ottenuto perturbando le valutazioni di $f( \cdot )$ nei nodi $x_{i}$:
+\begin{equation*}
+\tilde{\Pi }_{n} f(x) =\sum ^{n}_{i=0}\tilde{f}( x_{i})\mathcal{L}_{i}(x).
+\end{equation*}
+Come si comporta l'errore di perturbazione $\Pi _{n} f(x) -\tilde{\Pi }_{n} f(x)$ per $n\rightarrow \infty $?
+\begin{align*}
+\Pi _{n} f(x) -\tilde{\Pi }_{n} f(x) & =\sum ^{n}_{i=0} f( x_{i})\mathcal{L}_{i}(x) -\sum ^{n}_{i=0}\tilde{f}( x_{i})\mathcal{L}_{i}(x)\\
+ & =\sum ^{n}_{i=0}\mathcal{L}_{i}(x)\underbrace{\left[ f( x_{i}) -\tilde{f}( x_{i})\right].}_{\text{errore di perturbazione}}
+\end{align*}
+Passando ora alla norma infinito:
+\begin{align*}
+\left\Vert \Pi _{n} f(x) -\tilde{\Pi }_{n} f(x)\right\Vert _{\infty } & \leqslant \underbrace{\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty }}_{\Lambda _{n}(x)} \cdot \underbrace{\max_{i=1,\dotsc ,n}\left| f( x_{i}) -\tilde{f}( x_{i})\right| }_{\text{dipende solo dalla perturbazione}}\\
+\left\Vert \Pi _{n} f(x) -\tilde{\Pi }_{n} f(x)\right\Vert _{\infty } & \leqslant \Lambda _{n}(x) \cdot \max_{i=1,\dotsc ,n}\left| f( x_{i}) -\tilde{f}( x_{i})\right| .
+\end{align*}
+Notiamo che $\Lambda_{n}(x)$ dipende solo dalla distribuzione dei nodi di approssimazione.
+Essa prende il nome di \textbf{costante di Lebesgue} in quanto valore noto se i nodi sono fissati, e indipendente dalla funzione approssimata. In un certo senso è il \textit{condizionamento} del problema.
+
+Concludiamo che l'errore di perturbazione è piccolo solo se $\Lambda_{n}(x)$ è piccola. In generale, non possiamo garantirlo, in quanto cresce per $n\rightarrow +\infty $. Si può dimostrare che prendendo i nodi di interpolazione \textit{equispaziati}:
+\begin{equation*}
+\Lambda _{n}(x) =\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty } \approx \frac{2^{n+1}}{e\, n\, (\log n+\gamma )} ,\quad\gamma \approx \frac{1}{2} ,
+\end{equation*}
+quindi con questi nodi all'aumentare di $n$ il polinomio di interpolazione diventa sempre più sensibile alle perturbazioni.
 
 % \textit{[Lezione 12 (07-04-2020)]}
 \section{Approssimazione nel senso dei minimi quadrati}
