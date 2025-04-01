@@ -104,8 +104,7 @@ b_{n}
 \end{bmatrix}}_{\mathbf{b}}.
 \label{eq:Ly-b}
 \end{equation}
-\textbf{Osservazione. }$\displaystyle l_{11} \neq 0,l_{22} \neq 0,\dotsc ,l_{nn} \neq 0$ altrimenti $\displaystyle L$ sarebbe singolare, quindi anche $\displaystyle A$ sarebbe singolare\footnote{In una matrice triangolare, $L$ in questo caso, gli autovalori sono gli elementi sulla diagonale, e in generale il determinante è il prodotto degli autovalori. Se un elemento della diagonale di $L$ fosse nullo, allora anche il determinante lo sarebbe. Essendo $A=LU$, per il teorema di Binet $\operatorname{det}A=\operatorname{det}L\cdot\operatorname{det}U$, quindi sarebbe singolare anche $A$.}
-e non rispetterebbe la condizione per l'esistenza e unicità della soluzione. Vediamo ora cosa succede alle varie equazioni risolutive del sistema \eqref{eq:Ly-b}
+\textbf{Osservazione. }$\displaystyle l_{11} \neq 0,l_{22} \neq 0,\dotsc ,l_{nn} \neq 0$ altrimenti $\displaystyle L$ sarebbe singolare, quindi anche $\displaystyle A$ sarebbe singolare\footnote{In una matrice triangolare, $L$ in questo caso, gli autovalori sono gli elementi sulla diagonale, e in generale il determinante è il prodotto degli autovalori. Se un elemento della diagonale di $L$ fosse nullo, allora anche il determinante lo sarebbe. Essendo $A=LU$, per il teorema di Binet $\operatorname{det}A=\operatorname{det}L\cdot\operatorname{det}U$, quindi sarebbe singolare anche $A$.}. Vediamo ora cosa succede alle varie equazioni risolutive del sistema \eqref{eq:Ly-b}
 \begin{itemize}
 \item alla $1^{a}$ equazione:
 \begin{equation*}
@@ -257,6 +256,7 @@ Naturalmente quindi una matrice quadrata di dimensione $n$ ha esattamente $n$ mi
 Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ una matrice. La matrice $\displaystyle A$ ammette una e una sola fattorizzazione $\displaystyle LU$ se e solo se tutti i minori principali di testa di ordine $\displaystyle i=1,\dotsc ,n-1$ sono non nulli.
 \label{thm:esist-unicita-LU}
 \end{theorem}
+
 \textit{Esempio.}
 \begin{equation*}
 A=\begin{bmatrix}
@@ -309,6 +309,52 @@ A=\begin{bmatrix}
 0 & 0 & -13
 \end{bmatrix}.
 \end{equation*}
+
+\textit{Osservazione.}
+Se nelle ipotesi del teorema il minore principale di ordine $n$ fosse nullo, allora il sistema non sarebbe determinato, ma ammetterebbe comunque un'unica fattorizzazione $\displaystyle LU$.
+
+\textit{Esempio.}
+La matrice singolare
+\begin{equation*}
+    A = \begin{bmatrix}
+        1&2\\
+        1&2
+    \end{bmatrix}
+\end{equation*}
+ammette un'unica fattorizzazione LU. Infatti:
+\begin{equation*}
+    \begin{bmatrix}
+        1&2\\
+        1&2
+    \end{bmatrix}=
+    \begin{bmatrix}
+        1&0\\
+        l_{21}&1
+    \end{bmatrix}\begin{bmatrix}
+        u_{11}&u_{12}\\
+        0&u_{22}
+    \end{bmatrix}\implies \begin{cases}
+        u_{12}=1\\
+        u_{12}=2\\
+        l_{21}=1\\
+        u_{12}l_{21}+u_{22}=2\implies u_{22}=0
+    \end{cases}
+\end{equation*}
+Quindi la fattorizzazione $\displaystyle LU$ della matrice $A$ esiste ed è unica.
+\begin{equation*}
+    A=\begin{bmatrix}
+        1&2\\
+        1&2
+    \end{bmatrix}=
+    \begin{bmatrix}
+        1&0\\
+        1&1
+    \end{bmatrix}\begin{bmatrix}
+        1&2\\
+        0&0
+    \end{bmatrix}
+\end{equation*}
+
 Richiamiamo ora una definizione dall'algebra lineare che ci sarà utile nelle prossime pagine.
 \begin{definition}
   [Predominanza diagonale stretta]
