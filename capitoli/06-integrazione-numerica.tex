@@ -249,6 +249,11 @@ Diciamo che una formula di quadratura ha \textbf{grado di esattezza} $r\geqslant
 E_{n}( p_{r}) =0\quad \forall p_{r} \in \mathbb{P}^{r}.
 \end{equation*}
 \end{definition}
+Enunciamo un utile criterio per determinare il grado di esattezza di una formula di quadratura.
+\begin{theorem}
+Una formula di quadratura ha grado di esattezza $r$ se e solo se 
+\[E_n(x^k)=0\ \forall k=0,\dots,r\]
+\end{theorem}
 
 \subsection{Calcolo dell'errore}
 Ricordiamo anzitutto il teorema della media integrale pesata.
@@ -267,7 +272,7 @@ Riportiamo ora i teoremi relativi agli errori delle tre formule presentate, dimo
 \index{errore!della formula del punto medio}
 Data $f\in C^{2}([ a,b])$, esiste $\xi \in ( a,b)$ tale che
 \begin{equation*}
-E_{0}(x) =\frac{1}{24} f''( \xi )( b-a)^{3}.
+E_{0}(f) =\frac{1}{24} f''( \xi )( b-a)^{3}.
 \end{equation*}
 \end{theorem}
 \textit{Dimostrazione.}
@@ -298,7 +303,7 @@ B & =\frac{1}{2}\int\nolimits ^{b}_{a}( x-x_{m})^{2} f''( \eta (x)) \dx\\
 \end{align*}
 Allora otteniamo che:
 \begin{gather*}
-E_{0}(x) =A+B=\frac{1}{24} f''( \xi )( b-a)^{3}.
+E_{0}(f) =A+B=\frac{1}{24} f''( \xi )( b-a)^{3}.
 \qed
 \end{gather*}
 \begin{theorem}
@@ -306,7 +311,7 @@ E_{0}(x) =A+B=\frac{1}{24} f''( \xi )( b-a)^{3}.
 \index{errore!della formula del trapezio}
 Data $f\in C^{2}([ a,b])$, esiste $\xi _{2} \in ( a,b)$ tale che
 \begin{equation*}
-E_{1}(x) =-\frac{1}{12} f''( \xi _{2})( b-a)^{3}.
+E_{1}(f) =-\frac{1}{12} f''( \xi _{2})( b-a)^{3}.
 \end{equation*}
 \end{theorem}
 \begin{theorem}
@@ -314,7 +319,7 @@ E_{1}(x) =-\frac{1}{12} f''( \xi _{2})( b-a)^{3}.
 \index{errore!della formula di Cavalieri-Simpson}
 Data $f\in C^{4}([ a,b])$, esiste $\xi _{3} \in ( a,b)$ tale che
 \begin{equation*}
-E_{2}(x) =-\frac{1}{90 \cdot 32} f^{(4)}( \xi _{3})( b-a)^{5}.
+E_{2}(f) =-\frac{1}{90 \cdot 32} f^{(4)}( \xi _{3})( b-a)^{5}.
 \end{equation*}
 \end{theorem}
 \textit{Osservazioni.}
@@ -806,6 +811,9 @@ n & \text{per formule chiuse}.
 \label{sec:integrazione-gaussiana}
 
 Possiamo guadagnare gradi di esattezza e ordini di accuratezza usando nodi non equispaziati con le \textbf{formule di quadratura di Gauss-Legendre}\index{formula!di Gauss-Legendre} (GL) o di \textbf{Gauss-Legendre-Lobatto}\index{formula!di Gauss-Legendre-Lobatto} (GLL).
+
+I nodi e i pesi sono scelti in modo da massimizzare il grado di esattezza.
+
 In particolare:
 \begin{equation*}
 \{( x_{i} ,\alpha _{i})\}^{n}_{i=0} \ \ \rightarrow \ \ I_{n}(f) =\sum\limits ^{n}_{i=0} \alpha _{i} f( x_{i}) \ \begin{cases}
@@ -813,39 +821,48 @@ In particolare:
 \text{g.d.e.} =( 2n-1) & \text{con GLL.}
 \end{cases}
 \end{equation*}
-\subsection{Polinomi di Legendre}
 
-Su $I=[ -1,1]$ consideriamo un insieme di polinomi, detti \textbf{polinomi di Legendre}\index{polinomio!di Legendre}:
-\begin{equation*}
-\{L_{0}(x) ,L_{1}(x) ,\dotsc ,L_{n}(x)\} \quad \text{con} \quad n\geqslant 0.
-\end{equation*}
-Ciascun $L_{i}(x)$ è un polinomio di grado $i$ ed è tale che
-\begin{equation*}
-\int\nolimits ^{1}_{-1} L_{i}(x) L_{j}(x) \dx=0,\quad \forall j=0,\dotsc ,i-1,
-\end{equation*}
-ossia essi sono ortogonali a due a due tra loro. Allora si può dimostrare che questa è una base per lo spazio dei polinomi di grado $n$ su $I$:
-\begin{equation*}
-\mathbb{P}^{n}(I) =\operatorname{span}\{L_{0}(x) ,L_{1}(x) ,\dotsc ,L_{n}(x)\} .
-\end{equation*}
-Presentiamo una formula ricorsiva per il calcolo dei polinomi di Legendre:
-\begin{equation*}
-\begin{cases}
-L_{k+1} =\frac{2k+1}{k+1} xL_{k}(x) -\frac{k}{k+1} L_{k-1}(x) \quad \text{con} \quad k=1,2,\dotsc \\
-L_{0}(x) =1\\
-L_{1}(x) =x.
-\end{cases}
-\end{equation*}
 \subsection{Nodi e pesi di Gauss-Legendre (GL)}
+Poiché abbiamo $n+1$ nodi e $n+1$ pesi, bisogna imporre $2n+2$ condizioni per determinarli. Imponiamo che la formula di quadratura esattamente tutti i polinomi fino al grado $n+1$, cioè:
+\[
+\begin{cases}
+    \text{g.d.e.}=0\\
+    \text{g.d.e.}=1\\
+    \vdots\\
+    \text{g.d.e.}=n+1
+\end{cases}
+\]
+Queste sono $n+2$ equazioni, che permettono di determinare i \textbf{nodi di Gauss-Legendre}\index{nodi!di Gauss-Legendre} e i relativi pesi.
 
-Per $n\geqslant 0$, i \textbf{nodi di Gauss-Legendre}\index{nodi!di Gauss-Legendre} ed i relativi pesi sono dati da:
-\begin{equation*}
-x_{i} \ \text{zeri di} \ L_{n+1}(x) ,\quad \alpha _{i} =\frac{2}{( 1-x_{i})^{2}[ L_{n+1} '( x_{i})]^{2}} ,\quad i=0,\dotsc ,n.
-\end{equation*}
-\textit{Osservazioni.}
-\begin{itemize}
-\item Nei nodi $x_{i}$ sono esclusi gli estremi dell'intervallo $( -1,1)$.
-\item Il grado di esattezza della formula è $2n+1$, che si può dimostrare essere il massimo raggiungibile.
-\end{itemize}
+\textit{Esempio.} Determiniamo nodi e pesi di GL per $n=1$.
+\[
+\begin{cases}
+    \text{g.d.e.}=0\\
+    \text{g.d.e.}=1\\
+    \text{g.d.e.}=2\\
+    \text{g.d.e.}=3
+\end{cases}\iff 
+\begin{cases}
+    \int_a^b 1=b-a=\alpha_0+\alpha_1\\
+    \int_a^b x=\frac{b^2}2-\frac{a^2}2=\alpha_0 x_0+\alpha_1 x_1\\
+    \int_a^b x^2=\frac{b^3}3-\frac{a^3}3=\alpha_0 x_0^2+\alpha_1 x_1^2\\
+    \int_a^b x^3=\frac{b^4}4-\frac{a^4}4=\alpha_0 x_0^3+\alpha_1 x_1^3
+\end{cases}
+\]
+È un sistema non lineare, difficile da risolvere. La sua soluzione è 
+\[
+x_1= a+\left(1-\frac1{\sqrt 3}\right)\left(\frac{b-a}2\right),\quad x_2= a+\left(1+\frac1{\sqrt 3}\right)\left(\frac{b-a}2\right),\quad \alpha_1=\alpha_2 =\frac{b-a}{2}
+\]
+\textit{Osservazione.} La formula di quadratura di GL è quindi una formula aperta.
+
+\begin{theorem}
+    [Errore della formula di Gauss-Legendre a 2 nodi]
+    Data $f\in C^4([a,b])$, esiste $\xi_\text{G2}\in[a,b]$ tale che 
+    \[
+    E_\text{G2}(f)=\frac{1}{4320} (b-a)^5f^{(4)}(\xi_\text{G2})
+    \]
+\end{theorem}
+Quindi con due nodi abbiamo prestazioni paragonabili a Cavalieri-Simpson!
 
 \textit{Esempio.}
 Integriamo su $( -1,1)$, con $n=1$. Abbiamo $2$ nodi, i cui pesi, si può verificare, sono $\alpha _{i} =\{1,1\}$ mentre i nodi sono $x_{i} =\left\{\pm 1/\sqrt{3}\right\}$. Consideriamo una $f( x) ,x\in [ -1,1]$.
@@ -887,26 +904,195 @@ Integriamo su $( -1,1)$, con $n=1$. Abbiamo $2$ nodi, i cui pesi, si può verifi
 
 
 	\end{tikzpicture}
-	\caption{La linea spessa denota la $f( x)$, la linea sottile continua denota l'approssimazione che si ottiene con la formula del trapezio, mentre la linea sottile tratteggiata denota l'approssimazione con Gauss-Lobatto.}
+	\caption{La linea spessa denota la $f( x)$, la linea sottile continua denota l'approssimazione che si ottiene con la formula del trapezio, mentre la linea sottile tratteggiata denota l'approssimazione con Gauss-Legendre.}
 \end{figure}
 
-La formula del trapezio integra in modo esatto fino a polinomi di grado $1$, mentre la \textbf{formula di Gauss-Lobatto}\index{formula!di Gauss-Lobatto} integra in modo esatto fino a grado $3$.
+La formula del trapezio integra in modo esatto fino a polinomi di grado $1$, mentre la \textbf{formula di Gauss-Legendre} integra in modo esatto fino a grado $3$.
 \begin{align*}
 I^{\text{GL}}_{1}( f) & =\sum\limits ^{2}_{i=0} \alpha _{i} f( x_{i}) =1\cdot f\left( -\frac{1}{\sqrt{3}}\right) +1\cdot f\left(\frac{1}{\sqrt{3}}\right)\\
 I^{\text{trap}}_{1}( f) & =( b-a)\left[\frac{f( a) +f( b)}{2}\right] =f( -1) +f( 1)
 \end{align*}
 
+\subsection{Formule di Gauss-Legendre composite}
+In modo simile a quanto fatto per le formule di Newton-Cotes, dividiamo l'intervallo $[a,b]$ in più sottointervalli, in ciascuno dei quali usiamo la formula di GL.
+
+In questo caso, poiché GL non è una formula chiusa, in generale i polinomi interpolanti non si incontrano con continuità.
+
+\begin{figure}[ht]
+    \centering
+% Pattern Info
+\tikzset{
+pattern size/.store in=\mcSize, 
+pattern size = 5pt,
+pattern thickness/.store in=\mcThickness, 
+pattern thickness = 0.3pt,
+pattern radius/.store in=\mcRadius, 
+pattern radius = 1pt}
+\makeatletter
+\pgfutil@ifundefined{pgf@pattern@name@_yhmk61g9k}{
+\pgfdeclarepatternformonly[\mcThickness,\mcSize]{_yhmk61g9k}
+{\pgfqpoint{0pt}{-\mcThickness}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{
+\pgfsetcolor{\tikz@pattern@color}
+\pgfsetlinewidth{\mcThickness}
+\pgfpathmoveto{\pgfqpoint{0pt}{\mcSize}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{-\mcThickness}}
+\pgfusepath{stroke}
+}}
+\makeatother
+
+% Pattern Info
+ 
+\tikzset{
+pattern size/.store in=\mcSize, 
+pattern size = 5pt,
+pattern thickness/.store in=\mcThickness, 
+pattern thickness = 0.3pt,
+pattern radius/.store in=\mcRadius, 
+pattern radius = 1pt}
+\makeatletter
+\pgfutil@ifundefined{pgf@pattern@name@_gfzj7aomp}{
+\pgfdeclarepatternformonly[\mcThickness,\mcSize]{_gfzj7aomp}
+{\pgfqpoint{0pt}{-\mcThickness}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{
+\pgfsetcolor{\tikz@pattern@color}
+\pgfsetlinewidth{\mcThickness}
+\pgfpathmoveto{\pgfqpoint{0pt}{\mcSize}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{-\mcThickness}}
+\pgfusepath{stroke}
+}}
+\makeatother
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,240); %set diagram left start at 0, and has height of 240
+
+%Shape: Polygon [id:ds6767593056546697] 
+\draw  [pattern=_yhmk61g9k,pattern size=6pt,pattern thickness=0.75pt,pattern radius=0pt, pattern color={rgb, 255:red, 155; green, 155; blue, 155}] (313.67,185.6) -- (233.08,185.6) -- (231.35,70.48) -- (313.87,109.6) -- cycle ;
+%Shape: Axis 2D [id:dp792326899605013] 
+\draw  (109.44,185.72) -- (509.06,185.72)(136.83,30.69) -- (136.83,202.58) (502.06,180.72) -- (509.06,185.72) -- (502.06,190.72) (131.83,37.69) -- (136.83,30.69) -- (141.83,37.69)  ;
+%Curve Lines [id:da6426647998245478] 
+\draw [line width=1.5]    (193,117.11) .. controls (210.45,88.98) and (228.03,78.99) .. (245.08,78.67) .. controls (294.72,77.74) and (339.79,158.84) .. (363.35,112.94) .. controls (394.99,51.28) and (446.07,117.69) .. (513.82,76.38) ;
+%Straight Lines [id:da06593695826492318] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (250.27,80.67) -- (250.27,187.48) ;
+%Straight Lines [id:da19011680567983746] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (296.99,102.67) -- (296.99,185.48) ;
+%Straight Lines [id:da14727304728561008] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (333.33,123.48) -- (333.33,185.48) ;
+%Straight Lines [id:da04415130495999009] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (374.85,98.48) -- (374.85,186.48) ;
+%Shape: Polygon [id:ds6999911861419973] 
+\draw  [pattern=_gfzj7aomp,pattern size=6pt,pattern thickness=0.75pt,pattern radius=0pt, pattern color={rgb, 255:red, 155; green, 155; blue, 155}] (395.21,185.6) -- (313.67,185.6) -- (313.67,135.58) -- (395.72,85.48) -- cycle ;
+
+% Text Node
+\draw (212.89,195.26) node [anchor=north west][inner sep=0.75pt]    {$x_{k-1}$};
+% Text Node
+\draw (307.14,194.88) node [anchor=north west][inner sep=0.75pt]    {$x_{k}$};
+% Text Node
+\draw (397.21,197) node [anchor=north west][inner sep=0.75pt]    {$x_{k+1}$};
+% Text Node
+\draw (265,212.4) node [anchor=north west][inner sep=0.75pt]    {$I_{k}$};
+% Text Node
+\draw (342,214.4) node [anchor=north west][inner sep=0.75pt]    {$I_{k+1}$};
+% Text Node
+\draw (247.89,188.4) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize]  {$x_{1}^{\text G,k}$};
+% Text Node
+\draw (280.89,188.4) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize]  {$x_{2}^{\text G,k}$};
+% Text Node
+\draw (328.89,187.4) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize]  {$x_{1}^{\text G,k+1}$};
+% Text Node
+\draw (361.44,189) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize]  {$x_{2}^{\text G,k+1}$};
+\end{tikzpicture}
+\end{figure}
+
+\begin{theorem}
+    [Errore della formula di Gauss-Legendre composito a 2 nodi]
+    Data $f\in C^4([a,b])$, esiste $\rho\in[a,b]$ tale che 
+    \[
+    E_\text{G2}^C(f)=\frac{H^4}{4320} (b-a)f^{(4)}(\rho)
+    \]
+\end{theorem}
+Il grado di esattezza è $3$ e l'ordine di accuratezza è $4$.
+
+\subsection{Polinomi di Legendre}
+Cerchiamo un modo più semplice per trovare i nodi e pesi di GL\footnote{In realtà tali valori si trovano già tabulati in software di calcolo, per cui in genere non è necessario calcolarli.}.
+
+Cominciamo introducendo la nozione di \textbf{polinomi ortogonali}\index{polinomio!ortogonale} rispetto a un peso, ovvero una funzione non negativa, integrabile e continua.
+\begin{definition}
+    Dato un insieme di polinomi $\mathcal P=\{p_k\}_{k=0}^n$, i suoi elementi sono detti \textbf{polinomi ortogonali} sull'intervallo $[a,b]$ rispetto al peso $w$ se
+    \[
+    \int_{a}^b p_k(x) p_m(x)w(x)\,dx=0\quad\forall k\ne x
+    \]
+\end{definition}
+
+In particolare, se $w(x)\equiv 1$ e $[a,b]=[-1,1]$, i polinomi $L_k\in \mathcal P$ e tali che $L_k\in \mathbb P^k\ \forall k$ sono detti \textbf{polinomi di Legendre}\index{polinomio!di Legendre}.
+
+Vale che
+\[
+\int_{-1}^{1} L_k(x) L_m(x) \, dx = \left(k + \frac{1}{2} \right)^{-1} \delta_{km},\quad \text{dove } \ \delta_{km}=\begin{cases}
+    1&\text{se }k=m\\
+    0&\text{se }k\ne m
+\end{cases}
+\]
+Inoltre si può dimostrare che $\{L_k\}_{k=1}^n$ è una base per lo spazio dei polinomi di grado $n$ su $I$:
+\begin{equation*}
+\mathbb{P}^{n}(I) =\operatorname{span}\{L_{0}(x) ,L_{1}(x) ,\dotsc ,L_{n}(x)\} .
+\end{equation*}
+Presentiamo una formula ricorsiva per il calcolo dei polinomi di Legendre:
+\begin{equation*}
+\begin{cases}
+L_{0}(x) =1\\
+L_{1}(x) =x\\
+L_{k+1} =\frac{2k+1}{k+1} xL_{k}(x) -\frac{k}{k+1} L_{k-1}(x) \quad \text{con} \quad k=1,2,\dots
+\end{cases}
+\end{equation*}
+
+I polinomi di Legendre non sono l'unica famiglia di polinomi ortogonali: se ad esempio $w(x)=\frac{1}{\sqrt{1-x^2}}$, otteniamo i cosiddetti \textbf{polinomi di Chebyshev}\index{polinomio!di Chebyshev}.
+
+\subsection{Approssimazione di integrali pesati}
+Oltre a trovare i valori di pesi e nodi di GL, i polinomi di Legendre danno origine a una \textbf{formula di quadratura per integrali pesati}.
+
+Approssimiamo l'integrale $I_w(f)$ in questo modo:
+\[
+I_w(f)=\int_{-1}^1f(x)w(x)\,dx\approx \sum_{i=0}^n f(x_i)\underbrace{\int_{-1}^1\varphi_i(x) w(x)\,dx}_{\alpha_i}=\sum _{i=0}^nf(x_i)\alpha_i,
+\]
+Dove gli $x_i$ sono gli zeri del polinomio di Legendre di grado $n+1$.
+
+Il grado di esattezza della formula è $2n+1$, che si può dimostrare essere il massimo raggiungibile.
+
+In particolare, se $w(x)\equiv 1$, troviamo i nodi di Gauss-Legendre ed i relativi pesi:
+\begin{equation}
+x_{i} = \text{zeri di} \ L_{n+1}(x) ,\quad \alpha _{i} =\frac{2}{( 1-x_{i})^{2}[ L_{n+1} '( x_{i})]^{2}} ,\quad i=0,\dotsc ,n.
+\label{eq:nodi-gl}
+\end{equation}
+
+
 \subsection{Nodi e pesi di Gauss-Legendre-Lobatto (GLL)}
+Come per i Gauss-Legendre, scegliamo strategicamente i nodi di quadratura, ma questa volta vogliamo che siano inclusi anche gli estremi.
+
 Per $n\geqslant 0$, i \textbf{nodi di Gauss-Legendre-Lobatto}\index{nodi!di Gauss-Legendre-Lobatto} ed i relativi pesi sono dati da:
-\begin{gather*}
+\begin{gather}
+\begin{split}
 x_{0} =-1,\quad \left\{x_{i} \ \text{zeri di} \ L_{n} '(x) ,\quad i=1,\dotsc ,n-1\right\} ,\quad x_{n} =1,\\
 \alpha _{i} =\frac{2}{n( n+1)}\frac{1}{[ L_{n}( x_{i})]^{2}} ,\quad i=0,\dotsc ,n.
-\end{gather*}
+\end{split}
+\label{eq:nodi-gll}
+\end{gather}
 \textit{Osservazioni.}
 \begin{itemize}
 \item I nodi $x_{i}$ comprendono gli estremi.
-\item Il grado di esattezza della formula è $2n-1$.
+\item Il grado di esattezza della formula è $2n-1$, infatti la scelta di due nodi (gli estremi) non è strategica.
 \end{itemize}
+
+\textbf{NB.}
+Sull'intervallo generico $[ a,b]$ i nodi di GL e GLL si ottengono da \eqref{eq:nodi-gl} e da \eqref{eq:nodi-gll} con la stessa trasformazione lineare vista nella sezione \ref{sec:interpolazione-non-equispaziata} per l'interpolazione non equispaziata:
+\begin{equation*}
+\hat{x}_{i} =\frac{a+b}{2} +\frac{b-a}{2} x_{i}, \quad i=0,\dotsc ,n.
+\end{equation*}
 
 \subsection{Errore delle formule di GL e GLL}
 \index{errore!di Gauss-Legendre}
