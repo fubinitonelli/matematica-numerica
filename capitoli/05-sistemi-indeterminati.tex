@@ -64,7 +64,9 @@ e poniamolo uguale a zero per trovare il minimo:
 A^{T} A\x^{\star } -A^{T}\mathbf{b} =0\\
 \Updownarrow \\
 A^{T} A\x^{\star } =A^{T}\mathbf{b}.
+\qed
 \end{gather*}
+
 \begin{theorem}
 Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$.
 Se $A$ ha rango pieno, cioè $\operatorname{rank}(A) =n$, allora $A^{T} A\in \mathbb{R}^{n\times n}$ è una matrice SDP e quindi il sistema di equazioni normali
@@ -73,6 +75,62 @@ A^{T} A\x^{\star } =A^{T}\mathbf{b}
 \end{equation*}
 ammette una e una sola soluzione.
 \end{theorem}
+
+\textit{Osservazione.} La definizione di soluzione fornita è coerente con l'approssimazione nel senso dei minimi quadrati per dati e funzioni vista nella sezione \ref{sec:dati-min-quadrati}. Infatti per $\tilde {\boldsymbol  \alpha} =[\tilde \alpha_0, \tilde \alpha_1, \dots,\tilde \alpha_m]$ vale che 
+\[
+\tilde {\boldsymbol{\alpha}}=\operatornamewithlimits{argmin}_{\boldsymbol \alpha \in\mathbb R^{m+1}}\sum_{i=0}^n\big (y_i-(\alpha_0+\alpha_1x_i+\dots+\alpha_mx_i^m)\big)^2=\operatornamewithlimits{argmin}_{\boldsymbol \alpha \in\mathbb R^{m+1}}\|A \boldsymbol \alpha -\mathbf y\|_2
+\]
+Dove
+\[
+    A=\begin{bmatrix}
+        1&x_0&\cdots&x_0^m\\
+        \vdots&\vdots&\ddots&\vdots\\
+        1&x_n&\cdots&x_n^m
+    \end{bmatrix}\in \mathbb R^{n\times m+1},\quad \mathbf y=\begin{bmatrix}
+        y_0\\
+        \vdots\\
+        y_m
+    \end{bmatrix}.
+\]
+$\tilde{\boldsymbol{\alpha}}$ sarà la soluzione del sistema delle equazioni normali $A^TA\boldsymbol{\alpha}=A^T\mathbf y$, che ritroviamo essere lo stesso presentato nella sezione \ref{sec:caso-gen-min-quadrati}:
+\[
+\underbrace{\begin{bmatrix}
+        1 & \cdots & 1 \\
+        x_0 & \cdots & x_n \\
+        \vdots & \ddots & \vdots \\
+        x_0^m & \cdots & x_n^m
+    \end{bmatrix}}_{A^T}
+    \underbrace{\begin{bmatrix}
+        1&x_0&\cdots&x_0^m\\
+        \vdots&\vdots&\ddots&\vdots\\
+        1&x_n&\cdots&x_n^m
+    \end{bmatrix}}_A=\begin{bmatrix}( n+1) & \sum ^{n}_{i=0} x_{i} & \dotsc  & \sum ^{n}_{i=0} x^{m}_{i}\\
+\sum ^{n}_{i=0} x_{i} & \sum ^{n}_{i=0} x^{2}_{i} & \dotsc  & \sum ^{n}_{i=0} x^{m+1}_{i}\\
+\vdots  & \vdots  & \ddots  & \vdots \\
+\sum ^{n}_{i=0} x^{m}_{i} & \sum ^{n}_{i=0} x^{m+1}_{i} & \dotsc  & \sum ^{n}_{i=0} x^{2m}_{i}
+\end{bmatrix}
+\]
+e
+\[
+A^T\mathbf y=\begin{bmatrix}
+        1 & \cdots & 1 \\
+        x_0 & \cdots & x_n \\
+        \vdots & \ddots & \vdots \\
+        x_0^m & \cdots & x_n^m
+    \end{bmatrix}\begin{bmatrix}
+        y_0\\
+        \vdots\\
+        y_m
+    \end{bmatrix}=\begin{bmatrix}
+\sum ^{n}_{i=0} y_{i}\\
+\sum ^{n}_{i=0} x_{i} y_{i}\\
+\vdots \\
+\sum ^{n}_{i=0} x^{m}_{i} y_{i}
+\end{bmatrix}
+\]
+
+La regressione polinomiale, quindi, non è altro che un caso particolare di soluzione di un sistema nel senso dei minimi quadrati.
+
 \textit{Osservazioni.}
 \begin{itemize}
     \item Se $A^{T} A\x^{\star } =A^{T}\mathbf{b}$ ammette una e una sola soluzione in senso classico, allora \eqref{eq:sist-lin-sovradet} ammette una e una sola soluzione nel senso dei minimi quadrati.
@@ -260,7 +318,115 @@ e dunque $\x^{\star }$ soddisfa
 \tilde{R}\x^{\star } -\tilde{Q}^{T}\mathbf{b} =0\ \ \Rightarrow \ \ \x^{\star } =\tilde{R}^{-1}\tilde{Q}^{T}\mathbf{b}.
 \qed
 \end{gather*}
-\textit{Osservazione.} Il costo di calcolare la fattorizzazione $QR$ è $\approx mn^{2}$. L'algoritmo per il calcolo di $Q$ è basato sull'algoritmo di Gram-Schmidt, la tecnica dall'algebra lineare per la costruzione di una base ortogonale.
+\textit{Osservazione.} Il costo di calcolare la fattorizzazione $QR$ è $\approx mn^{2}$. L'algoritmo per il calcolo di $Q$ è basato sull'algoritmo di Gram-Schmidt, la tecnica dall'algebra lineare per la costruzione di una base ortonormale.
+
+\subsection{Sistemi sovradeterminati a rango non massimo}
+Consideriamo ora un sistema sovradeterminato $A\x =\mathbf b$, dove $A\in \mathbb{R}^{m\times n},\ m>n$, ma $\operatorname{Rank(A)<n}$. La soluzione nel senso dei minimi quadrati non è più unica in quanto se $x^\star$ è tale da minimizzare $\Phi(x)$, anche $x^\star+z,\ \forall z\in \operatorname{Ker}(A)$ soddisfano la medesima condizione.
+
+Occorre quindi porre un vincolo ulteriore per trovare una nozione che sia unica.
+
+La soluzione che cerchiamo è, tra le soluzioni nel senso dei minimi quadrati, quella a norma minima.
+
+Per trovare questa soluzione, faremo uso della \textbf{decomposizione ai valori singolari}\index{decomposizione!ai valori singolari} \footnote{in inglese \textit{SVD}, \textit{singular value decomposition}} che è una generalizzazione della decomposizione agli autovalori.
+
+Ricordiamo che per una matrice $A\in \mathbb R^{n\times n}$ sufficientemente regolare si definisce la sua decomposizione agli autovalori, o decomposizione spettrale, data da
+\begin{gather*}
+    A=RDR^{-1},\quad  \text{dove} \quad D=\operatorname{diag}(\lambda_1,\dots,\lambda_n)\\R=[\x_1,\dots,\x_n], \quad \x_i=\text{autovettori di }A.
+\end{gather*}
+
+Cominciamo allora dalla definizione dei valori singolari.
+
+\begin{definition}
+    [Valori singolari]\index{valori singolari}
+    Sia $A\in\mathbb R^{m\times n},\ m>n$. I suoi valori singolari sono le radici degli autovalori di $A^TA$, ovvero
+    \[
+    \sigma_i=\sqrt{\lambda _i(A^TA)},\quad i=1,\dots,n
+    \]
+\end{definition}
+
+\begin{theorem}
+    [Decomposizione ai valori singolari]
+    Sia $A\in\mathbb R^{m\times n},\ m>n$. Allora $\exists U,V$ tali che 
+    \[
+    A = U\Sigma V^T,
+    \]
+    dove $U\in \mathbb R^{m\times m}$, $V\in \mathbb R^{n\times n}$, $\Sigma=\operatorname{diag}(\sigma_1,\dots,\sigma_n)$
+\end{theorem}
+
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot
+\end{bmatrix}}_{A\in \mathbb{R}^{m\times n}} =\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot
+\end{bmatrix}}_{U\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
+\sigma_1  & 0  & 0 \\
+0 & \ddots  & 0 \\
+0 & 0 & \sigma_n \\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}}_{\Sigma\in \mathbb{R}^{m\times n}}
+\underbrace{\begin{bmatrix}
+    \cdot  & \cdot  & \cdot \\
+    \cdot  & \cdot  & \cdot \\
+    \cdot  & \cdot  & \cdot \\
+\end{bmatrix}}_{V^T\in\mathbb R^{n\times n}}
+\end{equation*}
+\textit{Osservazione.} Il costo di calcolare la decomposizione \textit{SVD} è $\approx 12 n^3$.
+
+\begin{definition}
+    [Matrice pseudoinversa]
+    Siano $A,U,V$ definiti come nel teorema. Definiamo la matrice pseudoinversa di $A$
+    \[
+    A^\dagger =V\Sigma^\dagger U^T,\quad \text{dove} \ \Sigma^\dagger =\operatorname{diag}\left(\frac1{\sigma_1},\dots,\frac1{\sigma_n}\right)^T
+    \]
+\end{definition}
+
+\begin{theorem}
+    Sia $A\in \mathbb{R}^{m\times n},\ m>n$, $\operatorname{Rank(A)<n}$. La soluzione $\x^\star$ nel senso dei minimi quadrati del sistema $A\x =\mathbb b$ di norma minima soddisfa
+    \[
+    \x^\star =A^\dagger\mathbf  b
+    \]
+\end{theorem}
 
 \section{Sistemi lineari sottodeterminati}
-%TODO
+
+Trattiamo brevemente anche i sistemi sottodeterminati. Sia $A\in \mathbb R^{m\times n}$, $m<n$. Consideriamo il sistema lineare
+\[
+A\x =\mathbf b,\quad \mathbf b\in \mathbb R^m.
+\]
+Per il teorema di Rouché-Capelli la soluzione del sistema non è unica. Procediamo quindi cercando la soluzione che soddisfi una condizione aggiuntiva, cioè che abbia norma minima.
+\begin{theorem}
+    Siano dati $A\in \mathbb R^{n\times m},\ m<n,\ \operatorname{Rank}(A)=m,\ \mathbf b\in \mathbb R^m$. $\x^\star = A^T(AA^T)^{-1}\mathbf b$ soddisfa le seguenti proprietà:
+    \begin{gather*}
+        A\x^\star =\mathbf b\tag{1}\\
+        \x^\star = \operatornamewithlimits{argmin}_{\x \in\mathbb R^n:A\x=\mathbf b} \|\x\| \tag{2}\\
+    \end{gather*}
+\end{theorem}
+
+\textit{Dimostrazione.}
+
+Per (1) è sufficiente notare $A\x^\star = AA^T (AA^T)^{-1}\mathbf b=\mathbf b$.
+
+Per (2), dimostriamo che $\|\x^\star\|^2\le \|\x\|^2\ \forall \x\in\mathbb R^n$ tale che $A\x =\mathbf b$.
+
+Sia dunque $\x$ tale che $A\x = \mathbf b$.
+\begin{multline*}
+    \|\x\|^2=\|\x^\star +(\x -\x^\star)\|=(\x^\star +(\x -\x^\star))^T(\x^\star +(\x -\x^\star))=\\=\|\x^\star \|^2+\|\x-\x^\star\|^2+2\underbrace{(\x -\x^\star)^T\x^\star}_{\triangle}
+\end{multline*}
+
+Osserviamo che 
+\[
+\triangle=\underbrace{(\x-\x^\star)^TA^T}_{\big(A(\x-\x^\star)\big)^T}(AA^T)^{-1}\mathbf b=
+\]
+Ma $A(\x-\x^\star)=A\x-A\x^\star =\mathbf b-\mathbf b=\mathbf 0$, quindi riprendendo l'equazione sopra
+\[
+\|\x\| = \|\x^\star \|^2+\underbrace{\|\x-\x^\star\|^2}_{\ge 0} + \mathbf 0\ge \|\x^\star \|^2\qed
+\]

@@ -751,7 +751,7 @@ Concludiamo che l'errore di perturbazione è piccolo solo se $\Lambda_{n}(x)$ è
 \end{itemize}
 
 % \textit{[Lezione 12 (07-04-2020)]}
-\section{Approssimazione nel senso dei minimi quadrati}
+\section{Approssimazione nel senso dei minimi quadrati}\label{sec:dati-min-quadrati}
 Se i dati di cui siamo in possesso sono molto numerosi, potrebbe non aver senso cercare un'interpolazione su di essi, sia per ragioni di complessità computazionale, sia per il rischio di \textit{overfitting}, cioè la creazione di un'approssimazione eccessivamente accurata dei dati quando probabilmente essi sono affetti da errore.
 In un esempio bidimensionale, potrebbe essere sufficiente una retta che descrive il comportamento qualitativo di una ``nuvola'' di punti.
 
@@ -880,7 +880,7 @@ La soluzione $\begin{bmatrix}
 \end{bmatrix}.
 \end{equation*}
 Osserviamo anche che la matrice è SDP, quindi il sistema ammette una e una sola soluzione come visto nei teoremi \ref{thm:esistenza-unicita-sl} e \ref{thm:A-DP-invertibile}.
-\subsection{Caso generale}
+\subsection{Caso generale}\label{sec:caso-gen-min-quadrati}
 
 Sia $m\geqslant 1$. Si può procedere come prima e riscrivere $p_{m}(x)$ come:
 \begin{equation*}
@@ -918,7 +918,7 @@ allora:
 \sum ^{n}_{i=0} x^{m}_{i} y_{i}
 \end{bmatrix}.
 \end{equation*}
-Esso è un sistema di $( m+1)$ equazioni in $( m+1)$ incognite. La matrice è SDP, quindi il sistema ammette una e una sola soluzione:
+Esso è un sistema di $( m+1)$ equazioni in $( m+1)$ incognite, detto sistema delle equazioni normali. La matrice è SDP, quindi il sistema ammette una e una sola soluzione:
 \begin{equation*}
 \begin{bmatrix}
 \tilde{\alpha }_{0}\\
