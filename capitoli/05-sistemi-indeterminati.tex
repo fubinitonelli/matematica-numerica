@@ -406,16 +406,16 @@ Per il teorema di Rouché-Capelli la soluzione del sistema non è unica. Procedi
 \begin{theorem}
     Siano dati $A\in \mathbb R^{n\times m},\ m<n,\ \operatorname{Rank}(A)=m,\ \mathbf b\in \mathbb R^m$. $\x^\star = A^T(AA^T)^{-1}\mathbf b$ soddisfa le seguenti proprietà:
     \begin{gather*}
-        A\x^\star =\mathbf b\tag{1}\\
-        \x^\star = \operatornamewithlimits{argmin}_{\x \in\mathbb R^n:A\x=\mathbf b} \|\x\| \tag{2}\\
+        A\x^\star =\mathbf b\tag{1}\label{eq:sottodet-soluz}\\
+        \x^\star = \operatornamewithlimits{argmin}_{\x \in\mathbb R^n:A\x=\mathbf b} \|\x\| \tag{2}\label{eq:sottodet-min-norma}\\
     \end{gather*}
 \end{theorem}
 
 \textit{Dimostrazione.}
 
-Per (1) è sufficiente notare $A\x^\star = AA^T (AA^T)^{-1}\mathbf b=\mathbf b$.
+Per \eqref{eq:sottodet-soluz} è sufficiente notare $A\x^\star = AA^T (AA^T)^{-1}\mathbf b=\mathbf b$.
 
-Per (2), dimostriamo che $\|\x^\star\|^2\le \|\x\|^2\ \forall \x\in\mathbb R^n$ tale che $A\x =\mathbf b$.
+Per \eqref{eq:sottodet-min-norma}, dimostriamo che $\|\x^\star\|^2\le \|\x\|^2\ \forall \x\in\mathbb R^n$ tale che $A\x =\mathbf b$.
 
 Sia dunque $\x$ tale che $A\x = \mathbf b$.
 \begin{multline*}
@@ -430,3 +430,11 @@ Ma $A(\x-\x^\star)=A\x-A\x^\star =\mathbf b-\mathbf b=\mathbf 0$, quindi riprend
 \[
 \|\x\| = \|\x^\star \|^2+\underbrace{\|\x-\x^\star\|^2}_{\ge 0} + \mathbf 0\ge \|\x^\star \|^2\qed
 \]
+
+\textit{Osservazione.} La matrice $A^T(AA^T)^{-1}$ è fortemente mal condizionata, dunque è necessario procedere in modo alternativo per determinare la soluzione. Usiamo la fattorizzazione $QR$ ridotta di $A^T$. Sia dunque $A^T=\tilde Q\tilde R$. Allora riscriviamo $\x^\star$ come
+\begin{multline*}
+    \x^\star = A^T(AA^T)^{-1}\mathbf b = (\tilde Q \tilde R)(( \tilde Q \tilde R)^T( \tilde Q \tilde R))^{-1}\mathbf b=\\=
+    (\tilde Q \tilde R)(\tilde R^T \underbrace{\tilde Q^T \tilde Q}_I \tilde R)^{-1}\mathbf b = 
+    \tilde Q \underbrace{\tilde R  \tilde R^{-1}}_I(\tilde R^T)^{-1} \mathbf b = 
+    \tilde Q (\tilde R^T)^{-1} \mathbf b
+\end{multline*}

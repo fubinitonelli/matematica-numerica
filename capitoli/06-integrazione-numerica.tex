@@ -1077,13 +1077,13 @@ Come per i Gauss-Legendre, scegliamo strategicamente i nodi di quadratura, ma qu
 Per $n\geqslant 0$, i \textbf{nodi di Gauss-Legendre-Lobatto}\index{nodi!di Gauss-Legendre-Lobatto} ed i relativi pesi sono dati da:
 \begin{gather}
 \begin{split}
-x_{0} =-1,\quad \left\{x_{i} \ \text{zeri di} \ L_{n} '(x) ,\quad i=1,\dotsc ,n-1\right\} ,\quad x_{n} =1,\\
-\alpha _{i} =\frac{2}{n( n+1)}\frac{1}{[ L_{n}( x_{i})]^{2}} ,\quad i=0,\dotsc ,n.
+x_{0} =-1,\quad &\left\{x_{i} \ \text{zeri di} \ L_{n} '(x) ,\quad i=1,\dotsc ,n-1\right\} ,\quad x_{n} =1,\\
+&\alpha _{i} =\frac{2}{n( n+1)}\frac{1}{[ L_{n}( x_{i})]^{2}} ,\quad i=0,\dotsc ,n.
 \end{split}
 \label{eq:nodi-gll}
 \end{gather}
 
-Il grado di esattezza della formula è $2n-1$, due in meno di GL, infatti la scelta di due nodi (gli estremi) non è strategica.
+Il grado di esattezza della formula è $2n-1$: due in meno di GL, poiché la scelta di due nodi (gli estremi) non è strategica.
 
 \textbf{NB.}
 Sull'intervallo generico $[ a,b]$ i nodi di GL e GLL si ottengono da \eqref{eq:nodi-gl} e da \eqref{eq:nodi-gll} con la stessa trasformazione lineare vista nella sezione \ref{sec:interpolazione-non-equispaziata} per l'interpolazione non equispaziata:
