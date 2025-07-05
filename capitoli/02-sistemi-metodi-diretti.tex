@@ -104,8 +104,7 @@ b_{n}
 \end{bmatrix}}_{\mathbf{b}}.
 \label{eq:Ly-b}
 \end{equation}
-\textbf{Osservazione. }$\displaystyle l_{11} \neq 0,l_{22} \neq 0,\dotsc ,l_{nn} \neq 0$ altrimenti $\displaystyle L$ sarebbe singolare, quindi anche $\displaystyle A$ sarebbe singolare\footnote{In una matrice triangolare, $L$ in questo caso, gli autovalori sono gli elementi sulla diagonale, e in generale il determinante è il prodotto degli autovalori. Se un elemento della diagonale di $L$ fosse nullo, allora anche il determinante lo sarebbe. Essendo $A=LU$, per il teorema di Binet $\operatorname{det}A=\operatorname{det}L\cdot\operatorname{det}U$, quindi sarebbe singolare anche $A$.}
-e non rispetterebbe la condizione per l'esistenza e unicità della soluzione. Vediamo ora cosa succede alle varie equazioni risolutive del sistema \eqref{eq:Ly-b}
+\textbf{Osservazione. }$\displaystyle l_{11} \neq 0,l_{22} \neq 0,\dotsc ,l_{nn} \neq 0$ altrimenti $\displaystyle L$ sarebbe singolare, quindi anche $\displaystyle A$ sarebbe singolare\footnote{In una matrice triangolare, $L$ in questo caso, gli autovalori sono gli elementi sulla diagonale, e in generale il determinante è il prodotto degli autovalori. Se un elemento della diagonale di $L$ fosse nullo, allora anche il determinante lo sarebbe. Essendo $A=LU$, per il teorema di Binet $\operatorname{det}A=\operatorname{det}L\cdot\operatorname{det}U$, quindi sarebbe singolare anche $A$.}. Vediamo ora cosa succede alle varie equazioni risolutive del sistema \eqref{eq:Ly-b}
 \begin{itemize}
 \item alla $1^{a}$ equazione:
 \begin{equation*}
@@ -241,17 +240,23 @@ I valori degli elementi sulla diagonale principale di $\displaystyle L$ sono irr
 Per ragioni di stabilità numerica degli algoritmi, li scegliamo uguali a $\displaystyle 1$.
 Ricordiamo infatti che gli autovalori di una matrice triangolare sono i valori sulla diagonale principale.
 \begin{definition}
-[Minori principali]
-\index{minori principali}
-Data una matrice quadrata $A \in \mathbb{R}^{n\times n}$, si definiscono \textbf{minori principali} di ordine $k$, con $k=0,\dots,n$, le sottomatrici quadrate di dimensione $k$ ottenute eliminando righe e colonne \emph{dello stesso indice}. Più in particolare, si definisce \textbf{minore principale di testa}\index{minori principale di testa} (o \textbf{minore Nord-Ovest})\index{minore di nord-ovest} di ordine $k$ quel minore principale ottenuto eliminando le ultime $(n-k)$ righe e colonne, con $0\le k\le n-1$.
+[Sottomatrici principali]
+\index{sottomatrici principali}
+Data una matrice quadrata $A \in \mathbb{R}^{n\times n}$, si definiscono \textbf{sottomatrici principali} di ordine $k$, con $k=1,\dots,n$, le sottomatrici quadrate di dimensione $k$ ottenute eliminando righe e colonne \emph{dello stesso indice}. Più in particolare, si definisce \textbf{sottomatrice principale di testa}\index{sottomatrice principale di testa} di ordine $k$ quella sottomatrice principale ottenuto eliminando le ultime $(n-k)$ righe e colonne, con $1\le k\le n$.
+\end{definition}
+\begin{definition}
+    [Minori principali]
+    \index{minori principali}
+    Data una matrice quadrata $A \in \mathbb{R}^{n\times n}$, si definisce \textbf{minore principale}\index{minore principale} di ordine $k$ il determinante della sottomatrice principale di ordine $k$. Più in particolare, si definisce \textbf{minore principale di testa}\index{minore principale di testa} (o \textbf{minore di Nord-Ovest})\index{minore di nord-ovest} il determinante della sottomatrice principale di testa di ordine $k$.
 \end{definition}
 Naturalmente quindi una matrice quadrata di dimensione $n$ ha esattamente $n$ minori principali di testa.
 \begin{theorem}
 [Esistenza e unicità della fattorizzazione $\displaystyle LU$]
 \index{fattorizzazione!LU!esistenza e unicità}
-Sia $\displaystyle A\in \mathbb{R}^{n\times n}$ una matrice non singolare. La matrice $\displaystyle A$ ammette una e una sola fattorizzazione $\displaystyle LU$ se e solo se tutti i minori principali di testa $\displaystyle A_{i}$ di ordine $\displaystyle i=1,\dotsc ,n$ sono non singolari.
+Sia $\displaystyle A\in \mathbb{R}^{n\times n}$. La matrice $\displaystyle A$ ammette una e una sola fattorizzazione $\displaystyle LU$ se e solo se tutti i minori principali di testa di ordine $\displaystyle i=1,\dotsc ,n-1$ sono non nulli.
 \label{thm:esist-unicita-LU}
 \end{theorem}
+
 \textit{Esempio.}
 \begin{equation*}
 A=\begin{bmatrix}
@@ -268,15 +273,11 @@ u_{11} & u_{12} & u_{13}\\
 0 & 0 & u_{33}
 \end{bmatrix}
 \end{equation*}
-I suoi minori di testa principali sono:
+Le sue sottomatrici principali di testa sono:
 \begin{equation*}
 A_{1} =[ 1] \qquad A_{2} =\begin{bmatrix}
 1 & 2\\
 4 & 5
-\end{bmatrix} \qquad A=\begin{bmatrix}
-1 & 2 & 3\\
-4 & 5 & 6\\
-0 & 7 & 1
 \end{bmatrix}.
 \end{equation*}
 Essendo tutti non singolari, la matrice soddisfa le ipotesi del teorema \ref{thm:esist-unicita-LU}.
@@ -308,6 +309,52 @@ A=\begin{bmatrix}
 0 & 0 & -13
 \end{bmatrix}.
 \end{equation*}
+
+\textit{Osservazione.}
+Se nelle ipotesi del teorema il minore principale di ordine $n$ fosse nullo, allora il sistema non sarebbe determinato, ma ammetterebbe comunque un'unica fattorizzazione $\displaystyle LU$.
+
+\textit{Esempio.}
+La matrice singolare
+\begin{equation*}
+    A = \begin{bmatrix}
+        1&2\\
+        1&2
+    \end{bmatrix}
+\end{equation*}
+ammette un'unica fattorizzazione LU. Infatti:
+\begin{equation*}
+    \begin{bmatrix}
+        1&2\\
+        1&2
+    \end{bmatrix}=
+    \begin{bmatrix}
+        1&0\\
+        l_{21}&1
+    \end{bmatrix}\begin{bmatrix}
+        u_{11}&u_{12}\\
+        0&u_{22}
+    \end{bmatrix}\implies \begin{cases}
+        u_{12}=1\\
+        u_{12}=2\\
+        l_{21}=1\\
+        u_{12}l_{21}+u_{22}=2\implies u_{22}=0
+    \end{cases}
+\end{equation*}
+Quindi la fattorizzazione $\displaystyle LU$ della matrice $A$ esiste ed è unica.
+\begin{equation*}
+    A=\begin{bmatrix}
+        1&2\\
+        1&2
+    \end{bmatrix}=
+    \begin{bmatrix}
+        1&0\\
+        1&1
+    \end{bmatrix}\begin{bmatrix}
+        1&2\\
+        0&0
+    \end{bmatrix}
+\end{equation*}
+
 Richiamiamo ora una definizione dall'algebra lineare che ci sarà utile nelle prossime pagine.
 \begin{definition}
   [Predominanza diagonale stretta]
@@ -583,7 +630,7 @@ L'elemento pivotale $\displaystyle a^{(2)}_{22} =0$ quindi il MEG si interrompe.
 Per risolvere questo intoppo, introduciamo le tecniche di \textbf{pivoting}\index{pivoting}.
 
 L'idea in questo caso è scambiare la II e III riga.
-Si noti inoltre che il minore nord-ovest di ordine 2 della matrice $A$ è singolare:
+Si noti inoltre che il minore di nord-ovest di ordine 2 della matrice $A$ è nullo:
 \begin{equation*}
 \operatorname{det}\begin{bmatrix}
 1 & 1 \\
@@ -743,7 +790,7 @@ L=\begin{bmatrix}
 Si noti che i termini $c_{k}$ sono rimasti invariati.
 Per determinare i fattori $\displaystyle L$ ed $U$ è quindi sufficiente determinare:
 \begin{equation*}
-\alpha _{1} ,\alpha _{2} ,\dotsc ,\alpha _{n} \quad \text{e} \quad \beta _{1} ,\beta _{2} ,\dotsc ,\beta _{n}.
+\alpha _{1} ,\alpha _{2} ,\dotsc ,\alpha _{n} \quad \text{e} \quad \beta _{2} ,\dotsc ,\beta _{n}.
 \end{equation*}
 
 Questi si possono determinare risolvendo col seguente algoritmo. \\

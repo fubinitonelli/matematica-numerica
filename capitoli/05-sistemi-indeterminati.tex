@@ -1,0 +1,440 @@
+%!TEX root = ../main.tex
+
+\chapter{Risoluzione di sistemi lineari indeterminati}
+
+Prendiamo un sistema lineare della forma:
+\begin{equation*}
+A\x =\mathbf{b}
+\end{equation*}
+dove $A\in \mathbb{R}^{m\times n} ,\mathbf{b} \in \mathbb{R}^{m} ,\x \in \mathbb{R}^{n}$. Il sistema si dice \textbf{indeterminato}\index{sistema!indeterminato} se $m\ne n$. In particolare:
+\begin{itemize}
+\item \textbf{sovradeterminato}\index{sistema!sovradeterminato} se $m >n$,
+\item \textbf{sottodeterminato}\index{sistema!sottodeterminato} se $m< n$.
+\end{itemize}
+
+\section{Sistemi lineari sovradeterminati}
+Approfondiremo ora i sistemi sovradeterminati, caso di maggiore interesse.
+Sia dunque $A\in \mathbb{R}^{m\times n} ,m\geqslant n$.
+Consideriamo il sistema lineare
+\begin{equation}
+A\x =\mathbf{b} ,\qquad\mathbf{b} \in \mathbb{R}^{m},
+\label{eq:sist-lin-sovradet}
+\end{equation}
+osserviamo che \eqref{eq:sist-lin-sovradet} ha soluzione nel senso classico del termine solo se il termine noto è un elemento del seguente spazio:
+\begin{equation*}
+\operatorname{range}(A) =\left\{\y \in \mathbb{R}^{m} \ \text{tale che} \ A\x =\y \ \text{per qualche} \ \x \in \mathbb{R}^{n}\right\}.
+\end{equation*}
+Dobbiamo quindi allargare il concetto di \textit{soluzione} per studiare un sistema sovradeterminato.
+\begin{definition}
+[Soluzione di un sistema lineare nel senso dei minimi quadrati]
+\index{soluzione!ai minimi quadrati}
+Dati $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, e $\mathbf{b} \in \mathbb{R}^{m}$, diciamo che $\x^{\star } \in \mathbb{R}^{n}$ è soluzione di \eqref{eq:sist-lin-sovradet} nel senso dei minimi quadrati se
+\begin{equation*}
+\Phi \left(\x^{\star }\right) =\min_{\x \in \mathbb{R}^{n}} \Phi (\x),
+\end{equation*}
+dove il funzionale da minimizzare è $\Phi (\mathbf{w}) =\Vert A\mathbf{w} -\mathbf{b}\Vert ^{2}_{2}$, il residuo nella norma euclidea.
+\end{definition}
+\textit{Osservazione.} Se $m=n$, la soluzione $\x^{\star }$ nel senso dei minimi quadrati coincide con la soluzione classica perché $\Phi \left(\x^{\star }\right) =0$.
+
+Dobbiamo chiarire se la soluzione ai minimi quadrati esista e se sia unica.
+\begin{lemma}
+Se la soluzione $\x^{\star }$ nel senso dei minimi quadrati di un sistema lineare esiste, essa coincide con la soluzione $\x^{\star }$ nel senso classico del \textit{sistema di equazioni normali}:
+\begin{equation*}
+A^{T} A\x^{\star } =A^{T}\mathbf{b}.
+\end{equation*}
+\end{lemma}
+\textit{Dimostrazione.}
+Scriviamo il funzionale da minimizzare:
+\begin{align*}
+\Phi (\x) & =\Vert A\x -\mathbf{b}\Vert ^{2}_{2}\\
+ & =( A\x -\mathbf{b})^{T}( A\x -\mathbf{b})\\
+ & =\left(( A\x)^{T} -\mathbf{b}^{T}\right)( A\x -\mathbf{b})\\
+ & =( A\x)^{T} A\x-\underbrace{\mathbf{b}^{T}A\x}_{\langle \mathbf{b} ,A\x \rangle } -\underbrace{( A\x)^{T}\mathbf{b}}_{\langle A\x ,\mathbf{b} \rangle } +\mathbf{b}^{T}\mathbf{b}\\
+ & =\x^{T} A^{T} A\x -2( A\x)^{T}\mathbf{b} +\mathbf{b}^{T}\mathbf{b}\\
+ & =\x^{T} A^{T} A\x -2\x^{T} A^{T}\mathbf{b} +\mathbf{b}^{T}\mathbf{b}.
+\end{align*}
+Calcoliamone poi il gradiente
+\begin{equation*}
+\nabla \Phi (\x) =2A^{T} A\x -2A^{T}\mathbf{b}
+\end{equation*}
+e poniamolo uguale a zero per trovare il minimo:
+\begin{gather*}
+\nabla \Phi \left(\x^{\star }\right) =0\\
+\Updownarrow \\
+A^{T} A\x^{\star } -A^{T}\mathbf{b} =0\\
+\Updownarrow \\
+A^{T} A\x^{\star } =A^{T}\mathbf{b}.
+\qed
+\end{gather*}
+
+\begin{theorem}
+Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$.
+Se $A$ ha rango pieno, cioè $\operatorname{rank}(A) =n$, allora $A^{T} A\in \mathbb{R}^{n\times n}$ è una matrice SDP e quindi il sistema di equazioni normali
+\begin{equation*}
+A^{T} A\x^{\star } =A^{T}\mathbf{b}
+\end{equation*}
+ammette una e una sola soluzione.
+\end{theorem}
+
+\textit{Osservazione.} La definizione di soluzione fornita è coerente con l'approssimazione nel senso dei minimi quadrati per dati e funzioni vista nella sezione \ref{sec:dati-min-quadrati}. Infatti per $\tilde {\boldsymbol  \alpha} =[\tilde \alpha_0, \tilde \alpha_1, \dots,\tilde \alpha_m]$ vale che 
+\[
+\tilde {\boldsymbol{\alpha}}=\operatornamewithlimits{argmin}_{\boldsymbol \alpha \in\mathbb R^{m+1}}\sum_{i=0}^n\big (y_i-(\alpha_0+\alpha_1x_i+\dots+\alpha_mx_i^m)\big)^2=\operatornamewithlimits{argmin}_{\boldsymbol \alpha \in\mathbb R^{m+1}}\|A \boldsymbol \alpha -\mathbf y\|_2
+\]
+Dove
+\[
+    A=\begin{bmatrix}
+        1&x_0&\cdots&x_0^m\\
+        \vdots&\vdots&\ddots&\vdots\\
+        1&x_n&\cdots&x_n^m
+    \end{bmatrix}\in \mathbb R^{n\times m+1},\quad \mathbf y=\begin{bmatrix}
+        y_0\\
+        \vdots\\
+        y_m
+    \end{bmatrix}.
+\]
+$\tilde{\boldsymbol{\alpha}}$ sarà la soluzione del sistema delle equazioni normali $A^TA\boldsymbol{\alpha}=A^T\mathbf y$, che ritroviamo essere lo stesso presentato nella sezione \ref{sec:caso-gen-min-quadrati}:
+\[
+\underbrace{\begin{bmatrix}
+        1 & \cdots & 1 \\
+        x_0 & \cdots & x_n \\
+        \vdots & \ddots & \vdots \\
+        x_0^m & \cdots & x_n^m
+    \end{bmatrix}}_{A^T}
+    \underbrace{\begin{bmatrix}
+        1&x_0&\cdots&x_0^m\\
+        \vdots&\vdots&\ddots&\vdots\\
+        1&x_n&\cdots&x_n^m
+    \end{bmatrix}}_A=\begin{bmatrix}( n+1) & \sum ^{n}_{i=0} x_{i} & \dotsc  & \sum ^{n}_{i=0} x^{m}_{i}\\
+\sum ^{n}_{i=0} x_{i} & \sum ^{n}_{i=0} x^{2}_{i} & \dotsc  & \sum ^{n}_{i=0} x^{m+1}_{i}\\
+\vdots  & \vdots  & \ddots  & \vdots \\
+\sum ^{n}_{i=0} x^{m}_{i} & \sum ^{n}_{i=0} x^{m+1}_{i} & \dotsc  & \sum ^{n}_{i=0} x^{2m}_{i}
+\end{bmatrix}
+\]
+e
+\[
+A^T\mathbf y=\begin{bmatrix}
+        1 & \cdots & 1 \\
+        x_0 & \cdots & x_n \\
+        \vdots & \ddots & \vdots \\
+        x_0^m & \cdots & x_n^m
+    \end{bmatrix}\begin{bmatrix}
+        y_0\\
+        \vdots\\
+        y_m
+    \end{bmatrix}=\begin{bmatrix}
+\sum ^{n}_{i=0} y_{i}\\
+\sum ^{n}_{i=0} x_{i} y_{i}\\
+\vdots \\
+\sum ^{n}_{i=0} x^{m}_{i} y_{i}
+\end{bmatrix}
+\]
+
+La regressione polinomiale, quindi, non è altro che un caso particolare di soluzione di un sistema nel senso dei minimi quadrati.
+
+\textit{Osservazioni.}
+\begin{itemize}
+    \item Se $A^{T} A\x^{\star } =A^{T}\mathbf{b}$ ammette una e una sola soluzione in senso classico, allora \eqref{eq:sist-lin-sovradet} ammette una e una sola soluzione nel senso dei minimi quadrati.
+    \item In genere, la matrice $A^{T} A$ è molto mal condizionata, quindi nella pratica è spesso difficile risolvere il sistema di equazioni normali per calcolare $\x^{\star }$.
+    \item Se una matrice $A$ invertibile viene rappresentata in un calcolatore, a causa degli errori di arrotondamento è possibile che $A^TA$ perda l'invertibilità. Ad esempio,
+    \[
+        A = \begin{bmatrix}
+            1 & 1 \\
+            2^{-27} & 0 \\
+            0 & 2^{-27}
+        \end{bmatrix},\quad \operatorname{float}(A^T A)=\begin{bmatrix}
+            1 & 1\\
+            1 & 1
+        \end{bmatrix}
+    \]
+\end{itemize}
+Dobbiamo quindi trovare un altro modo di procedere per la risoluzione.
+\subsection{Fattorizzazione QR}
+Proviamo a generalizzare il concetto di fattorizzazione $LU$, visto nella sezione \ref{sec:fattorizzazione-lu} e proprio delle matrici quadrate, anche a matrici rettangolari come $A$.
+\begin{definition}
+[Fattorizzazione $QR$]
+\index{fattorizzazione!QR}
+Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$.
+Si dice che $A$ ammette una fattorizzazione $QR$ se esistono:
+\begin{itemize}
+\item $Q\in \mathbb{R}^{m\times m}$ ortogonale ($Q^{-1} =Q^{T}$);
+\item $R\in \mathbb{R}^{m\times n}$ trapezoidale superiore (con le righe dalla $n+1$ in poi tutte nulle) 
+\end{itemize}
+tali che $$A=QR$$
+\end{definition}
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot
+\end{bmatrix}}_{A\in \mathbb{R}^{m\times n}} =\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot
+\end{bmatrix}}_{Q\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot \\
+0 & \cdot  & \cdot \\
+0 & 0 & \cdot \\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}}_{R\in \mathbb{R}^{m\times n}}
+\end{equation*}
+\textbf{Proprietà (Fattorizzazione }$QR$\textbf{ ridotta).} \index{fattorizzazione!QR!ridotta} Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, di rango massimo di cui esista la fattorizzazione $QR$. Allora esiste un'unica fattorizzazione di $A$ tale che:
+\begin{equation*}
+A=\tilde{Q} \ \tilde{R}
+\end{equation*}
+dove $\tilde{Q}$ e $\tilde{R}$ sono le sottomatrici ottenute da $Q$ e $R$ nel seguente modo:
+\begin{itemize}
+\item $\tilde{Q} =Q( 1:m,1:n) \in \mathbb{R}^{m\times n}$;
+\item $\tilde{R} =R( 1:n,1:n) \in \mathbb{R}^{n\times n}$.
+\end{itemize}
+
+Inoltre le colonne di $\tilde{Q}$ sono vettori ortonormali e $\tilde{R}$ coincide con il fattore di Cholesky della matrice $A^{T} A$, ossia $A^{T} A=\tilde{R}^{T}\tilde{R}$.
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot
+\end{bmatrix}}_{A\in \mathbb{R}^{m\times n}} =\underbrace{\begin{bmatrix}
+\begin{array}{|c c c|}
+\hline
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \tilde{Q} & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\hline
+\end{array} & \begin{array}{ c }
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot
+\end{array} & \begin{array}{ c }
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot
+\end{array}
+\end{bmatrix}}_{Q\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
+\begin{array}{|c c c|}
+\hline
+\cdot  & \cdot  & \cdot \\
+0 & \tilde{R} & \cdot \\
+0 & 0 & \cdot \\
+\hline
+\end{array}\\
+\begin{array}{ c c c }
+0 & 0 & 0
+\end{array}\\
+\begin{array}{ c c c }
+0 & 0 & 0
+\end{array}
+\end{bmatrix}}_{R\in \mathbb{R}^{m\times n}}
+\end{equation*}
+Come usiamo $A=\tilde{Q} \ \tilde{R}$ per risolvere $A\x =\mathbf{b}$?
+\begin{theorem}
+Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, di rango massimo, e sia $\mathbf{b} \in \mathbb{R}^{m}$. Allora esiste un'unica soluzione $\x^{\star } \in \mathbb{R}^{n}$ nel senso dei minimi quadrati del sistema sovradimensionato $A\x =\mathbf{b}$ ed essa è data da:
+\begin{equation*}
+\x^{\star } =\tilde{R}^{-1}\tilde{Q}^{T}\mathbf{b} \qquad \text{ovvero} \qquad \tilde{R}\x^{\star } =\tilde{Q}^{T}\mathbf{b}
+\end{equation*}
+dove $\tilde{Q}$ ed $\tilde{R}$ sono i fattori della decomposizione ridotta di $A$.
+\end{theorem}
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+\begin{array}{|c c c|}
+\hline
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \tilde{Q} & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\hline
+\end{array} & \begin{array}{ c }
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot
+\end{array} & \begin{array}{ c }
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot
+\end{array}
+\end{bmatrix}}_{Q\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
+\begin{array}{|c c c|}
+\hline
+\cdot  & \cdot  & \cdot \\
+0 & \tilde{R} & \cdot \\
+0 & 0 & \cdot \\
+\hline
+\end{array}\\
+\begin{array}{ c c c }
+0 & 0 & 0
+\end{array}\\
+\begin{array}{ c c c }
+0 & 0 & 0
+\end{array}
+\end{bmatrix}}_{R\in \mathbb{R}^{m\times n}}\underbrace{\begin{bmatrix}
+\begin{array}{ c }
+\cdot \\
+\cdot \\
+\cdot
+\end{array}
+\end{bmatrix}}_{\x \in \mathbb{R}^{n}} =\underbrace{\begin{bmatrix}
+\begin{array}{ c }
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot \\
+\cdot
+\end{array}
+\end{bmatrix}}_{\mathbf{b} \in \mathbb{R}^{n}}
+\end{equation*}
+\textit{Idea di dimostrazione.} Ci concentreremo sulla dimostrazione dell'esistenza, tralasciando quella dell'unicità. Supponendo che $A$ ammetta una fattorizzazione $QR$, allora:
+\begin{align*}
+\Vert A\x -\mathbf{b}\Vert ^{2}_{2} & =\Vert QR\x -\mathbf{b}\Vert ^{2}_{2} & \\
+ & =\left\Vert Q^{T} QR\x -Q^{T}\mathbf{b}\right\Vert ^{2}_{2} & \Vert \mathbf{z}\Vert _{2} =\left\Vert Q^{T}\mathbf{z}\right\Vert _{2} \ \forall \mathbf{z}\\
+ & =\left\Vert R\x -Q^{T}\mathbf{b}\right\Vert ^{2}_{2} & \text{($Q$ è ortogonale)}\\
+ & =\left\Vert \tilde{R}\x -\tilde{Q}^{T}\mathbf{b}\right\Vert ^{2}_{2} +\sum ^{m}_{i=n+1}\left[\left( Q^{T}\mathbf{b}\right)_{i}\right]^{2} & \forall \x \in \mathbb{R}^{n}.
+\end{align*}
+Osserviamo in particolare l'ultimo passaggio: abbiamo la norma (al quadrato, ma ciò è irrilevante) di un vettore, ovvero $R\x -Q^{T}\mathbf{b}$. Dato che la norma $2$ al quadrato è per definizione (vedi \ref{def:norma-vettore}) la somma delle componenti al quadrato, possiamo liberamente separare in due somme.
+Il termine $R\x$ si separa in $\tilde{R}\x$ e una somma di zeri.
+Il termine $Q^{T}\mathbf{b}$ si separa in $\tilde{Q}^{T}\mathbf{b}$ e il termine in sommatoria (si noti l'indice che va da $n+1$ a $m$).
+Il minimo di $\Phi (\x)$ è raggiunto per $\x^{\star }$ che annulla tutto il termine in cui compare:
+\begin{equation*}
+\tilde{R}\x -\tilde{Q}^{T}\mathbf{b} =0\ \ \Rightarrow \ \ \left\Vert \tilde{R}\x -\tilde{Q}^{T}\mathbf{b}\right\Vert =0
+\end{equation*}
+e dunque $\x^{\star }$ soddisfa
+\begin{gather*}
+\tilde{R}\x^{\star } -\tilde{Q}^{T}\mathbf{b} =0\ \ \Rightarrow \ \ \x^{\star } =\tilde{R}^{-1}\tilde{Q}^{T}\mathbf{b}.
+\qed
+\end{gather*}
+\textit{Osservazione.} Il costo di calcolare la fattorizzazione $QR$ è $\approx mn^{2}$. L'algoritmo per il calcolo di $Q$ è basato sull'algoritmo di Gram-Schmidt, la tecnica dall'algebra lineare per la costruzione di una base ortonormale.
+
+\subsection{Sistemi sovradeterminati a rango non massimo}
+Consideriamo ora un sistema sovradeterminato $A\x =\mathbf b$, dove $A\in \mathbb{R}^{m\times n},\ m>n$, ma $\operatorname{Rank(A)<n}$. La soluzione nel senso dei minimi quadrati non è più unica in quanto se $x^\star$ è tale da minimizzare $\Phi(x)$, anche $x^\star+z,\ \forall z\in \operatorname{Ker}(A)$ soddisfano la medesima condizione.
+
+Occorre quindi porre un vincolo ulteriore per trovare una nozione che sia unica.
+
+La soluzione che cerchiamo è, tra le soluzioni nel senso dei minimi quadrati, quella a norma minima.
+
+Per trovare questa soluzione, faremo uso della \textbf{decomposizione ai valori singolari}\index{decomposizione!ai valori singolari} \footnote{in inglese \textit{SVD}, \textit{singular value decomposition}} che è una generalizzazione della decomposizione agli autovalori.
+
+Ricordiamo che per una matrice $A\in \mathbb R^{n\times n}$ sufficientemente regolare si definisce la sua decomposizione agli autovalori, o decomposizione spettrale, data da
+\begin{gather*}
+    A=RDR^{-1},\quad  \text{dove} \quad D=\operatorname{diag}(\lambda_1,\dots,\lambda_n)\\R=[\x_1,\dots,\x_n], \quad \x_i=\text{autovettori di }A.
+\end{gather*}
+
+Cominciamo allora dalla definizione dei valori singolari.
+
+\begin{definition}
+    [Valori singolari]\index{valori singolari}
+    Sia $A\in\mathbb R^{m\times n},\ m>n$. I suoi valori singolari sono le radici degli autovalori di $A^TA$, ovvero
+    \[
+    \sigma_i=\sqrt{\lambda _i(A^TA)},\quad i=1,\dots,n
+    \]
+\end{definition}
+
+\begin{theorem}
+    [Decomposizione ai valori singolari]
+    Sia $A\in\mathbb R^{m\times n},\ m>n$. Allora $\exists U,V$ tali che 
+    \[
+    A = U\Sigma V^T,
+    \]
+    dove $U\in \mathbb R^{m\times m}$, $V\in \mathbb R^{n\times n}$, $\Sigma=\operatorname{diag}(\sigma_1,\dots,\sigma_n)\in \mathbb R^{m\times n}$
+\end{theorem}
+
+\begin{equation*}
+\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot
+\end{bmatrix}}_{A\in \mathbb{R}^{m\times n}} =\underbrace{\begin{bmatrix}
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
+\cdot  & \cdot  & \cdot  & \cdot  & \cdot
+\end{bmatrix}}_{U\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
+\sigma_1  & 0  & 0 \\
+0 & \ddots  & 0 \\
+0 & 0 & \sigma_n \\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}}_{\Sigma\in \mathbb{R}^{m\times n}}
+\underbrace{\begin{bmatrix}
+    \cdot  & \cdot  & \cdot \\
+    \cdot  & \cdot  & \cdot \\
+    \cdot  & \cdot  & \cdot \\
+\end{bmatrix}}_{V^T\in\mathbb R^{n\times n}}
+\end{equation*}
+\textit{Osservazione.} Il costo di calcolare la decomposizione \textit{SVD} è $\approx 12 n^3$.
+
+\begin{definition}
+    [Matrice pseudoinversa]
+    Siano $A,U,V$ definiti come nel teorema. Definiamo la matrice pseudoinversa di $A$
+    \[
+    A^\dagger =V\Sigma^\dagger U^T,\quad \text{dove} \ \Sigma^\dagger =\operatorname{diag}\left(\frac1{\sigma_1},\dots,\frac1{\sigma_n}\right)^T
+    \]
+\end{definition}
+
+\begin{theorem}
+    Sia $A\in \mathbb{R}^{m\times n},\ m>n$, $\operatorname{Rank(A)<n}$. La soluzione $\x^\star$ nel senso dei minimi quadrati del sistema $A\x =\mathbb b$ di norma minima soddisfa
+    \[
+    \x^\star =A^\dagger\mathbf  b
+    \]
+\end{theorem}
+
+\section{Sistemi lineari sottodeterminati}
+
+Trattiamo brevemente anche i sistemi sottodeterminati. Sia $A\in \mathbb R^{m\times n}$, $m<n$. Consideriamo il sistema lineare
+\[
+A\x =\mathbf b,\quad \mathbf b\in \mathbb R^m.
+\]
+Per il teorema di Rouché-Capelli la soluzione del sistema non è unica. Procediamo quindi cercando la soluzione che soddisfi una condizione aggiuntiva, cioè che abbia norma minima.
+\begin{theorem}
+    Siano dati $A\in \mathbb R^{n\times m},\ m<n,\ \operatorname{Rank}(A)=m,\ \mathbf b\in \mathbb R^m$. $\x^\star = A^T(AA^T)^{-1}\mathbf b$ soddisfa le seguenti proprietà:
+    \begin{gather*}
+        A\x^\star =\mathbf b\tag{1}\label{eq:sottodet-soluz}\\
+        \x^\star = \operatornamewithlimits{argmin}_{\x \in\mathbb R^n:A\x=\mathbf b} \|\x\| \tag{2}\label{eq:sottodet-min-norma}\\
+    \end{gather*}
+\end{theorem}
+
+\textit{Dimostrazione.}
+
+Per \eqref{eq:sottodet-soluz} è sufficiente notare $A\x^\star = AA^T (AA^T)^{-1}\mathbf b=\mathbf b$.
+
+Per \eqref{eq:sottodet-min-norma}, dimostriamo che $\|\x^\star\|^2\le \|\x\|^2\ \forall \x\in\mathbb R^n$ tale che $A\x =\mathbf b$.
+
+Sia dunque $\x$ tale che $A\x = \mathbf b$.
+\begin{multline*}
+    \|\x\|^2=\|\x^\star +(\x -\x^\star)\|=(\x^\star +(\x -\x^\star))^T(\x^\star +(\x -\x^\star))=\\=\|\x^\star \|^2+\|\x-\x^\star\|^2+2\underbrace{(\x -\x^\star)^T\x^\star}_{\triangle}
+\end{multline*}
+
+Osserviamo che 
+\[
+\triangle=\underbrace{(\x-\x^\star)^TA^T}_{\left(A(\x-\x^\star)\right)^T}(AA^T)^{-1}\mathbf b
+\]
+Ma $A(\x-\x^\star)=A\x-A\x^\star =\mathbf b-\mathbf b=\mathbf 0$, quindi riprendendo l'equazione sopra
+\[
+\|\x\| = \|\x^\star \|^2+\underbrace{\|\x-\x^\star\|^2}_{\ge 0} + \mathbf 0\ge \|\x^\star \|^2\qed
+\]
+
+\textit{Osservazione.} La matrice $A^T(AA^T)^{-1}$ è fortemente mal condizionata, dunque è necessario procedere in modo alternativo per determinare la soluzione. Usiamo la fattorizzazione $QR$ ridotta di $A^T$. Sia dunque $A^T=\tilde Q\tilde R$. Allora riscriviamo $\x^\star$ come
+\begin{multline*}
+    \x^\star = A^T(AA^T)^{-1}\mathbf b = (\tilde Q \tilde R)(( \tilde Q \tilde R)^T( \tilde Q \tilde R))^{-1}\mathbf b=\\=
+    (\tilde Q \tilde R)(\tilde R^T \underbrace{\tilde Q^T \tilde Q}_I \tilde R)^{-1}\mathbf b = 
+    \tilde Q \underbrace{\tilde R  \tilde R^{-1}}_I(\tilde R^T)^{-1} \mathbf b = 
+    \tilde Q (\tilde R^T)^{-1} \mathbf b
+\end{multline*}

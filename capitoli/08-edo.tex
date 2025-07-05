@@ -962,9 +962,9 @@ c_{s} & a_{s1} & a_{s2} & \cdots  & a_{ss}\\
 \end{equation}
 Come suggerito dalla notazione, i vincoli applicati a questi coefficienti sono:
 \begin{equation}
+\label{eq:ipotesi-rk}
 c_{i} =\sum\limits ^{s}_{j=1} a_{ij} ,\quad \sum\limits ^{s}_{i=1} b_{i} =1,\quad i=1,\dotsc ,s.
 \end{equation}
-\label{eq:ipotesi-rk}
 Vedremo nel teorema \ref{thm:metodo-rk-consistente} che la condizione su $b$ serve a garantire un'importante proprietà del metodo.
 
 \subsection{Classificazione dei metodi Runge-Kutta}
@@ -1273,7 +1273,7 @@ Un metodo RK è assolutamente stabile se e solo se
 $$| R( h\lambda )| < 1.$$
 Notiamo che tale condizione implica che $|u_{n+1} |\to 0$ per $n\to\infty$. La sua \textbf{regione di assoluta stabilità}\index{regione di assoluta stabilità} è:
 $$\mathcal{A} =\left\{z=h\lambda \in \mathbb{C} \ \text{tali che} \ | R( h\lambda )| < 1\right\}.$$
-Un metodo RK si dice $\mathcal{A}$-stabile se $A\cap \mathbb{C}^{-} =\mathbb{C}^{-}$.
+Un metodo RK si dice $\mathcal{A}$-stabile se $\mathcal A\cap \mathbb{C}^{-} =\mathbb{C}^{-}$.
 \end{definition}
 In figura \ref{fig-regioni-stabilita-rk} si possono osservare alcune regioni di stabilità per metodi Runge-Kutta.
 

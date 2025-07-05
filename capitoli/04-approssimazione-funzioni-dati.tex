@@ -213,7 +213,7 @@ con $a_{0} ,a_{1} ,\dotsc ,a_{n} \in \mathbb{R}$ da determinare imponendo i vinc
 \begin{equation*}
 \mathbb{P}^{n} =\operatorname{span}\{\mathcal{L}_{0}(x) ,\dotsc ,\mathcal{L}_{n}(x)\}
 \end{equation*}
-dove per ogni $i=0,\dotsc ,n$ l'$i$-esimo \textbf{polinomio di Lagrange}\index{polinomio!di Lagrange} $\mathcal{L}_{i}(x)$ è definito in questo modo:
+dove per ogni $i=0,\dotsc ,n$ l'$i$-esimo \textbf{polinomio di Lagrange}\index{polinomio!di Lagrange} $\mathcal{L}_{i}(x)$ è definito in modo da soddisfare le seguenti condizioni:
 \begin{equation*}
 \begin{array}{{>{\displaystyle}l}}
 \mathcal{L}_{i}(x) \ \text{è un polinomio di grado} \ n\\
@@ -225,8 +225,10 @@ dove per ogni $i=0,\dotsc ,n$ l'$i$-esimo \textbf{polinomio di Lagrange}\index{p
 \end{equation*}
 L'espressione analitica di ogni $\mathcal{L}_{i}(x) ,i=0,\dotsc ,n$ è:
 \begin{equation*}
-\mathcal{L}_{i}(x) =\prod ^{n}_{j=0,j\neq i}\frac{( x-x_{j})}{( x_{i} -x_{j})} \quad i=0,\dotsc ,n.
+\mathcal{L}_{i}(x) =\prod ^{n}_{j=0,j\neq i}\frac{( x-x_{j})}{( x_{i} -x_{j})} \quad i=0,\dotsc ,n,
 \end{equation*}
+in quanto il numeratore si annulla in ogni $x_j$ con $j\ne i$, mentre il denominatore coincide con il numeratore calcolato in $x_i$.
+
 In figura \ref{fig-polinomi-lagrange} si può vedere un esempio di un set di polinomi di Lagrange costruiti su un specifico insieme di nodi.
 \fg[Polinomi di Lagrange nei nodi $x_{i}=1,3,4,6,8$.]{0.75}{fig-polinomi-lagrange}
 
@@ -240,7 +242,7 @@ Ovvero in forma compatta otteniamo:
 \end{equation*}
 Questo ne dimostra l'esistenza.
 
-\textit{Unicità.} Per assurdo supponiamo che esistano due polinomi distinti $\Pi _{n}(x)$ e $\tilde{\Pi }_{n}(x)$ tali che rispettano le proprietà richieste, ovvero:
+\textit{Unicità.} Per assurdo supponiamo che esistano due polinomi di grado $n$ distinti $\Pi _{n}(x)$ e $\tilde{\Pi }_{n}(x)$ che rispettino le proprietà richieste, ovvero:
 \begin{equation*}
 \Pi _{n}( x_{i}) =y_{i} \quad \forall i=0,\dotsc ,n \quad \text{e} \quad \tilde{\Pi }_{n}( x_{i}) =y_{i} \quad \forall i=0,\dotsc ,n.
 \end{equation*}
@@ -251,9 +253,9 @@ $$
 	=y_{i} -y_{i}
 	=0.
 $$
-Quindi $\mathcal{Y}_{n}(x)$ è un polinomio di grado $n$ che ha $n+1$ zeri. Dunque per il teorema fondamentale dell'algebra:
+Quindi $\mathcal{Y}_{n}(x)$ è un polinomio di grado $n$ che ha $n+1$ zeri. Per il teorema fondamentale dell'algebra un polinomio di grado $n$ ha al più $n$ zeri, dunque non può che essere:
 \begin{equation*}
-\mathcal{Y}_{n}(x) \equiv 0\ \ \Rightarrow \ \ \Pi _{n}(x) =\tilde{\Pi }_{n}(x)
+\mathcal{Y}_{n}(x) \equiv 0\ \ \Rightarrow \ \ \Pi _{n}(x) \equiv \tilde{\Pi }_{n}(x)
 \end{equation*}
 ma questo è assurdo in quanto si è supposto fossero distinti, pertanto abbiamo dimostrato l'unicità. \textqed
 
@@ -280,15 +282,40 @@ Ne consegue che
 \begin{equation*}
 \Pi _{n}(x) =\sum\limits ^{n}_{i=0} y_{i}\frac{w_{n+1}(x)}{( x-x_{i}) w'_{n+1}( x_{i})}.
 \end{equation*}
+\item Per trovare il polinomio di interpolazione, sarebbe anche possibile risolvere un sistema che imponga il passaggio per i punti campionati:
+\begin{equation*}
+    \begin{cases}
+        a_0 +a_1x_0+\dots+a_nx_0^n=y_0\\
+        \ \vdots \\
+        a_0+a_1x_n+\dots+a_nx_n^n=y_n
+    \end{cases}
+    \iff
+    \begin{bmatrix}
+        1 & x_0 & \cdots & x_0^n\\
+        \vdots&\vdots&\ddots&\vdots\\
+        1 & x_n & \cdots & x_n^n
+    \end{bmatrix}
+    \begin{bmatrix}
+        a_0\\
+        \vdots\\
+        a_n
+    \end{bmatrix}=
+    \begin{bmatrix}
+        y_0\\
+        \vdots\\
+        y_n
+    \end{bmatrix}
+\end{equation*}
+La matrice del sistema si chiama \textbf{matrice di Vandermonde}\index{matrice!di Vandermonde} ed è non singolare se gli $x_i$ sono distinti. Questo metodo tuttavia è difficilmente percorribile perché la matrice è mal condizionata.
 \end{itemize}
 \begin{theorem}
 [Errore di interpolazione]
 \index{errore!di interpolazione}
-Siano $x_{0} ,x_{1} ,\dotsc ,x_{n}$ un set di $n+1$ punti distinti in $I\subseteq \mathbb{R}$ e sia $f\in C^{n+1}(I)$. Per ogni $x\in I$ l'errore $E(x) =f(x) -\Pi _{n} f(x)$ è dato da
+Siano $x_{0} ,x_{1} ,\dotsc ,x_{n}$ un set di $n+1$ punti distinti in $I\subseteq \mathbb{R}$ e sia $f\in C^{n+1}(I)$. Per ogni $x\in I$, $\exists \xi = \xi(x)\in I$ tale che l'errore $E(x) =f(x) -\Pi _{n} f(x)$ sia dato da
 \begin{equation*}
 E(x) =\frac{\omega _{n+1}(x)}{( n+1) !} f^{( n+1)}( \xi )
 \end{equation*}
-dove $\xi (x) \in I$ e $\omega _{n+1}(x)$ è il polinomio nodale associato ai nodi $x_{0} ,x_{1} ,\dotsc ,x_{n}$, ossia $\omega _{n+1}(x) =\prod ^{n}_{i=0}( x-x_{i})$.
+dove $\omega _{n+1}(x)$ è il polinomio nodale associato ai nodi $x_{0} ,x_{1} ,\dotsc ,x_{n}$, ossia $\omega _{n+1}(x) =\prod ^{n}_{i=0}( x-x_{i})$.
 \end{theorem}
 
 Per capire l'utilizzo del teorema, diamo la seguente definizione.
@@ -305,7 +332,7 @@ Per capire l'utilizzo del teorema, diamo la seguente definizione.
 L'utilizzo della norma infinito è fondamentale in quanto la formula dell'errore è valida quando la funzione viene valutata in un punto $\xi$, ma questo punto non è noto, e si sa solo che esso appartiene all'intervallo $I$.
 Possiamo naturalmente maggiorare il valore che la $f^{(n+1)}$ assume in $\xi$ con il massimo valore assunto nell'intervallo. Questo avviene proprio grazie alla norma infinito, che essendo un massimo su $x$ è una costante rispetto a $x$:
 \begin{equation*}
-| E(x)| \leqslant \frac{1}{( n+1) !} \ | \omega _{n+1}(x)| \ \underbrace{\left\Vert f^{( n+1)}(x)\right\Vert _{\infty }}_{\leqslant C} \leqslant \frac{C}{( n+1) !} \ | \omega _{n+1}(x)|.
+| E(x)| \leqslant \frac{1}{( n+1) !} \ | \omega _{n+1}(x)| \ \underbrace{\left\Vert f^{( n+1)}(x)\right\Vert _{\infty }}_{\leqslant C} \leqslant \frac{C}{( n+1) !} \ | \omega _{n+1}(x)|\ \ \forall x\in I.
 \end{equation*}
 
 \textit{Dimostrazione.}
@@ -332,7 +359,7 @@ Osserviamo che:
 
 Quindi $G(t)$ è una funzione di classe $C^{n+1}$ in $I$ con almeno $n+2$ zeri distinti. Quindi per il teorema del valor medio possiamo concludere che $G'(t)$ ha almeno $n+1$ zeri distinti e, con lo stesso ragionamento, che $G^{( n+1)}(t)$ ammette uno zero che chiamiamo $\xi =\xi (x)$, cioè $G^{( n+1)}( \xi ) =0$.
 
-Adesso calcoliamo l'espressione di $G^{( n+1)}(t)$. Per linearità si ha:
+Adesso calcoliamo l'espressione di $G^{( n+1)}(t)$. Per linearità della derivata si ha:
 \begin{align*}
 G^{( n+1)}(t) & =E^{( n+1)}_{n}(t) -\omega ^{( n+1)}_{n+1}(t)\frac{E_{n}(x)}{\omega _{n+1}(x)}\\
  & =f^{( n+1)}(t) -\underbrace{( \Pi _{n} f)^{( n+1)}(t)}_{=0} -\underbrace{\omega ^{( n+1)}_{n+1}(t)}_{=( n+1) !}\frac{E_{n}(x)}{\omega _{n+1}(x)}\\
@@ -348,10 +375,289 @@ E_{n}(x) = & \frac{\omega _{n+1}(x)}{( n+1) !} f^{( n+1)}( \xi ).
 \end{align*}
 \end{itemize}
 
+\section{Utilizzo di nodi equispaziati}
+\index{nodi!equispaziati}
+Una proprietà desiderabile per un polinomio di interpolazione $\Pi _{n} f(x)$ è che l'errore tenda a zero se $n\rightarrow \infty $.
+
+Ipotizziamo di approssimare la funzione nell'intervallo $I=[x_0,x_n]$ usando $n+1$ nodi equispaziati $\{x_i\}_{i=0}^n$. L'intervallo tra ciascuno dei nodi è $h=(x_n-x_0)/n$.
+\begin{figure}[htpb]
+	\centering
+	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
+
+	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+	%uncomment if require: \path (0,102); %set diagram left start at 0, and has height of 102
+
+	%Straight Lines [id:da20621224248267156]
+	\draw    (250,30) -- (280,30) ;
+	\draw [shift={(280,30)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+	\draw [shift={(250,30)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+	%Straight Lines [id:da9554369535839922]
+	\draw    (190,50) -- (340,50) (220,46) -- (220,54)(250,46) -- (250,54)(280,46) -- (280,54)(310,46) -- (310,54) ;
+	\draw [shift={(340,50)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+	\draw [shift={(190,50)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+
+	% Text Node
+	%\draw (187,22.4) node [anchor=north west][inner sep=0.75pt]    {$x_0$};
+	% Text Node
+	%\draw (337,22.4) node [anchor=north west][inner sep=0.75pt]    {$x_n$};
+	% Text Node
+	\draw (181,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_0$};
+	% Text Node
+	\draw (241,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_{k}$};
+	% Text Node
+	\draw (271,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_{k+1}$};
+	% Text Node
+	\draw (260,8) node [anchor=north west][inner sep=0.75pt]    {$h$};
+	% Text Node
+	\draw (331,62.4) node [anchor=north west][inner sep=0.75pt]    {$x_{n}$};
+
+
+	\end{tikzpicture}
+\end{figure}
+
+I nodi sono definiti da 
+\begin{equation*}
+    x_{i}=x_0+ih,\quad i=0,\dots,n
+\end{equation*}
+
+È possibile dimostrare che per i nodi equispaziati $|\omega_{n+1}|\le \frac{h^{n+1}} 4 n!$. Valutiamo quindi l'errore massimo nell'intervallo $I$:
+\begin{multline*}
+    \|E_n\|_\infty=\|f(x)-\Pi_n f(x)\|_\infty \le \frac{\|\omega_{n+1}(x)\|_\infty}{(n+1)!}\| f^{(n+1)}(x) \|_\infty\\
+    \le   \frac{1}{(n+1)!} \frac{h^{n+1}}{4}\ n!\ \| \!f^{(n+1)}(x) \|_\infty
+    =\underbrace{\frac{h^{n+1}}{4(n+1)}}_A \ \underbrace{\| \!f^{(n+1)}(x) \|_\infty}_B
+\end{multline*}
+Il termine $A$ tende a $0$ per $n\to\infty$, ma non sappiamo nulla del termine $B$: se dovesse tendere a $\infty$ più velocemente di $A$, allora l'approssimazione polinomiale diventerebbe meno accurata quando usiamo polinomi di grado superiore.
+
+\textit{Controesempio (Fenomeno di Runge).}
+Consideriamo la cosiddetta funzione di Runge, definita come:
+\begin{equation*}
+f:[ -5,5]\rightarrow \mathbb{R} \quad f(x) =\frac{1}{1+x^{2}}.
+\end{equation*}
+Se si prova a interpolare la \textbf{funzione di Runge}\index{funzione!di Runge} su un set di nodi equispaziati, per $n$ che cresce si generano delle oscillazioni via via sempre più marcate, come si vede in figura \ref{fig-runge}.
+
+\fg[Fenomeno di Runge con polinomi interpolanti di grado $n$ crescente.]{0.6}{fig-runge}
+
+Le oscillazioni, all'aumentare del grado, peggiorano solo \textit{in prossimità degli estremi dell'intervallo}.
+
+
+ Le possibili soluzioni al fenomeno di Runge sono:
+\begin{enumerate}
+\item Utilizzo di \textbf{nodi non equispaziati}, concentrati agli estremi, dove ci sono oscillazioni
+\item Utilizzo di \textbf{nodi equispaziati o non equispaziati} ma con metodi diversi:
+\begin{enumerate}
+\item \textit{Interpolazione composita}: si divide l'intervallo di approssimazione in più parti calcolando su ciascun sottointervallo un polinomio interpolante di grado $n$ non elevato $\Pi ^{n}_{h} f$.
+\item \textit{Approssimazione nel senso dei minimi quadrati}, un approccio diverso dall'interpolazione vista finora.
+\end{enumerate}
+\end{enumerate}
+\section{Utilizzo di nodi non equispaziati}
+\index{nodi!non equispaziati}\label{sec:interpolazione-non-equispaziata}
+\subsection{Nodi di Chebyshev-Gauss-Lobatto (CGL)}
+\index{nodi!di Chebyshev-Gauss-Lobatto}
+Il seguente ragionamento sarà applicato all'intervallo $I=[ -1,1]$, ma esso può essere esteso a tutto $\mathbb{R}$. Consideriamo la semicirconferenza unitaria, fissando $n$ e dividendola in $n$ spicchi di ampiezza $\frac{\pi }{n}$.
+Per esempio, se $n=6$ si ha:
+
+\begin{figure}[htpb]
+	\centering
+	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
+
+	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+	%uncomment if require: \path (0,177); %set diagram left start at 0, and has height of 177
+
+	%Shape: Axis 2D [id:dp28920976706554846]
+	\draw  (147.5,134.11) -- (451.5,134.11)(299.5,8.67) -- (299.5,152.78) (444.5,129.11) -- (451.5,134.11) -- (444.5,139.11) (294.5,15.67) -- (299.5,8.67) -- (304.5,15.67)  ;
+	%Shape: Circle [id:dp9498181842213234]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (297.33,134.11) .. controls (297.33,132.91) and (298.3,131.94) .. (299.5,131.94) .. controls (300.7,131.94) and (301.67,132.91) .. (301.67,134.11) .. controls (301.67,135.31) and (300.7,136.28) .. (299.5,136.28) .. controls (298.3,136.28) and (297.33,135.31) .. (297.33,134.11) -- cycle ;
+	%Shape: Arc [id:dp9516587242954431]
+	\draw  [draw opacity=0] (200.5,133.37) .. controls (200.9,79.03) and (245.07,35.11) .. (299.5,35.11) .. controls (353.96,35.11) and (398.15,79.09) .. (398.5,133.47) -- (299.5,134.11) -- cycle ; \draw   (200.5,133.37) .. controls (200.9,79.03) and (245.07,35.11) .. (299.5,35.11) .. controls (353.96,35.11) and (398.15,79.09) .. (398.5,133.47) ;
+	%Shape: Boxed Line [id:dp4652733397149975]
+	\draw    (299.5,134.11) -- (213.76,84.61) ;
+	%Straight Lines [id:da747760306166442]
+	\draw    (299.5,134.11) -- (250,48.37) ;
+	%Shape: Boxed Line [id:dp3131950747001577]
+	\draw    (299.5,134.11) -- (385.24,84.61) ;
+	%Straight Lines [id:da26944541377482634]
+	\draw    (299.5,134.11) -- (349,48.37) ;
+	%Straight Lines [id:da5264596630206395]
+	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (349,134.25) -- (349,48.37) ;
+	%Straight Lines [id:da9910633125291166]
+	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (385.24,134.25) -- (385.24,84.61) ;
+	%Shape: Circle [id:dp28057307423967504]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (396.33,133.47) .. controls (396.33,132.27) and (397.3,131.3) .. (398.5,131.3) .. controls (399.69,131.3) and (400.66,132.27) .. (400.66,133.47) .. controls (400.66,134.67) and (399.69,135.64) .. (398.5,135.64) .. controls (397.3,135.64) and (396.33,134.67) .. (396.33,133.47) -- cycle ;
+	%Shape: Circle [id:dp8038291186526589]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (198.34,133.37) .. controls (198.34,132.17) and (199.31,131.2) .. (200.5,131.2) .. controls (201.7,131.2) and (202.67,132.17) .. (202.67,133.37) .. controls (202.67,134.56) and (201.7,135.53) .. (200.5,135.53) .. controls (199.31,135.53) and (198.34,134.56) .. (198.34,133.37) -- cycle ;
+	%Straight Lines [id:da9795650683884123]
+	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (250,134.25) -- (250,48.37) ;
+	%Straight Lines [id:da5415344160854358]
+	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (213.76,134.25) -- (213.76,84.61) ;
+	%Shape: Circle [id:dp0804362878553726]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (211.6,134.08) .. controls (211.6,132.89) and (212.57,131.92) .. (213.76,131.92) .. controls (214.96,131.92) and (215.93,132.89) .. (215.93,134.08) .. controls (215.93,135.28) and (214.96,136.25) .. (213.76,136.25) .. controls (212.57,136.25) and (211.6,135.28) .. (211.6,134.08) -- cycle ;
+	%Shape: Circle [id:dp8087155929860674]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (247.83,134.25) .. controls (247.83,133.05) and (248.8,132.08) .. (250,132.08) .. controls (251.2,132.08) and (252.17,133.05) .. (252.17,134.25) .. controls (252.17,135.45) and (251.2,136.42) .. (250,136.42) .. controls (248.8,136.42) and (247.83,135.45) .. (247.83,134.25) -- cycle ;
+	%Shape: Circle [id:dp21102697503346013]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (346.83,134.25) .. controls (346.83,133.05) and (347.8,132.08) .. (349,132.08) .. controls (350.2,132.08) and (351.17,133.05) .. (351.17,134.25) .. controls (351.17,135.45) and (350.2,136.42) .. (349,136.42) .. controls (347.8,136.42) and (346.83,135.45) .. (346.83,134.25) -- cycle ;
+	%Shape: Circle [id:dp310009003820201]
+	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (383.07,134.25) .. controls (383.07,133.05) and (384.04,132.08) .. (385.24,132.08) .. controls (386.43,132.08) and (387.4,133.05) .. (387.4,134.25) .. controls (387.4,135.45) and (386.43,136.42) .. (385.24,136.42) .. controls (384.04,136.42) and (383.07,135.45) .. (383.07,134.25) -- cycle ;
+
+	% Text Node
+	\draw (405,96.4) node [anchor=north west][inner sep=0.75pt]    {$\vartheta =\frac{\pi }{6}$};
+	% Text Node
+	\draw (187,144.4) node [anchor=north west][inner sep=0.75pt]    {$-1$};
+	% Text Node
+	\draw (396,144.4) node [anchor=north west][inner sep=0.75pt]    {$1$};
+	\end{tikzpicture}
+\end{figure}
+\FloatBarrier
+
+I nodi $x_{i}$ sono definiti come
+\begin{equation}
+x_{i} =-\cos\left(\frac{\pi i}{n}\right) ,\quad i=0,\dotsc ,n.
+\label{eq:def-nodi-cgl}
+\end{equation}
+Si può dimostrare che se $f\in C^1(I)$, $\|E_{n}\|_\infty =\| \Pi _{n} f-f\|_\infty \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CGL.
+\subsection{Nodi di Chebyshev-Gauss (CG)}
+\index{nodi!di Chebyshev-Gauss}
+Scegliamo solo i nodi che sono interni ad $I=[ -1,1]$, quindi tralasciando gli estremi. In questo modo:
+\begin{equation}
+x_{i} =-\cos\left(\frac{\pi ( 2i+1)}{2( n+1)}\right) ,\quad i=0,\dotsc ,n.
+\label{eq:def-nodi-cg}
+\end{equation}
+Si può dimostrare che se $f$ è sufficientemente regolare, $\|E_{n}\|_\infty =\| \Pi _{n} f-f\|_\infty \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CG.
+
+\textbf{NB.}
+Sull'intervallo generico $[ a,b]$ i nodi di CGL e CG si ottengono da \eqref{eq:def-nodi-cgl} e da \eqref{eq:def-nodi-cg} con una trasformazione lineare:
+\begin{equation*}
+\hat{x}_{i} =\frac{a+b}{2} +\frac{b-a}{2} x_{i}, \quad i=0,\dotsc ,n.
+\end{equation*}
+
+\section{Interpolazione composita}
+\index{interpolazione!composita}
+\subsection{Interpolazione composita con nodi generici}
+Assegnata $f:I\rightarrow \mathbb{R}$, vogliamo approssimare $f$ usando nodi qualunque, dividendo $[ a,b]$ in sottointervalli.
+\begin{enumerate}
+    \item Scegliamo i nodi di interpolazione $x_0,\dots,x_M$, dividendo quindi $I$ in $M$ sottointervalli di ampiezza $h_i$
+    $$I_{i} =[ x_{i} ,x_{i+1}] \quad i=0,\dotsc ,M-1, \quad h_{i} =x_{i+1}-x_i,\quad H=\max_{i}h_i.$$
+    \item Su ciascun sottointervallo $I_{i}$ approssimiamo la funzione con un polinomio $\Pi ^{H}_{k} f(x)$ di interpolazione di Lagrange di grado $k\geqslant 1$, con $k$ \textit{non troppo grande} in modo da ovviare ai problemi di oscillazione.
+\end{enumerate}
+Quindi il polinomio di interpolazione composita $\Pi ^{H}_{k} f(x)$ soddisfa le seguenti proprietà:
+\begin{itemize}
+    \item $\Pi ^{H}_{k} f\in C^0([a,b])$
+    \item $\Pi ^{H}_{k} f|_{I_i}\in \mathbb P^k(I_i)\quad \forall i=0,\dots ,M-1$
+    \item $\Pi ^{H}_{k} f(x_i)=y_i\quad \forall i=0,\dots ,M$
+\end{itemize}
+
+\subsection{Interpolazione composita lineare}
+Per $k=1$, in ogni intervallo possiamo scrivere il polinomio di interpolazione di Lagrange come
+\begin{equation*}
+    \Pi ^{H}_{k} f|_{I_i}(x)=f(x_i)+\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}(x-x_i)
+\end{equation*}
+Poiché questa è un'interpolazione lineare effettuata su $2$ nodi (che essendo solo $2$ sono "equispaziati"), supponendo $f\in C^2$ possiamo usare la disuguaglianza dell'errore presentata precedentemente:
+\begin{equation*}
+    \|E_n\|_{\infty,I_i}=\|f(x)- \Pi ^{H}_{k} f|_{I_i}(x)\|_\infty \le \frac{h^{k+1}}{4(k+1)}\| \!f^{(k+1)}(x) \|_{\infty,I_i} = \frac{h_i^2}{8}\ \|f''(x)\|_{\infty,I_i}
+\end{equation*}
+Ora valutiamo l'errore nell'intero intervallo $I$, considerando il massimo che l'errore assume tra tutti gli $I_i$:
+\begin{equation*}
+    \|E_n\|_{\infty,I}\le \underbrace{\frac{H^2}8}_A \underbrace{\|f''(x)\|_{\infty,I}}_B
+\end{equation*}
+Come nel caso trattato precedentemente, il termine $A$ tende a $0$ per $M\to\infty$, ma adesso $B$ è una costante e ciò garantisce che $\|E_M\|_\infty \xrightarrow{M\to \infty}0$.
+\begin{figure}[htpb]
+	\centering
+    \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+    
+    \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+    %uncomment if require: \path (0,235); %set diagram left start at 0, and has height of 235
+    
+    %Shape: Axis 2D [id:dp18444718817100658] 
+    \draw  (161.5,168.37) -- (465.5,168.37)(191.9,38.67) -- (191.9,182.78) (458.5,163.37) -- (465.5,168.37) -- (458.5,173.37) (186.9,45.67) -- (191.9,38.67) -- (196.9,45.67)  ;
+    %Straight Lines [id:da062172154656692125] 
+    \draw    (293.33,164.67) -- (293.33,173.33) ;
+    %Shape: Circle [id:dp7214422439638635] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (261.17,100.17) .. controls (261.17,98.42) and (262.58,97) .. (264.33,97) .. controls (266.08,97) and (267.5,98.42) .. (267.5,100.17) .. controls (267.5,101.92) and (266.08,103.33) .. (264.33,103.33) .. controls (262.58,103.33) and (261.17,101.92) .. (261.17,100.17) -- cycle ;
+    %Shape: Circle [id:dp3795620538286856] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (289.17,97.67) .. controls (289.17,95.92) and (290.58,94.51) .. (292.33,94.51) .. controls (294.08,94.51) and (295.5,95.92) .. (295.5,97.67) .. controls (295.5,99.42) and (294.08,100.84) .. (292.33,100.84) .. controls (290.58,100.84) and (289.17,99.42) .. (289.17,97.67) -- cycle ;
+    %Curve Lines [id:da4712863514460399] 
+    \draw    (229.6,150.8) .. controls (236.4,139.2) and (244.4,127.2) .. (254.33,111.67) .. controls (263.6,99.6) and (273.87,80.94) .. (304.33,105.67) .. controls (334.8,130.4) and (390.27,140.14) .. (414.33,89.67) .. controls (425.2,65.2) and (429.6,57.6) .. (435.6,44) ;
+    %Straight Lines [id:da3752186519870171] 
+    \draw    (344.33,164.67) -- (344.33,173.33) ;
+    %Straight Lines [id:da4559519736586207] 
+    \draw    (384.33,164.67) -- (384.33,173.33) ;
+    %Straight Lines [id:da8960631674092833] 
+    \draw    (264.33,164.67) -- (264.33,173.33) ;
+    %Straight Lines [id:da8212422896339734] 
+    \draw    (424.33,164.67) -- (424.33,173.33) ;
+    %Shape: Circle [id:dp7699308608601513] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (341.17,125.17) .. controls (341.17,123.42) and (342.58,122) .. (344.33,122) .. controls (346.08,122) and (347.5,123.42) .. (347.5,125.17) .. controls (347.5,126.92) and (346.08,128.33) .. (344.33,128.33) .. controls (342.58,128.33) and (341.17,126.92) .. (341.17,125.17) -- cycle ;
+    %Shape: Circle [id:dp7749796192574097] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (381.17,120.17) .. controls (381.17,118.42) and (382.58,117) .. (384.33,117) .. controls (386.08,117) and (387.5,118.42) .. (387.5,120.17) .. controls (387.5,121.92) and (386.08,123.33) .. (384.33,123.33) .. controls (382.58,123.33) and (381.17,121.92) .. (381.17,120.17) -- cycle ;
+    %Shape: Circle [id:dp21920595374543028] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (421.17,68.17) .. controls (421.17,66.42) and (422.58,65) .. (424.33,65) .. controls (426.08,65) and (427.5,66.42) .. (427.5,68.17) .. controls (427.5,69.92) and (426.08,71.33) .. (424.33,71.33) .. controls (422.58,71.33) and (421.17,69.92) .. (421.17,68.17) -- cycle ;
+    %Straight Lines [id:da711773099353101] 
+    \draw    (344.33,183.33) -- (384.33,183.33) ;
+    \draw [shift={(384.33,183.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+    \draw [shift={(344.33,183.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
+    %Straight Lines [id:da2561639103232428] 
+    \draw    (384.33,120.17) -- (400.75,109.17) ;
+    %Straight Lines [id:da030147884442299544] 
+    \draw    (384.33,120.17) -- (344.33,125.17) ;
+    %Straight Lines [id:da9060532424330414] 
+    \draw    (292.33,97.67) -- (344.33,125.17) ;
+    %Straight Lines [id:da9160326772746151] 
+    \draw    (292.33,97.67) -- (261.17,100.17) ;
+    %Straight Lines [id:da7721416652906353] 
+    \draw    (401.33,164.67) -- (401.33,173.33) ;
+    %Shape: Circle [id:dp5685147729949077] 
+    \draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (397.58,109.17) .. controls (397.58,107.42) and (399,106) .. (400.75,106) .. controls (402.5,106) and (403.92,107.42) .. (403.92,109.17) .. controls (403.92,110.92) and (402.5,112.33) .. (400.75,112.33) .. controls (399,112.33) and (397.58,110.92) .. (397.58,109.17) -- cycle ;
+    %Straight Lines [id:da854138099346445] 
+    \draw    (400.75,109.17) -- (424.33,68.17) ;
+    
+    % Text Node
+    \draw (170,28.4) node [anchor=north west][inner sep=0.75pt]    {$y$};
+    % Text Node
+    \draw (477,157.4) node [anchor=north west][inner sep=0.75pt]    {$x$};
+    % Text Node
+    \draw (359,188.4) node [anchor=north west][inner sep=0.75pt]    {$h_{i}$};
+    
+    
+    \end{tikzpicture}
+    
+	\caption{Già nel caso di interpolazione composita con $k=1$ si può notare visivamente una maggiore \textit{precisione} nell'interpolazione, data dal fatto che stiamo lavorando su tanti intervalli di ampiezza $h_i$, pur usando un banale polinomio lineare.}
+\end{figure}
+
+\subsection{Interpolazione composita di gradi superiori al primo}
+Vogliamo ora generalizzare il risultato ottenuto per l'interpolazione lineare a tratti.
+Poiché un polinomio di grado superiore al primo richiede più di due nodi, all'interno di ciascun sottointervallo andiamo a scegliere ulteriori nodi, che ipotizziamo equispaziati.
+
+In maniera analoga al caso lineare possiamo applicare in ciascun sottointervallo la stima dell'errore per nodi equispaziati, ottenendo il seguente teorema.
+
+\begin{theorem}
+Sia $f\in C^{k+1}(I)$ e sia $\Pi ^{H}_{k} f(x)$ il suo polinomio di interpolazione composita. Allora:
+\begin{equation*}
+\left\Vert f(x) -\Pi ^{H}_{k} f(x)\right\Vert _{\infty } \leqslant \frac{H^{k+1}}{4(k+1)} \ \left\Vert f^{( k+1)}\right\Vert _{\infty }.
+\end{equation*}
+\end{theorem}
+\textit{Osservazione.}
+Nonostante l'errore tenda a $0$ più velocemente all'aumentare di $M$, le richieste di regolarità sulla funzione sono sempre più gravose. Oltretutto la regolarità di $f$ non viene rispecchiata dal polinomio di interpolazione composita, che continua ad essere solo $C^0$. Per garantire una maggiore regolarità dell'interpolante, bisogna ricorrere a oggetti più sofisticati, come le splines.
+
+\subsection{Splines cubiche interpolatorie}
+Queste funzioni soddisfano le seguenti proprietà\footnote{
+Le proprietà presentate in realtà danno origine a $4M-2$ equazioni, ma bisogna dare l'identità a $4 M$ coefficienti in quanto vanno definiti $M$ polinomi di grado $3$. Per garantire l'unicità dell'approssimazione bisognerebbe dunque aggiungere 2 condizioni.}:
+\begin{itemize}
+    \item $S_3(x_i)=f(x_i)\quad \forall x_i$
+    \item $S_3|_{I_i}\in \mathbb P^3(I_i)\quad \forall I_ i$
+    \item $S_3\in C^2(I)$
+\end{itemize}
+
+Le splines cubiche sono talmente accurate che si possono usare anche per approssimare $f'$ e $f''$.
+\begin{theorem}
+Sia $f$ sufficientemente regolare e sia $S_3(x)$ la sua spline cubica interpolatoria. Allora per $q=0,1,2$:
+\begin{equation*}
+\left\Vert f^{(q)}(x) -S_3^{(q)}(x)\right\Vert _{\infty } \leqslant C_q H^{4-q} \ \left\Vert f^{(4)}(x)\right\Vert _{\infty }
+\end{equation*}
+\end{theorem}
+
+
 % \textit{[Lezione 11 (06-04-2020)]}
 \section{Stabilità del polinomio di interpolazione}
 \label{sec:stabilita-pol-interpolazione}
-Una proprietà desiderabile per un polinomio di interpolazione $\Pi _{n} f(x)$ è che l'errore tenda a zero se $n\rightarrow \infty $. In questa sezione sarà presentato un significativo controesempio (detto \textit{di Runge}), che mostra come basti aumentare $n$ di poco per far emergere problemi di stabilità agli estremi dell'intervallo. Nelle sezioni successive saranno presentati metodi per risolvere questo problema, ad esempio usando nodi non equispaziati.
 
 Sia $x_{0} ,x_{1} ,\dotsc ,x_{n}$ un insieme di $n+1$ punti distinti:
 
@@ -430,197 +736,22 @@ Passando ora alla norma infinito:
 Notiamo che $\Lambda_{n}(x)$ dipende solo dalla distribuzione dei nodi di approssimazione.
 Essa prende il nome di \textbf{costante di Lebesgue} in quanto valore noto se i nodi sono fissati, e indipendente dalla funzione approssimata. In un certo senso è il \textit{condizionamento} del problema.
 
-Concludiamo che l'errore di perturbazione è piccolo solo se $\Lambda_{n}(x)$ è piccola. In generale, non possiamo garantirlo, in quanto cresce per $n\rightarrow +\infty $. Si può però dimostrare che prendendo i nodi di interpolazione \textit{equispaziati}, allora:
-\begin{equation*}
-\Lambda _{n}(x) =\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty } \approx \frac{2^{n+1}}{e\, n\, (\log n+\gamma )} ,\quad\gamma \approx \frac{1}{2} .
-\end{equation*}
-
-\textit{Controesempio (Fenomeno di Runge).}
-Consideriamo la cosiddetta funzione di Runge, definita come:
-\begin{equation*}
-f:[ -5,5]\rightarrow \mathbb{R} \quad f(x) =\frac{1}{1+x^{2}}.
-\end{equation*}
-Se si prova a interpolare la \textbf{funzione di Runge}\index{funzione!di Runge} su un set di nodi equispaziati, per $n$ che cresce si generano delle oscillazioni via via sempre più marcate, come si vede in figura \ref{fig-runge}.
-
-\fg[Fenomeno di Runge con polinomi interpolanti di grado $n$ crescente.]{0.6}{fig-runge}
-
-Le oscillazioni, all'aumentare del grado, peggiorano solo \textit{in prossimità degli estremi dell'intervallo}. Le possibili soluzioni al fenomeno di Runge sono:
-\begin{enumerate}
-\item Utilizzo di \textbf{nodi non equispaziati}\index{nodi!non equispaziati}, concentrati dove ci sono oscillazioni agli estremi
-\item Utilizzo di \textbf{nodi equispaziati}\index{nodi!equispaziati} ma con metodi diversi:
-\begin{enumerate}
-\item \textit{Interpolazione composita}: si divide l'intervallo di approssimazione in più parti calcolando su ciascun sottointervallo un polinomio interpolante di grado $n$ non elevato $\Pi ^{n}_{h} f$.
-\item \textit{Approssimazione nel senso dei minimi quadrati}, un approccio diverso dall'interpolazione vista finora.
-\end{enumerate}
-\end{enumerate}
-\section{Utilizzo dei nodi non equispaziati}
-\subsection{Nodi di Chebyshev-Gauss-Lobatto (CGL)}
-\index{nodi!di Chebyshev-Gauss-Lobatto}
-Il seguente ragionamento sarà applicato all'intervallo $I=[ -1,1]$, ma esso può essere esteso a tutto $\mathbb{R}$. Consideriamo la semicirconferenza unitaria, fissando $n$ e dividendola in $n$ spicchi di ampiezza $\frac{\pi }{n}$.
-Per esempio, se $n=6$ si ha:
-
-\begin{figure}[htpb]
-	\centering
-	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
-
-	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
-	%uncomment if require: \path (0,177); %set diagram left start at 0, and has height of 177
-
-	%Shape: Axis 2D [id:dp28920976706554846]
-	\draw  (147.5,134.11) -- (451.5,134.11)(299.5,8.67) -- (299.5,152.78) (444.5,129.11) -- (451.5,134.11) -- (444.5,139.11) (294.5,15.67) -- (299.5,8.67) -- (304.5,15.67)  ;
-	%Shape: Circle [id:dp9498181842213234]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (297.33,134.11) .. controls (297.33,132.91) and (298.3,131.94) .. (299.5,131.94) .. controls (300.7,131.94) and (301.67,132.91) .. (301.67,134.11) .. controls (301.67,135.31) and (300.7,136.28) .. (299.5,136.28) .. controls (298.3,136.28) and (297.33,135.31) .. (297.33,134.11) -- cycle ;
-	%Shape: Arc [id:dp9516587242954431]
-	\draw  [draw opacity=0] (200.5,133.37) .. controls (200.9,79.03) and (245.07,35.11) .. (299.5,35.11) .. controls (353.96,35.11) and (398.15,79.09) .. (398.5,133.47) -- (299.5,134.11) -- cycle ; \draw   (200.5,133.37) .. controls (200.9,79.03) and (245.07,35.11) .. (299.5,35.11) .. controls (353.96,35.11) and (398.15,79.09) .. (398.5,133.47) ;
-	%Shape: Boxed Line [id:dp4652733397149975]
-	\draw    (299.5,134.11) -- (213.76,84.61) ;
-	%Straight Lines [id:da747760306166442]
-	\draw    (299.5,134.11) -- (250,48.37) ;
-	%Shape: Boxed Line [id:dp3131950747001577]
-	\draw    (299.5,134.11) -- (385.24,84.61) ;
-	%Straight Lines [id:da26944541377482634]
-	\draw    (299.5,134.11) -- (349,48.37) ;
-	%Straight Lines [id:da5264596630206395]
-	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (349,134.25) -- (349,48.37) ;
-	%Straight Lines [id:da9910633125291166]
-	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (385.24,134.25) -- (385.24,84.61) ;
-	%Shape: Circle [id:dp28057307423967504]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (396.33,133.47) .. controls (396.33,132.27) and (397.3,131.3) .. (398.5,131.3) .. controls (399.69,131.3) and (400.66,132.27) .. (400.66,133.47) .. controls (400.66,134.67) and (399.69,135.64) .. (398.5,135.64) .. controls (397.3,135.64) and (396.33,134.67) .. (396.33,133.47) -- cycle ;
-	%Shape: Circle [id:dp8038291186526589]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (198.34,133.37) .. controls (198.34,132.17) and (199.31,131.2) .. (200.5,131.2) .. controls (201.7,131.2) and (202.67,132.17) .. (202.67,133.37) .. controls (202.67,134.56) and (201.7,135.53) .. (200.5,135.53) .. controls (199.31,135.53) and (198.34,134.56) .. (198.34,133.37) -- cycle ;
-	%Straight Lines [id:da9795650683884123]
-	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (250,134.25) -- (250,48.37) ;
-	%Straight Lines [id:da5415344160854358]
-	\draw  [dash pattern={on 0.84pt off 2.51pt}]  (213.76,134.25) -- (213.76,84.61) ;
-	%Shape: Circle [id:dp0804362878553726]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (211.6,134.08) .. controls (211.6,132.89) and (212.57,131.92) .. (213.76,131.92) .. controls (214.96,131.92) and (215.93,132.89) .. (215.93,134.08) .. controls (215.93,135.28) and (214.96,136.25) .. (213.76,136.25) .. controls (212.57,136.25) and (211.6,135.28) .. (211.6,134.08) -- cycle ;
-	%Shape: Circle [id:dp8087155929860674]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (247.83,134.25) .. controls (247.83,133.05) and (248.8,132.08) .. (250,132.08) .. controls (251.2,132.08) and (252.17,133.05) .. (252.17,134.25) .. controls (252.17,135.45) and (251.2,136.42) .. (250,136.42) .. controls (248.8,136.42) and (247.83,135.45) .. (247.83,134.25) -- cycle ;
-	%Shape: Circle [id:dp21102697503346013]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (346.83,134.25) .. controls (346.83,133.05) and (347.8,132.08) .. (349,132.08) .. controls (350.2,132.08) and (351.17,133.05) .. (351.17,134.25) .. controls (351.17,135.45) and (350.2,136.42) .. (349,136.42) .. controls (347.8,136.42) and (346.83,135.45) .. (346.83,134.25) -- cycle ;
-	%Shape: Circle [id:dp310009003820201]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (383.07,134.25) .. controls (383.07,133.05) and (384.04,132.08) .. (385.24,132.08) .. controls (386.43,132.08) and (387.4,133.05) .. (387.4,134.25) .. controls (387.4,135.45) and (386.43,136.42) .. (385.24,136.42) .. controls (384.04,136.42) and (383.07,135.45) .. (383.07,134.25) -- cycle ;
-
-	% Text Node
-	\draw (405,96.4) node [anchor=north west][inner sep=0.75pt]    {$\vartheta =\frac{\pi }{6}$};
-	% Text Node
-	\draw (187,144.4) node [anchor=north west][inner sep=0.75pt]    {$-1$};
-	% Text Node
-	\draw (396,144.4) node [anchor=north west][inner sep=0.75pt]    {$1$};
-	\end{tikzpicture}
-\end{figure}
-\FloatBarrier
-
-I nodi $x_{i}$ sono definiti come
-\begin{equation}
-x_{i} =-\cos\left(\frac{\pi i}{n}\right) ,\quad i=0,\dotsc ,n.
-\label{eq:def-nodi-cgl}
-\end{equation}
-Si può dimostrare che:
+Concludiamo che l'errore di perturbazione è piccolo solo se $\Lambda_{n}(x)$ è piccola. In generale, non possiamo garantirlo, in quanto cresce per $n\rightarrow +\infty $. Si può dimostrare che
 \begin{itemize}
-\item $E_{n} =| \Pi _{n} f-f| \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CGL.
-\item Vale che:
-$$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log n+\gamma +\log\frac{8}{\pi ^{2}}\right] +\frac{\pi }{72n^{2}}.$$
+    \item prendendo i nodi di interpolazione \textit{equispaziati}:
+        \begin{equation*}
+            \Lambda _{n}(x) =\left\Vert \sum ^{n}_{i=0}\mathcal{L}_{i}(x)\right\Vert _{\infty } \approx \frac{2^{n+1}}{e\, n\, (\log n+\gamma )} ,\quad\gamma \approx \frac{1}{2} ,
+        \end{equation*}
+    quindi con questi nodi all'aumentare di $n$ il polinomio di interpolazione diventa rapidamente più sensibile alle perturbazioni ($\approx 2^n$).
+    \item Per i nodi CGL, l'andamento è logaritmico:
+    $$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log n+\gamma +\log\frac{8}{\pi ^{2}}\right] +\frac{\pi }{72n^{2}}.$$
+    \item Per i nodi CG, analogamente vale:
+    $$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log( n+1) +\gamma +\log\frac{8}{\pi }\right] +\frac{\pi }{72( n+1)^{2}}.$$
+        
 \end{itemize}
-\subsection{Nodi di Chebyshev-Gauss (CG)}
-\index{nodi!di Chebyshev-Gauss}
-Scegliamo solo i nodi che sono interni ad $I=[ -1,1]$, quindi tralasciando gli estremi. In questo modo:
-\begin{equation}
-x_{i} =-\cos\left(\frac{\pi ( 2i+1)}{2( n+1)}\right) ,\quad i=0,\dotsc ,n.
-\label{eq:def-nodi-cg}
-\end{equation}
-Si può dimostrare che:
-\begin{itemize}
-\item $E_{n} =| \Pi _{n} f-f| \xrightarrow{n\rightarrow \infty } 0$ con $\Pi _{n} f$ l'interpolante di Lagrange associata ai nodi di CG ($f$ sufficientemente regolare).
-\item Vale che:
-$$\Lambda _{n}(x) \leqslant \frac{2}{\pi }\left[\log( n+1) +\gamma +\log\frac{8}{\pi }\right] +\frac{\pi }{72( n+1)^{2}}.$$
-\end{itemize}
-\textbf{NB.}
-Sull'intervallo generico $[ a,b]$ i nodi di CGL e CG si ottengono da \eqref{eq:def-nodi-cgl} e da \eqref{eq:def-nodi-cg} con una trasformazione lineare:
-\begin{equation*}
-\hat{x}_{i} =\frac{a+b}{2} +\frac{b-a}{2} x_{i}, \quad i=0,\dotsc ,n.
-\end{equation*}
-
-\section{Interpolazione composita}
-\index{interpolazione!composita}
-Assegnata $f:[ a,b]\rightarrow \mathbb{R}$, vogliamo approssimare $f$ usando nodi equispaziati con $n$ piccolo e dividendo $[ a,b]$ in sottointervalli.
-In particolare:
-\begin{enumerate}
-\item Dividiamo $[ a,b]$ in $M\ $intervalli di ampiezza $h$, con
-$$I_{i} =[ x_{i} ,x_{i+1}] \quad i=0,\dotsc ,M-1 \quad \text{e} \quad x_{i} =a+ih.$$
-\item Su ciascun sottointervallo $I_{i}$ approssimiamo la funzione con un polinomio $\Pi ^{k}_{h} f(x)$ di interpolazione di Lagrange di grado $k\geqslant 1$, con $k$ \textit{non troppo grande} in modo da ovviare ai problemi di stabilità. Quindi il polinomio di interpolazione composita $\Pi ^{k}_{h} f(x)$ appartiene allo spazio
-\begin{equation*}
-\Pi ^{k}_{h} f(x) \in X^{k}_{h} =\left\{v\in C^{0}([ a,b]) \ t.c.\ v|_{I_{i}} \in \mathbb{P}_{k}( I_{i}), \quad \forall i=0,\dotsc ,n-1\right\}.
-\end{equation*}
-\end{enumerate}
-
-\begin{figure}[ht]
-	\centering
-	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
-
-	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
-	%uncomment if require: \path (0,201); %set diagram left start at 0, and has height of 201
-
-	%Shape: Axis 2D [id:dp5938785059494647]
-	\draw  (177.5,157.6) -- (481.5,157.6)(207.9,48) -- (207.9,169.78) (474.5,152.6) -- (481.5,157.6) -- (474.5,162.6) (202.9,55) -- (207.9,48) -- (212.9,55)  ;
-	%Straight Lines [id:da34535391593873066]
-	\draw    (320.33,153.67) -- (320.33,162.33) ;
-	%Curve Lines [id:da7054939579876551]
-	\draw    (255.6,149.8) .. controls (259.67,137.33) and (260.4,136.2) .. (270.33,120.67) .. controls (279.6,108.6) and (289.87,89.94) .. (320.33,114.67) .. controls (350.8,139.4) and (406.27,149.14) .. (430.33,98.67) .. controls (441.2,74.2) and (445.6,66.6) .. (451.6,53) ;
-	%Straight Lines [id:da09149373809642669]
-	\draw    (360.33,153.67) -- (360.33,162.33) ;
-	%Straight Lines [id:da5265988284811343]
-	\draw    (400.33,153.67) -- (400.33,162.33) ;
-	%Straight Lines [id:da7794878884155887]
-	\draw    (280.33,153.67) -- (280.33,162.33) ;
-	%Straight Lines [id:da3837028907033768]
-	\draw    (440.33,153.67) -- (440.33,162.33) ;
-	%Straight Lines [id:da6132551084075859]
-	\draw    (360.33,172.33) -- (400.33,172.33) ;
-	\draw [shift={(400.33,172.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
-	\draw [shift={(360.33,172.33)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (0,5.59) -- (0,-5.59)   ;
-	%Straight Lines [id:da9684821626942524]
-	\draw    (400.33,129.17) -- (440.33,77.17) ;
-	%Straight Lines [id:da5816617011874519]
-	\draw    (400.33,129.17) -- (360.33,134.17) ;
-	%Straight Lines [id:da057117751608081635]
-	\draw    (320.33,114.67) -- (360.33,134.17) ;
-	%Straight Lines [id:da4096132454663459]
-	\draw    (320.33,114.67) -- (280.33,109.17) ;
-	%Shape: Circle [id:dp7809648208205671]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (278.33,109.17) .. controls (278.33,108.06) and (279.23,107.17) .. (280.33,107.17) .. controls (281.44,107.17) and (282.33,108.06) .. (282.33,109.17) .. controls (282.33,110.27) and (281.44,111.17) .. (280.33,111.17) .. controls (279.23,111.17) and (278.33,110.27) .. (278.33,109.17) -- cycle ;
-	%Shape: Circle [id:dp8526518373813228]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (318.33,114.67) .. controls (318.33,113.57) and (319.23,112.67) .. (320.33,112.67) .. controls (321.44,112.67) and (322.33,113.57) .. (322.33,114.67) .. controls (322.33,115.78) and (321.44,116.67) .. (320.33,116.67) .. controls (319.23,116.67) and (318.33,115.78) .. (318.33,114.67) -- cycle ;
-	%Shape: Circle [id:dp07951403743329943]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (358.33,134.17) .. controls (358.33,133.06) and (359.23,132.17) .. (360.33,132.17) .. controls (361.44,132.17) and (362.33,133.06) .. (362.33,134.17) .. controls (362.33,135.27) and (361.44,136.17) .. (360.33,136.17) .. controls (359.23,136.17) and (358.33,135.27) .. (358.33,134.17) -- cycle ;
-	%Shape: Circle [id:dp37361977339450303]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (398.33,129.17) .. controls (398.33,128.06) and (399.23,127.17) .. (400.33,127.17) .. controls (401.44,127.17) and (402.33,128.06) .. (402.33,129.17) .. controls (402.33,130.27) and (401.44,131.17) .. (400.33,131.17) .. controls (399.23,131.17) and (398.33,130.27) .. (398.33,129.17) -- cycle ;
-	%Shape: Circle [id:dp03985157045169618]
-	\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (438.33,77.17) .. controls (438.33,76.06) and (439.23,75.17) .. (440.33,75.17) .. controls (441.44,75.17) and (442.33,76.06) .. (442.33,77.17) .. controls (442.33,78.27) and (441.44,79.17) .. (440.33,79.17) .. controls (439.23,79.17) and (438.33,78.27) .. (438.33,77.17) -- cycle ;
-
-	% Text Node
-	\draw (186,37.4) node [anchor=north west][inner sep=0.75pt]    {$y$};
-	% Text Node
-	\draw (493,146.4) node [anchor=north west][inner sep=0.75pt]    {$x$};
-	% Text Node
-	\draw (375,177.4) node [anchor=north west][inner sep=0.75pt]    {$h$};
-	\end{tikzpicture}
-	\caption{Già nel caso di interpolazione composita con $k=1$ si può notare visivamente una maggiore \textit{precisione} nell'interpolazione, data dal fatto che stiamo lavorando su tanti intervalli di ampiezza $h$, pur usando un banale polinomio lineare.}
-\end{figure}
-
-\begin{theorem}
-Sia $f\in C^{k+1}(I) ,I=[ a,b]$ e sia $\Pi ^{k}_{h} f(x)$ il suo polinomio di interpolazione composita. Allora:
-\begin{equation*}
-\left\Vert f(x) -\Pi ^{k}_{h} f(x)\right\Vert _{\infty } \leqslant C\ h^{k+1} \ \left\Vert f^{( k+1)}\right\Vert _{\infty }.
-\end{equation*}
-\end{theorem}
-\textit{Osservazione.} Per $k=1$ il teorema diventa
-\begin{equation*}
-\left\Vert f(x) -\Pi ^{1}_{h} f(x)\right\Vert _{\infty } \leqslant C\ h^{2} \ \Vert f''\Vert _{\infty }\xrightarrow{h\rightarrow 0} 0.
-\end{equation*}
 
 % \textit{[Lezione 12 (07-04-2020)]}
-\section{Approssimazione nel senso dei minimi quadrati}
+\section{Approssimazione nel senso dei minimi quadrati}\label{sec:dati-min-quadrati}
 Se i dati di cui siamo in possesso sono molto numerosi, potrebbe non aver senso cercare un'interpolazione su di essi, sia per ragioni di complessità computazionale, sia per il rischio di \textit{overfitting}, cioè la creazione di un'approssimazione eccessivamente accurata dei dati quando probabilmente essi sono affetti da errore.
 In un esempio bidimensionale, potrebbe essere sufficiente una retta che descrive il comportamento qualitativo di una ``nuvola'' di punti.
 
@@ -749,7 +880,7 @@ La soluzione $\begin{bmatrix}
 \end{bmatrix}.
 \end{equation*}
 Osserviamo anche che la matrice è SDP, quindi il sistema ammette una e una sola soluzione come visto nei teoremi \ref{thm:esistenza-unicita-sl} e \ref{thm:A-DP-invertibile}.
-\subsection{Caso generale}
+\subsection{Caso generale}\label{sec:caso-gen-min-quadrati}
 
 Sia $m\geqslant 1$. Si può procedere come prima e riscrivere $p_{m}(x)$ come:
 \begin{equation*}
@@ -787,7 +918,7 @@ allora:
 \sum ^{n}_{i=0} x^{m}_{i} y_{i}
 \end{bmatrix}.
 \end{equation*}
-Esso è un sistema di $( m+1)$ equazioni in $( m+1)$ incognite. La matrice è SDP, quindi il sistema ammette una e una sola soluzione:
+Esso è un sistema di $( m+1)$ equazioni in $( m+1)$ incognite, detto sistema delle equazioni normali. La matrice è SDP, quindi il sistema ammette una e una sola soluzione:
 \begin{equation*}
 \begin{bmatrix}
 \tilde{\alpha }_{0}\\
@@ -797,248 +928,3 @@ Esso è un sistema di $( m+1)$ equazioni in $( m+1)$ incognite. La matrice è SD
 \end{bmatrix}
 \end{equation*}
 che è l'insieme di coefficienti che identificano il polinomio di approssimazione nel senso dei minimi quadrati.
-\section{Sistemi lineari sovradeterminati}
-
-Prendiamo un sistema lineare della forma:
-\begin{equation*}
-A\x =\mathbf{b}
-\end{equation*}
-dove $A\in \mathbb{R}^{m\times n} ,\mathbf{b} \in \mathbb{R}^{m} ,\x \in \mathbb{R}^{n}$. Il sistema si dice:
-\begin{itemize}
-\item \textbf{sovradeterminato}\index{sistema!sovradeterminato} se $m >n$,
-\item \textbf{sottodeterminato}\index{sistema!sottodeterminato} se $m< n$.
-\end{itemize}
-Approfondiremo ora i sistemi sovradeterminati, caso di maggiore interesse.
-Sia dunque $A\in \mathbb{R}^{m\times n} ,m\geqslant n$.
-Consideriamo il sistema lineare
-\begin{equation}
-A\x =\mathbf{b} ,\qquad\mathbf{b} \in \mathbb{R}^{m},
-\label{eq:sist-lin-sovradet}
-\end{equation}
-osserviamo che \eqref{eq:sist-lin-sovradet} ha soluzione nel senso classico del termine solo se il termine noto è un elemento del seguente spazio:
-\begin{equation*}
-\operatorname{range}(A) =\left\{\y \in \mathbb{R}^{m} \ \text{tale che} \ A\x =\y \ \text{per qualche} \ \x \in \mathbb{R}^{n}\right\}.
-\end{equation*}
-Dobbiamo quindi allargare il concetto di \textit{soluzione} per studiare un sistema sovradeterminato.
-\begin{definition}
-[Soluzione di un sistema lineare nel senso dei minimi quadrati]
-\index{soluzione!ai minimi quadrati}
-Dati $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, e $\mathbf{b} \in \mathbb{R}^{m}$, diciamo che $\x^{\star } \in \mathbb{R}^{n}$ è soluzione di \eqref{eq:sist-lin-sovradet} nel senso dei minimi quadrati se
-\begin{equation*}
-\Phi \left(\x^{\star }\right) =\min_{\x \in \mathbb{R}^{n}} \Phi (\x),
-\end{equation*}
-dove il funzionale da minimizzare è $\Phi (\mathbf{w}) =\Vert A\mathbf{w} -\mathbf{b}\Vert ^{2}_{2}$, il residuo nella norma euclidea.
-\end{definition}
-\textit{Osservazione.} Se $m=n$, la soluzione $\x^{\star }$ nel senso dei minimi quadrati coincide con la soluzione classica perché $\Phi \left(\x^{\star }\right) =0$.
-
-Dobbiamo chiarire se la soluzione ai minimi quadrati esista e se sia unica.
-\begin{lemma}
-Se la soluzione $\x^{\star }$ nel senso dei minimi quadrati di un sistema lineare esiste, essa coincide con la soluzione $\x^{\star }$ nel senso classico del \textit{sistema di equazioni normali}:
-\begin{equation*}
-A^{T} A\x^{\star } =A^{T}\mathbf{b}.
-\end{equation*}
-\end{lemma}
-\textit{Dimostrazione.}
-Scriviamo il funzionale da minimizzare:
-\begin{align*}
-\Phi (\x) & =\Vert A\x -\mathbf{b}\Vert ^{2}_{2}\\
- & =( A\x -\mathbf{b})^{T}( A\x -\mathbf{b})\\
- & =\left(( A\x)^{T} -\mathbf{b}^{T}\right)( A\x -\mathbf{b})\\
- & =( A\x)^{T} A\x\underbrace{-\mathbf{b}^{T} A\x -( A\x)^{T}\mathbf{b}}_{\langle A\x ,\mathbf{b} \rangle } +\mathbf{b}^{T}\mathbf{b}\\
- & =\x^{T} A^{T} A\x -2( A\x)^{T}\mathbf{b} +\mathbf{b}^{T}\mathbf{b}\\
- & =\x^{T} A^{T} A\x -2\x^{T} A^{T}\mathbf{b} +\mathbf{b}^{T}\mathbf{b}.
-\end{align*}
-Calcoliamone poi il gradiente
-\begin{equation*}
-\nabla \Phi (\x) =2A^{T} A\x -2A^{T}\mathbf{b}
-\end{equation*}
-e poniamolo uguale a zero per trovare il minimo:
-\begin{gather*}
-\nabla \Phi \left(\x^{\star }\right) =0\\
-\Updownarrow \\
-A^{T} A\x^{\star } -A^{T}\mathbf{b} =0\\
-\Updownarrow \\
-A^{T} A\x^{\star } =A^{T}\mathbf{b}.
-\end{gather*}
-\begin{theorem}
-Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$.
-Se $A$ ha rango pieno, cioè $\operatorname{rank}(A) =n$, allora $A^{T} A\in \mathbb{R}^{n\times n}$ è una matrice SDP e quindi il sistema di equazioni normali
-\begin{equation*}
-A^{T} A\x^{\star } =A^{T}\mathbf{b}
-\end{equation*}
-ammette una e una sola soluzione.
-\end{theorem}
-\textit{Osservazione.} Se $A^{T} A\x^{\star } =A^{T}\mathbf{b}$ ammette una e una sola soluzione in senso classico, allora \eqref{eq:sist-lin-sovradet} ammette una e una sola soluzione nel senso dei minimi quadrati.
-
-\textit{Osservazione.} In genere, la matrice $A^{T} A$ è molto mal condizionata, quindi nella pratica è spesso difficile risolvere il sistema di equazioni normali per calcolare $\x^{\star }$. Dobbiamo quindi trovare un altro modo di procedere per la risoluzione.
-\subsection{Fattorizzazione QR}
-Proviamo a generalizzare il concetto di fattorizzazione $LU$, visto nella sezione \ref{sec:fattorizzazione-lu} e proprio delle matrici quadrate, anche a matrici rettangolari come $A$.
-\begin{definition}
-[Fattorizzazione $QR$]
-\index{fattorizzazione!QR}
-Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$.
-Si dice che $A$ ammette una fattorizzazione $QR$ se esistono:
-\begin{itemize}
-\item $Q\in \mathbb{R}^{m\times m}$ ortogonale ($Q^{-1} =Q^{T}$);
-\item $R\in \mathbb{R}^{m\times n}$ trapezoidale superiore (con le righe dalla $n+1$ in poi tutte nulle) 
-\end{itemize}
-tali che $$A=QR$$
-\end{definition}
-\begin{equation*}
-\underbrace{\begin{bmatrix}
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot
-\end{bmatrix}}_{A\in \mathbb{R}^{m\times n}} =\underbrace{\begin{bmatrix}
-\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot  & \cdot  & \cdot
-\end{bmatrix}}_{Q\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
-\cdot  & \cdot  & \cdot \\
-0 & \cdot  & \cdot \\
-0 & 0 & \cdot \\
-0 & 0 & 0\\
-0 & 0 & 0
-\end{bmatrix}}_{R\in \mathbb{R}^{m\times n}}
-\end{equation*}
-\textbf{Proprietà (Fattorizzazione }$QR$\textbf{ ridotta).} \index{fattorizzazione!QR!ridotta} Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, di rango massimo di cui esista la fattorizzazione $QR$. Allora esiste un'unica fattorizzazione di $A$ tale che:
-\begin{equation*}
-A=\tilde{Q} \ \tilde{R}
-\end{equation*}
-dove $\tilde{Q}$ e $\tilde{R}$ sono le sottomatrici ottenute da $Q$ e $R$ nel seguente modo:
-\begin{itemize}
-\item $\tilde{Q} =Q( 1:m,1:n) \in \mathbb{R}^{m\times n}$;
-\item $\tilde{R} =R( 1:n,1:n) \in \mathbb{R}^{n\times n}$.
-\end{itemize}
-
-Inoltre le colonne di $\tilde{Q}$ sono vettori ortonormali e $\tilde{R}$ coincide con il fattore di Cholesky della matrice $A^{T} A$, ossia $A^{T} A=\tilde{R}^{T}\tilde{R}$.
-\begin{equation*}
-\underbrace{\begin{bmatrix}
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot
-\end{bmatrix}}_{A\in \mathbb{R}^{m\times n}} =\underbrace{\begin{bmatrix}
-\begin{array}{|c c c|}
-\hline
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \tilde{Q} & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\hline
-\end{array} & \begin{array}{ c }
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot
-\end{array} & \begin{array}{ c }
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot
-\end{array}
-\end{bmatrix}}_{Q\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
-\begin{array}{|c c c|}
-\hline
-\cdot  & \cdot  & \cdot \\
-0 & \tilde{R} & \cdot \\
-0 & 0 & \cdot \\
-\hline
-\end{array}\\
-\begin{array}{ c c c }
-0 & 0 & 0
-\end{array}\\
-\begin{array}{ c c c }
-0 & 0 & 0
-\end{array}
-\end{bmatrix}}_{R\in \mathbb{R}^{m\times n}}
-\end{equation*}
-Come usiamo $A=\tilde{Q} \ \tilde{R}$ per risolvere $A\x =\mathbf{b}$?
-\begin{theorem}
-Sia $A\in \mathbb{R}^{m\times n}$, $m\geqslant n$, di rango massimo, e sia $\mathbf{b} \in \mathbb{R}^{m}$. Allora esiste un'unica soluzione $\x^{\star } \in \mathbb{R}^{n}$ nel senso dei minimi quadrati del sistema sovradimensionato $A\x =\mathbf{b}$ ed essa è data da:
-\begin{equation*}
-\x^{\star } =\tilde{R}^{-1}\tilde{Q}^{T}\mathbf{b} \qquad \text{ovvero} \qquad \tilde{R}\x^{\star } =\tilde{Q}^{T}\mathbf{b}
-\end{equation*}
-dove $\tilde{Q}$ ed $\tilde{R}$ sono i fattori della decomposizione ridotta di $A$.
-\end{theorem}
-\begin{equation*}
-\underbrace{\begin{bmatrix}
-\begin{array}{|c c c|}
-\hline
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \tilde{Q} & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\cdot  & \cdot  & \cdot \\
-\hline
-\end{array} & \begin{array}{ c }
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot
-\end{array} & \begin{array}{ c }
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot
-\end{array}
-\end{bmatrix}}_{Q\in \mathbb{R}^{m\times m}}\underbrace{\begin{bmatrix}
-\begin{array}{|c c c|}
-\hline
-\cdot  & \cdot  & \cdot \\
-0 & \tilde{R} & \cdot \\
-0 & 0 & \cdot \\
-\hline
-\end{array}\\
-\begin{array}{ c c c }
-0 & 0 & 0
-\end{array}\\
-\begin{array}{ c c c }
-0 & 0 & 0
-\end{array}
-\end{bmatrix}}_{R\in \mathbb{R}^{m\times n}}\underbrace{\begin{bmatrix}
-\begin{array}{ c }
-\cdot \\
-\cdot \\
-\cdot
-\end{array}
-\end{bmatrix}}_{\x \in \mathbb{R}^{n}} =\underbrace{\begin{bmatrix}
-\begin{array}{ c }
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot \\
-\cdot
-\end{array}
-\end{bmatrix}}_{\mathbf{b} \in \mathbb{R}^{n}}
-\end{equation*}
-\textit{Idea di dimostrazione.} Ci concentreremo sulla dimostrazione dell'esistenza, tralasciando quella dell'unicità. Supponendo che $A$ ammetta una fattorizzazione $QR$, allora:
-\begin{align*}
-\Vert A\x -\mathbf{b}\Vert ^{2}_{2} & =\Vert QR\x -\mathbf{b}\Vert ^{2}_{2} & \\
- & =\left\Vert Q^{T} QR\x -Q^{T}\mathbf{b}\right\Vert ^{2}_{2} & \Vert \mathbf{z}\Vert _{2} =\left\Vert Q^{T}\mathbf{z}\right\Vert _{2} \ \forall \mathbf{z}\\
- & =\left\Vert R\x -Q^{T}\mathbf{b}\right\Vert ^{2}_{2} & \text{($Q$ è ortogonale)}\\
- & =\left\Vert \tilde{R}\x -\tilde{Q}^{T}\mathbf{b}\right\Vert ^{2}_{2} +\sum ^{m}_{i=n+1}\left[\left( Q^{T}\mathbf{b}\right)_{i}\right]^{2} & \forall \x \in \mathbb{R}^{n}.
-\end{align*}
-Osserviamo in particolare l'ultimo passaggio: abbiamo la norma (al quadrato, ma ciò è irrilevante) di un vettore, ovvero $R\x -Q^{T}\mathbf{b}$. Dato che la norma $2$ al quadrato è per definizione (vedi \ref{def:norma-vettore}) la somma delle componenti al quadrato, possiamo liberamente separare in due somme.
-Il termine $R\x$ si separa in $\tilde{R}\x$ e una somma di zeri.
-Il termine $Q^{T}\mathbf{b}$ si separa in $\tilde{Q}^{T}\mathbf{b}$ e il termine in sommatoria (si noti l'indice che va da $n+1$ a $m$).
-Il minimo di $\Phi (\x)$ è raggiunto per $\x^{\star }$ che annulla tutto il termine in cui compare:
-\begin{equation*}
-\tilde{R}\x -\tilde{Q}^{T}\mathbf{b} =0\ \ \Rightarrow \ \ \left\Vert \tilde{R}\x -\tilde{Q}^{T}\mathbf{b}\right\Vert =0
-\end{equation*}
-e dunque $\x^{\star }$ soddisfa
-\begin{gather*}
-\tilde{R}\x^{\star } -\tilde{Q}^{T}\mathbf{b} =0\ \ \Rightarrow \ \ \x^{\star } =\tilde{R}^{-1}\tilde{Q}^{T}\mathbf{b}.
-\qed
-\end{gather*}
-\textit{Osservazione.} Il costo di calcolare la fattorizzazione $QR$ è $\approx mn^{2}$. L'algoritmo per il calcolo di $Q$ è basato sull'algoritmo di Gram-Schmidt, la tecnica dall'algebra lineare per la costruzione di una base ortogonale.
